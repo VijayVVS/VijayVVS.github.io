@@ -706,6 +706,111 @@
             padding: 0 28px 28px;
         }
 
+        /* Project Image Gallery */
+        .project-gallery {
+            margin-bottom: 20px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/10;
+        }
+
+        .gallery-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .gallery-slide.active {
+            opacity: 1;
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(212,168,75,0.9);
+            color: var(--navy-dark);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .gallery-nav:hover {
+            background: var(--gold);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .gallery-nav.prev {
+            left: 10px;
+        }
+
+        .gallery-nav.next {
+            right: 10px;
+        }
+
+        .gallery-nav svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-dot.active {
+            background: var(--gold);
+            transform: scale(1.2);
+        }
+
+        .gallery-dot:hover {
+            background: rgba(255,255,255,0.6);
+        }
+
+        /* Single image - hide nav */
+        .project-gallery.single-image .gallery-nav,
+        .project-gallery.single-image .gallery-dots {
+            display: none;
+        }
+
         .project-challenge {
             background: rgba(255,255,255,0.05);
             border-left: 3px solid var(--gold);
@@ -1524,6 +1629,24 @@
                         </div>
                     </div>
                     <div class="project-body">
+                        <!-- Image Gallery -->
+                        <div class="project-gallery single-image" id="gallery1">
+                            <div class="gallery-container">
+                                <div class="gallery-slide active">
+                                    <img src="crane-gantry-1.png" alt="Crane Gantry Foundation Section Detail">
+                                </div>
+                                <!-- Add more images: copy the div above, remove 'active' class -->
+                            </div>
+                            <button class="gallery-nav prev" onclick="changeSlide('gallery1', -1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <button class="gallery-nav next" onclick="changeSlide('gallery1', 1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <div class="gallery-dots">
+                                <button class="gallery-dot active" onclick="goToSlide('gallery1', 0)"></button>
+                            </div>
+                        </div>
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>Existing foundation and plinth ran close to proposed crane column positions, creating eccentric loading conditions that varied along the building length.</p>
@@ -1563,6 +1686,23 @@
                         </div>
                     </div>
                     <div class="project-body">
+                        <!-- Image Gallery -->
+                        <div class="project-gallery single-image" id="gallery2">
+                            <div class="gallery-container">
+                                <div class="gallery-slide active">
+                                    <img src="parapet-wall-1.png" alt="Parapet Wall Stabilisation Section">
+                                </div>
+                            </div>
+                            <button class="gallery-nav prev" onclick="changeSlide('gallery2', -1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <button class="gallery-nav next" onclick="changeSlide('gallery2', 1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <div class="gallery-dots">
+                                <button class="gallery-dot active" onclick="goToSlide('gallery2', 0)"></button>
+                            </div>
+                        </div>
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>No drilling or mechanical fixings permitted through the roof. Existing waterproofing meant any penetration would cause leakage.</p>
@@ -1602,6 +1742,23 @@
                         </div>
                     </div>
                     <div class="project-body">
+                        <!-- Image Gallery -->
+                        <div class="project-gallery single-image" id="gallery3">
+                            <div class="gallery-container">
+                                <div class="gallery-slide active">
+                                    <img src="shopfront-1.png" alt="Shopfront Portal Frame Connection Details">
+                                </div>
+                            </div>
+                            <button class="gallery-nav prev" onclick="changeSlide('gallery3', -1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <button class="gallery-nav next" onclick="changeSlide('gallery3', 1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <div class="gallery-dots">
+                                <button class="gallery-dot active" onclick="goToSlide('gallery3', 0)"></button>
+                            </div>
+                        </div>
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>Existing blockwork infill panels being replaced with full-height glazing. Diagonal cross-bracing providing lateral stability conflicted with the new layout.</p>
@@ -1641,6 +1798,23 @@
                         </div>
                     </div>
                     <div class="project-body">
+                        <!-- Image Gallery -->
+                        <div class="project-gallery single-image" id="gallery4">
+                            <div class="gallery-container">
+                                <div class="gallery-slide active">
+                                    <img src="underpinning-1.png" alt="Residential Underpinning Section Detail">
+                                </div>
+                            </div>
+                            <button class="gallery-nav prev" onclick="changeSlide('gallery4', -1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <button class="gallery-nav next" onclick="changeSlide('gallery4', 1)">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <div class="gallery-dots">
+                                <button class="gallery-dot active" onclick="goToSlide('gallery4', 0)"></button>
+                            </div>
+                        </div>
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>Tree removal had altered the moisture regime in shrinkable clay, creating both immediate subsidence and future heave risk.</p>
@@ -1829,10 +2003,6 @@
                             <span class="project-desc">Remedial ties, joist restraints, strengthening plates</span>
                         </li>
                         <li>
-                            <span class="project-name">Defect Reporting</span>
-                            <span class="project-desc">Coordination for remedial works programme</span>
-                        </li>
-                        <li>
                             <span class="project-name">Heave Protection</span>
                             <span class="project-desc">Cordek void formers, isolation joints</span>
                         </li>
@@ -1994,6 +2164,38 @@
             details.classList.toggle('expanded');
             button.classList.toggle('expanded');
             button.querySelector('span').textContent = isExpanded ? 'Show More' : 'Show Less';
+        }
+
+        // Image Gallery Functions
+        function changeSlide(galleryId, direction) {
+            const gallery = document.getElementById(galleryId);
+            const slides = gallery.querySelectorAll('.gallery-slide');
+            const dots = gallery.querySelectorAll('.gallery-dot');
+            if (slides.length <= 1) return;
+            
+            let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+            
+            slides[currentIndex].classList.remove('active');
+            dots[currentIndex].classList.remove('active');
+            
+            currentIndex += direction;
+            if (currentIndex >= slides.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = slides.length - 1;
+            
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        }
+
+        function goToSlide(galleryId, index) {
+            const gallery = document.getElementById(galleryId);
+            const slides = gallery.querySelectorAll('.gallery-slide');
+            const dots = gallery.querySelectorAll('.gallery-dot');
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
         }
 
         // Fade in on scroll
