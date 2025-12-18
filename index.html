@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vijay Venkatasamy | Graduate Structural Engineer</title>
-    <meta name="description" content="Graduate Structural Engineer with 40+ UK projects. Specializing in retail, industrial, and residential structural solutions.">
-    
+    <meta name="description" content="Graduate Structural Engineer with 40+ UK projects. Specializing in retail, industrial, and residential structural solutions." />
+
     <style>
         :root {
             --navy: #1a365d;
@@ -25,15 +25,8 @@
             --shadow-xl: 0 25px 50px -12px rgba(0,0,0,0.15);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Times New Roman', Times, Georgia, serif;
@@ -49,38 +42,21 @@
             line-height: 1.3;
         }
 
-        a {
-            color: var(--navy);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+        a { color: var(--navy); text-decoration: none; transition: color 0.3s ease; }
+        a:hover { color: var(--gold); }
 
-        a:hover {
-            color: var(--gold);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
         /* Navigation */
         nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            position: fixed; top: 0; left: 0; right: 0;
             z-index: 1000;
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--gray-200);
             transition: all 0.3s ease;
         }
-
-        nav.scrolled {
-            box-shadow: var(--shadow-md);
-        }
+        nav.scrolled { box-shadow: var(--shadow-md); }
 
         .nav-content {
             display: flex;
@@ -98,12 +74,7 @@
             color: var(--navy);
         }
 
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-
+        .nav-links { display: flex; gap: 32px; list-style: none; }
         .nav-links a {
             font-size: 0.9rem;
             font-weight: 500;
@@ -111,7 +82,6 @@
             transition: color 0.3s ease;
             position: relative;
         }
-
         .nav-links a::after {
             content: '';
             position: absolute;
@@ -122,23 +92,10 @@
             background: var(--gold);
             transition: width 0.3s ease;
         }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--navy); }
 
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: var(--navy);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
+        .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
         .mobile-menu-btn span {
             display: block;
             width: 24px;
@@ -150,23 +107,13 @@
 
         /* 3D Background Pattern */
         .bg-3d {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow: hidden;
-            pointer-events: none;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            overflow: hidden; pointer-events: none;
         }
-
         .bg-3d::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
+            position: absolute; inset: 0;
+            background:
                 linear-gradient(30deg, transparent 40%, rgba(212,168,75,0.03) 40%, rgba(212,168,75,0.03) 60%, transparent 60%),
                 linear-gradient(150deg, transparent 40%, rgba(212,168,75,0.03) 40%, rgba(212,168,75,0.03) 60%, transparent 60%),
                 linear-gradient(90deg, transparent 45%, rgba(255,255,255,0.02) 45%, rgba(255,255,255,0.02) 55%, transparent 55%);
@@ -175,12 +122,8 @@
 
         /* Isometric Grid */
         .isometric-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
+            position: absolute; inset: 0;
+            background-image:
                 linear-gradient(30deg, rgba(212,168,75,0.08) 1px, transparent 1px),
                 linear-gradient(150deg, rgba(212,168,75,0.08) 1px, transparent 1px);
             background-size: 60px 104px;
@@ -188,61 +131,32 @@
         }
 
         /* Floating 3D Shapes */
-        .floating-shapes {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            overflow: hidden;
-        }
-
-        .shape {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 20s ease-in-out infinite;
-        }
-
+        .floating-shapes { position: absolute; inset: 0; overflow: hidden; }
+        .shape { position: absolute; opacity: 0.1; animation: float 20s ease-in-out infinite; }
         .shape-1 {
-            top: 10%;
-            left: 10%;
-            width: 100px;
-            height: 100px;
+            top: 10%; left: 10%; width: 100px; height: 100px;
             border: 2px solid var(--gold);
             transform: rotate(45deg) skewX(-10deg) skewY(-10deg);
             animation-delay: 0s;
         }
-
         .shape-2 {
-            top: 60%;
-            right: 15%;
-            width: 80px;
-            height: 80px;
+            top: 60%; right: 15%; width: 80px; height: 80px;
             border: 2px solid var(--white);
             transform: rotate(30deg) skewX(-15deg) skewY(-15deg);
             animation-delay: -5s;
         }
-
         .shape-3 {
-            bottom: 20%;
-            left: 20%;
-            width: 60px;
-            height: 120px;
+            bottom: 20%; left: 20%; width: 60px; height: 120px;
             border: 2px solid var(--gold);
             transform: rotate(-15deg) skewX(10deg);
             animation-delay: -10s;
         }
-
         .shape-4 {
-            top: 30%;
-            right: 25%;
-            width: 40px;
-            height: 40px;
+            top: 30%; right: 25%; width: 40px; height: 40px;
             background: rgba(212,168,75,0.2);
             transform: rotate(60deg);
             animation-delay: -15s;
         }
-
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(45deg); }
             50% { transform: translateY(-20px) rotate(50deg); }
@@ -258,7 +172,6 @@
             overflow: hidden;
             padding-top: 80px;
         }
-
         .hero-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -267,14 +180,12 @@
             position: relative;
             z-index: 1;
         }
-
         .hero-text h1 {
             font-size: 3.5rem;
             color: var(--white);
             margin-bottom: 8px;
             animation: fadeInUp 0.8s ease;
         }
-
         .hero-text .subtitle {
             font-size: 1.5rem;
             color: var(--gold);
@@ -282,7 +193,6 @@
             font-weight: 400;
             animation: fadeInUp 0.8s ease 0.1s both;
         }
-
         .hero-text .credentials {
             display: flex;
             gap: 16px;
@@ -290,7 +200,6 @@
             flex-wrap: wrap;
             animation: fadeInUp 0.8s ease 0.2s both;
         }
-
         .credential-badge {
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
@@ -300,7 +209,6 @@
             color: var(--white);
             font-weight: 500;
         }
-
         .hero-text p {
             color: rgba(255,255,255,0.85);
             font-size: 1.1rem;
@@ -308,13 +216,7 @@
             max-width: 500px;
             animation: fadeInUp 0.8s ease 0.3s both;
         }
-
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-
+        .hero-cta { display: flex; gap: 16px; animation: fadeInUp 0.8s ease 0.4s both; }
         .btn {
             display: inline-flex;
             align-items: center;
@@ -327,28 +229,10 @@
             cursor: pointer;
             border: none;
         }
-
-        .btn-primary {
-            background: var(--gold);
-            color: var(--navy-dark);
-        }
-
-        .btn-primary:hover {
-            background: var(--gold-light);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid rgba(255,255,255,0.3);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--white);
-            background: rgba(255,255,255,0.1);
-        }
+        .btn-primary { background: var(--gold); color: var(--navy-dark); }
+        .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .btn-secondary { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.3); }
+        .btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
 
         /* Stats Grid */
         .hero-stats {
@@ -357,7 +241,6 @@
             gap: 24px;
             animation: fadeInUp 0.8s ease 0.5s both;
         }
-
         .stat-card {
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(10px);
@@ -367,12 +250,7 @@
             text-align: center;
             transition: all 0.3s ease;
         }
-
-        .stat-card:hover {
-            background: rgba(255,255,255,0.12);
-            transform: translateY(-4px);
-        }
-
+        .stat-card:hover { background: rgba(255,255,255,0.12); transform: translateY(-4px); }
         .stat-number {
             font-family: 'Times New Roman', Times, Georgia, serif;
             font-size: 2.75rem;
@@ -382,184 +260,56 @@
             line-height: 1;
             margin-bottom: 8px;
         }
-
-        .stat-label {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        .stat-label { color: rgba(255,255,255,0.8); font-size: 0.9rem; font-weight: 500; }
 
         /* Section Styles */
-        section {
-            padding: 100px 0;
-            position: relative;
-        }
+        section { padding: 100px 0; position: relative; }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            color: var(--navy);
-            margin-bottom: 16px;
-        }
-
-        .section-header p {
-            color: var(--gray-600);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .section-divider {
-            width: 60px;
-            height: 3px;
-            background: var(--gold);
-            margin: 20px auto 0;
-        }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; color: var(--navy); margin-bottom: 16px; }
+        .section-header p { color: var(--gray-600); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        .section-divider { width: 60px; height: 3px; background: var(--gold); margin: 20px auto 0; }
 
         /* About Section */
-        .about {
-            background: var(--white);
-        }
+        .about { background: var(--white); }
+        .about-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; align-items: start; }
+        .about-image img { width: 100%; border-radius: 12px; box-shadow: var(--shadow-lg); }
+        .about-content h3 { font-size: 1.75rem; color: var(--navy); margin-bottom: 20px; }
+        .about-content p { margin-bottom: 20px; color: var(--gray-600); }
+        .about-content p:first-of-type { font-size: 1.15rem; color: var(--gray-800); }
 
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 60px;
-            align-items: start;
-        }
-
-        .about-image {
-            position: relative;
-        }
-
-        .about-image img {
-            width: 100%;
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .about-content h3 {
-            font-size: 1.75rem;
-            color: var(--navy);
-            margin-bottom: 20px;
-        }
-
-        .about-content p {
-            margin-bottom: 20px;
-            color: var(--gray-600);
-        }
-
-        .about-content p:first-of-type {
-            font-size: 1.15rem;
-            color: var(--gray-800);
-        }
-
-        .education-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 32px;
-        }
-
-        .edu-card {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            background: var(--gray-100);
-            border-radius: 10px;
-            border-left: 4px solid var(--gold);
-        }
-
+        .education-cards { display: flex; flex-direction: column; gap: 20px; margin-top: 32px; }
+        .edu-card { display: flex; gap: 20px; padding: 20px; background: var(--gray-100); border-radius: 10px; border-left: 4px solid var(--gold); }
         .edu-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--navy);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
+            width: 48px; height: 48px; background: var(--navy);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-
-        .edu-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--gold);
-        }
-
-        .edu-details h4 {
-            font-family: 'Times New Roman', Times, Georgia, serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--navy);
-            margin-bottom: 4px;
-        }
-
-        .edu-details .degree {
-            color: var(--gray-600);
-            font-size: 0.9rem;
-        }
-
-        .edu-details .year {
-            color: var(--gold);
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
+        .edu-icon svg { width: 24px; height: 24px; fill: var(--gold); }
+        .edu-details h4 { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+        .edu-details .degree { color: var(--gray-600); font-size: 0.9rem; }
+        .edu-details .year { color: var(--gold); font-size: 0.85rem; font-weight: 600; }
 
         /* Experience Section */
-        .experience {
-            background: var(--cream);
-            position: relative;
-        }
-
-        .experience .bg-3d {
-            opacity: 0.3;
-        }
-
-        .timeline {
-            position: relative;
-            max-width: 900px;
-            margin: 0 auto;
-            z-index: 1;
-        }
-
+        .experience { background: var(--cream); position: relative; }
+        .experience .bg-3d { opacity: 0.3; }
+        .timeline { position: relative; max-width: 900px; margin: 0 auto; z-index: 1; }
         .timeline::before {
             content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
+            position: absolute; left: 0; top: 0; bottom: 0;
             width: 3px;
             background: linear-gradient(to bottom, var(--gold), var(--navy));
             border-radius: 3px;
         }
-
-        .timeline-item {
-            padding-left: 40px;
-            padding-bottom: 50px;
-            position: relative;
-        }
-
-        .timeline-item:last-child {
-            padding-bottom: 0;
-        }
-
+        .timeline-item { padding-left: 40px; padding-bottom: 50px; position: relative; }
+        .timeline-item:last-child { padding-bottom: 0; }
         .timeline-dot {
-            position: absolute;
-            left: -7px;
-            top: 0;
-            width: 17px;
-            height: 17px;
+            position: absolute; left: -7px; top: 0;
+            width: 17px; height: 17px;
             background: var(--gold);
             border-radius: 50%;
             border: 3px solid var(--cream);
             box-shadow: var(--shadow-md);
         }
-
         .timeline-content {
             background: var(--white);
             border-radius: 12px;
@@ -567,87 +317,21 @@
             border-left: 4px solid var(--gold);
             box-shadow: var(--shadow-sm);
         }
-
-        .timeline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .timeline-title h3 {
-            font-size: 1.25rem;
-            color: var(--navy);
-            margin-bottom: 4px;
-            font-family: 'Times New Roman', Times, Georgia, serif;
-            font-weight: 700;
-        }
-
-        .timeline-title .company {
-            color: var(--gold);
-            font-weight: 600;
-        }
-
-        .timeline-date {
-            background: var(--navy);
-            color: var(--white);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .timeline-content ul {
-            list-style: none;
-            margin-top: 16px;
-        }
-
-        .timeline-content li {
-            padding: 8px 0;
-            padding-left: 24px;
-            position: relative;
-            color: var(--gray-600);
-            font-size: 0.95rem;
-        }
-
-        .timeline-content li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: var(--gold);
-            font-weight: bold;
-        }
+        .timeline-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+        .timeline-title h3 { font-size: 1.25rem; color: var(--navy); margin-bottom: 4px; font-weight: 700; }
+        .timeline-title .company { color: var(--gold); font-weight: 600; }
+        .timeline-date { background: var(--navy); color: var(--white); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .timeline-content ul { list-style: none; margin-top: 16px; }
+        .timeline-content li { padding: 8px 0 8px 24px; position: relative; color: var(--gray-600); font-size: 0.95rem; }
+        .timeline-content li::before { content: '→'; position: absolute; left: 0; color: var(--gold); font-weight: bold; }
 
         /* Featured Projects Section */
-        .projects {
-            background: var(--navy-dark);
-            color: var(--white);
-            position: relative;
-            overflow: hidden;
-        }
+        .projects { background: var(--navy-dark); color: var(--white); position: relative; overflow: hidden; }
+        .projects .floating-shapes .shape { border-color: rgba(212,168,75,0.3); }
+        .projects .section-header h2 { color: var(--white); }
+        .projects .section-header p { color: rgba(255,255,255,0.7); }
 
-        .projects .floating-shapes .shape {
-            border-color: rgba(212,168,75,0.3);
-        }
-
-        .projects .section-header h2 {
-            color: var(--white);
-        }
-
-        .projects .section-header p {
-            color: rgba(255,255,255,0.7);
-        }
-
-        .project-cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
+        .project-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; position: relative; z-index: 1; }
         .project-card {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
@@ -655,23 +339,13 @@
             overflow: hidden;
             transition: all 0.4s ease;
         }
-
-        .project-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255,255,255,0.08);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-
-        .project-header {
-            padding: 28px 28px 0;
-        }
-
+        .project-card:hover { transform: translateY(-8px); background: rgba(255,255,255,0.08); box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+        .project-header { padding: 28px 28px 0; }
         .project-number {
             display: inline-block;
             background: var(--gold);
             color: var(--navy-dark);
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             border-radius: 8px;
             text-align: center;
             line-height: 36px;
@@ -679,63 +353,17 @@
             font-size: 0.9rem;
             margin-bottom: 12px;
         }
-
-        .project-header h3 {
-            font-size: 1.35rem;
-            color: var(--white);
-            margin-bottom: 8px;
-        }
-
-        .project-meta {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-
-        .project-tag {
-            background: rgba(212, 168, 75, 0.2);
-            color: var(--gold);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .project-body {
-            padding: 0 28px 28px;
-        }
+        .project-header h3 { font-size: 1.35rem; color: var(--white); margin-bottom: 8px; }
+        .project-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .project-tag { background: rgba(212,168,75,0.2); color: var(--gold); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .project-body { padding: 0 28px 28px; }
 
         /* Project Image Gallery */
-        .project-gallery {
-            margin-bottom: 20px;
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .gallery-container {
-            position: relative;
-            width: 100%;
-            min-height: 300px;
-        }
-
-        .gallery-slide {
-            width: 100%;
-            display: none;
-        }
-
-        .gallery-slide.active {
-            display: block;
-        }
-
-        .gallery-slide img {
-            width: 100%;
-            height: auto;
-            display: block;
-            background: #fff;
-        }
+        .project-gallery { margin-bottom: 20px; position: relative; border-radius: 8px; overflow: hidden; background: #fff; }
+        .gallery-container { position: relative; width: 100%; min-height: 300px; }
+        .gallery-slide { width: 100%; display: none; }
+        .gallery-slide.active { display: block; }
+        .gallery-slide img { width: 100%; height: auto; display: block; background: #fff; cursor: zoom-in; }
 
         .gallery-nav {
             position: absolute;
@@ -744,8 +372,7 @@
             background: rgba(212,168,75,0.9);
             color: var(--navy-dark);
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -754,64 +381,24 @@
             transition: all 0.3s ease;
             z-index: 10;
         }
+        .gallery-nav:hover { background: var(--gold); transform: translateY(-50%) scale(1.1); }
+        .gallery-nav.prev { left: 10px; }
+        .gallery-nav.next { right: 10px; }
+        .gallery-nav svg { width: 18px; height: 18px; }
 
-        .gallery-nav:hover {
-            background: var(--gold);
-            transform: translateY(-50%) scale(1.1);
-        }
+        .gallery-dots { display: flex; justify-content: center; gap: 8px; padding: 12px; background: rgba(26,54,93,0.1); }
+        .gallery-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(26,54,93,0.3); border: none; cursor: pointer; transition: all 0.3s ease; }
+        .gallery-dot.active { background: var(--gold); transform: scale(1.2); }
+        .gallery-dot:hover { background: rgba(26,54,93,0.5); }
 
-        .gallery-nav.prev {
-            left: 10px;
-        }
-
-        .gallery-nav.next {
-            right: 10px;
-        }
-
-        .gallery-nav svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .gallery-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px;
-            background: rgba(26,54,93,0.1);
-        }
-
-        .gallery-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(26,54,93,0.3);
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .gallery-dot.active {
-            background: var(--gold);
-            transform: scale(1.2);
-        }
-
-        .gallery-dot:hover {
-            background: rgba(26,54,93,0.5);
-        }
-
-        /* Single image - hide nav */
         .project-gallery.single-image .gallery-nav,
-        .project-gallery.single-image .gallery-dots {
-            display: none;
-        }
+        .project-gallery.single-image .gallery-dots { display: none; }
 
         /* Lightbox */
         .lightbox {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.95);
@@ -821,10 +408,7 @@
             justify-content: center;
             padding: 20px;
         }
-
-        .lightbox.active {
-            display: flex;
-        }
+        .lightbox.active { display: flex; }
 
         .lightbox img {
             max-width: 95%;
@@ -832,6 +416,8 @@
             object-fit: contain;
             border-radius: 4px;
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            cursor: default;
+            touch-action: pan-y; /* allow vertical page gestures to be blocked while we handle horizontal swipe */
         }
 
         .lightbox-close {
@@ -844,20 +430,35 @@
             cursor: pointer;
             transition: color 0.3s ease;
             line-height: 1;
+            background: transparent;
+            border: none;
         }
+        .lightbox-close:hover { color: var(--gold); }
 
-        .lightbox-close:hover {
-            color: var(--gold);
+        /* Lightbox navigation (prev/next inside enlarged view) */
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(212,168,75,0.95);
+            color: var(--navy-dark);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none; /* only show when gallery has >1 image */
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: transform 0.2s ease, background 0.2s ease;
         }
+        .lightbox-nav:hover { background: var(--gold); transform: translateY(-50%) scale(1.08); }
+        .lightbox-nav.prev { left: 20px; }
+        .lightbox-nav.next { right: 20px; }
+        .lightbox-nav svg { width: 20px; height: 20px; }
 
-        .gallery-slide img {
-            width: 100%;
-            height: auto;
-            display: block;
-            background: #fff;
-            cursor: zoom-in;
-        }
-
+        /* Project blocks */
         .project-challenge {
             background: rgba(255,255,255,0.05);
             border-left: 3px solid var(--gold);
@@ -865,9 +466,7 @@
             margin-bottom: 16px;
             border-radius: 0 8px 8px 0;
         }
-
         .project-challenge h4 {
-            font-family: 'Times New Roman', Times, Georgia, serif;
             font-size: 0.8rem;
             font-weight: 700;
             color: var(--gold);
@@ -875,27 +474,12 @@
             letter-spacing: 1px;
             margin-bottom: 6px;
         }
+        .project-challenge p { color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.5; }
 
-        .project-challenge p {
-            color: rgba(255,255,255,0.8);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        /* Expandable Details */
-        .project-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
-        }
-
-        .project-details.expanded {
-            max-height: 600px;
-            padding-top: 16px;
-        }
+        .project-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
+        .project-details.expanded { max-height: 600px; padding-top: 16px; }
 
         .project-contributions h4 {
-            font-family: 'Times New Roman', Times, Georgia, serif;
             font-size: 0.8rem;
             font-weight: 700;
             color: var(--gold);
@@ -903,25 +487,9 @@
             letter-spacing: 1px;
             margin-bottom: 10px;
         }
-
-        .project-contributions ul {
-            list-style: none;
-        }
-
-        .project-contributions li {
-            padding: 5px 0;
-            padding-left: 18px;
-            position: relative;
-            color: rgba(255,255,255,0.8);
-            font-size: 0.85rem;
-        }
-
-        .project-contributions li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: var(--gold);
-        }
+        .project-contributions ul { list-style: none; }
+        .project-contributions li { padding: 5px 0 5px 18px; position: relative; color: rgba(255,255,255,0.8); font-size: 0.85rem; }
+        .project-contributions li::before { content: '•'; position: absolute; left: 0; color: var(--gold); }
 
         .project-outcome {
             margin-top: 16px;
@@ -930,9 +498,7 @@
             border-radius: 8px;
             border: 1px solid rgba(212,168,75,0.3);
         }
-
         .project-outcome h4 {
-            font-family: 'Times New Roman', Times, Georgia, serif;
             font-size: 0.75rem;
             font-weight: 700;
             color: var(--gold);
@@ -940,12 +506,7 @@
             letter-spacing: 1px;
             margin-bottom: 4px;
         }
-
-        .project-outcome p {
-            color: var(--white);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        .project-outcome p { color: var(--white); font-size: 0.9rem; font-weight: 500; }
 
         .expand-btn {
             display: flex;
@@ -964,33 +525,13 @@
             transition: all 0.3s ease;
             margin-top: 16px;
         }
-
-        .expand-btn:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .expand-btn svg {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.3s ease;
-        }
-
-        .expand-btn.expanded svg {
-            transform: rotate(180deg);
-        }
+        .expand-btn:hover { background: rgba(255,255,255,0.1); }
+        .expand-btn svg { width: 16px; height: 16px; transition: transform 0.3s ease; }
+        .expand-btn.expanded svg { transform: rotate(180deg); }
 
         /* University Projects Section */
-        .uni-projects {
-            background: var(--white);
-            position: relative;
-        }
-
-        .uni-cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-
+        .uni-projects { background: var(--white); position: relative; }
+        .uni-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
         .uni-card {
             background: var(--gray-100);
             border-radius: 12px;
@@ -998,96 +539,20 @@
             border-left: 4px solid var(--navy);
             transition: all 0.3s ease;
         }
+        .uni-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+        .uni-card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+        .uni-card h3 { font-size: 1.2rem; color: var(--navy); margin-bottom: 8px; }
+        .uni-card .institution { color: var(--gold); font-weight: 600; font-size: 0.9rem; }
+        .uni-date { background: var(--navy); color: var(--white); padding: 4px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: 600; }
+        .uni-card .summary { color: var(--gray-600); font-size: 0.95rem; margin-bottom: 16px; }
+        .uni-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .uni-details.expanded { max-height: 500px; }
+        .uni-details ul { list-style: none; margin-bottom: 16px; }
+        .uni-details li { padding: 6px 0 6px 20px; position: relative; color: var(--gray-600); font-size: 0.9rem; }
+        .uni-details li::before { content: '•'; position: absolute; left: 0; color: var(--gold); font-weight: bold; }
 
-        .uni-card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
-        }
-
-        .uni-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .uni-card h3 {
-            font-size: 1.2rem;
-            color: var(--navy);
-            margin-bottom: 8px;
-        }
-
-        .uni-card .institution {
-            color: var(--gold);
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .uni-date {
-            background: var(--navy);
-            color: var(--white);
-            padding: 4px 12px;
-            border-radius: 16px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .uni-card .summary {
-            color: var(--gray-600);
-            font-size: 0.95rem;
-            margin-bottom: 16px;
-        }
-
-        .uni-details {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease;
-        }
-
-        .uni-details.expanded {
-            max-height: 500px;
-        }
-
-        .uni-details ul {
-            list-style: none;
-            margin-bottom: 16px;
-        }
-
-        .uni-details li {
-            padding: 6px 0;
-            padding-left: 20px;
-            position: relative;
-            color: var(--gray-600);
-            font-size: 0.9rem;
-        }
-
-        .uni-details li::before {
-            content: '•';
-            position: absolute;
-            left: 0;
-            color: var(--gold);
-            font-weight: bold;
-        }
-
-        .skills-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .skill-tag {
-            background: var(--navy);
-            color: var(--white);
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
+        .skills-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200); }
+        .skill-tag { background: var(--navy); color: var(--white); padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
 
         .uni-expand-btn {
             display: flex;
@@ -1105,40 +570,14 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
-        .uni-expand-btn:hover {
-            background: var(--gray-100);
-            border-color: var(--navy);
-        }
-
-        .uni-expand-btn svg {
-            width: 14px;
-            height: 14px;
-            transition: transform 0.3s ease;
-        }
-
-        .uni-expand-btn.expanded svg {
-            transform: rotate(180deg);
-        }
+        .uni-expand-btn:hover { background: var(--gray-100); border-color: var(--navy); }
+        .uni-expand-btn svg { width: 14px; height: 14px; transition: transform 0.3s ease; }
+        .uni-expand-btn.expanded svg { transform: rotate(180deg); }
 
         /* Project Summary Section */
-        .project-summary {
-            background: var(--cream);
-            position: relative;
-        }
-
-        .project-summary .bg-3d {
-            opacity: 0.3;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            position: relative;
-            z-index: 1;
-        }
-
+        .project-summary { background: var(--cream); position: relative; }
+        .project-summary .bg-3d { opacity: 0.3; }
+        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; position: relative; z-index: 1; }
         .summary-category {
             background: var(--white);
             border-radius: 12px;
@@ -1146,7 +585,6 @@
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--gray-200);
         }
-
         .summary-category h3 {
             font-size: 1.1rem;
             color: var(--navy);
@@ -1157,50 +595,16 @@
             align-items: center;
             gap: 10px;
         }
-
-        .summary-category h3 svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--gold);
-        }
-
-        .summary-list {
-            list-style: none;
-        }
-
-        .summary-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--gray-200);
-            color: var(--gray-600);
-            font-size: 0.9rem;
-        }
-
-        .summary-list li:last-child {
-            border-bottom: none;
-        }
-
-        .summary-list .project-name {
-            color: var(--navy);
-            font-weight: 600;
-            display: block;
-        }
-
-        .summary-list .project-desc {
-            font-size: 0.8rem;
-            color: var(--gray-400);
-        }
+        .summary-category h3 svg { width: 20px; height: 20px; fill: var(--gold); }
+        .summary-list { list-style: none; }
+        .summary-list li { padding: 10px 0; border-bottom: 1px solid var(--gray-200); color: var(--gray-600); font-size: 0.9rem; }
+        .summary-list li:last-child { border-bottom: none; }
+        .summary-list .project-name { color: var(--navy); font-weight: 600; display: block; }
+        .summary-list .project-desc { font-size: 0.8rem; color: var(--gray-400); }
 
         /* Process Improvement Section */
-        .process {
-            background: var(--white);
-        }
-
-        .process-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-
+        .process { background: var(--white); }
+        .process-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
         .process-card {
             background: var(--gray-100);
             border-radius: 12px;
@@ -1208,24 +612,10 @@
             border: 1px solid var(--gray-200);
             transition: all 0.3s ease;
         }
-
-        .process-card:hover {
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
-        }
-
-        .process-card h3 {
-            font-size: 1.25rem;
-            color: var(--navy);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .process-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+        .process-card h3 { font-size: 1.25rem; color: var(--navy); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
         .process-icon {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             background: var(--gold);
             border-radius: 8px;
             display: flex;
@@ -1233,17 +623,8 @@
             justify-content: center;
             flex-shrink: 0;
         }
-
-        .process-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--navy-dark);
-        }
-
-        .process-card p {
-            color: var(--gray-600);
-            font-size: 0.95rem;
-        }
+        .process-icon svg { width: 20px; height: 20px; fill: var(--navy-dark); }
+        .process-card p { color: var(--gray-600); font-size: 0.95rem; }
 
         /* Contact Section */
         .contact {
@@ -1253,15 +634,8 @@
             position: relative;
             overflow: hidden;
         }
-
-        .contact .section-header h2 {
-            color: var(--white);
-        }
-
-        .contact .section-header p {
-            color: rgba(255,255,255,0.8);
-        }
-
+        .contact .section-header h2 { color: var(--white); }
+        .contact .section-header p { color: rgba(255,255,255,0.8); }
         .contact-grid {
             display: flex;
             justify-content: center;
@@ -1271,7 +645,6 @@
             position: relative;
             z-index: 1;
         }
-
         .contact-item {
             display: flex;
             align-items: center;
@@ -1282,187 +655,70 @@
             border-radius: 12px;
             transition: all 0.3s ease;
         }
-
-        .contact-item:hover {
-            background: rgba(255,255,255,0.12);
-            transform: translateY(-4px);
-        }
-
+        .contact-item:hover { background: rgba(255,255,255,0.12); transform: translateY(-4px); }
         .contact-icon {
-            width: 48px;
-            height: 48px;
+            width: 48px; height: 48px;
             background: var(--gold);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
-        .contact-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: var(--navy-dark);
-        }
-
-        .contact-details {
-            text-align: left;
-        }
-
-        .contact-details .label {
-            font-size: 0.8rem;
-            color: var(--gold);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .contact-details .value {
-            color: var(--white);
-            font-size: 1rem;
-        }
+        .contact-icon svg { width: 22px; height: 22px; fill: var(--navy-dark); }
+        .contact-details { text-align: left; }
+        .contact-details .label { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .contact-details .value { color: var(--white); font-size: 1rem; }
 
         /* Footer */
-        footer {
-            background: var(--navy-dark);
-            padding: 30px;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        footer p {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.9rem;
-        }
+        footer { background: var(--navy-dark); padding: 30px; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
+        footer p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
 
         /* Animations */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-text p {
-                margin: 0 auto 32px;
-            }
-
-            .hero-cta {
-                justify-content: center;
-            }
-
-            .credentials {
-                justify-content: center;
-            }
-
-            .hero-stats {
-                max-width: 500px;
-                margin: 40px auto 0;
-            }
-
-            .about-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .about-image img {
-                max-width: 300px;
-                margin: 0 auto;
-                display: block;
-            }
-
-            .project-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .uni-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .summary-grid {
-                grid-template-columns: 1fr;
-            }
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-text p { margin: 0 auto 32px; }
+            .hero-cta { justify-content: center; }
+            .credentials { justify-content: center; }
+            .hero-stats { max-width: 500px; margin: 40px auto 0; }
+            .about-grid { grid-template-columns: 1fr; }
+            .about-image img { max-width: 300px; margin: 0 auto; display: block; }
+            .project-cards { grid-template-columns: 1fr; }
+            .uni-cards { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero-text h1 { font-size: 2.5rem; }
+            .hero-text .subtitle { font-size: 1.2rem; }
+            .stat-number { font-size: 2rem; }
+            .section-header h2 { font-size: 2rem; }
+            .process-grid { grid-template-columns: 1fr; }
+            .timeline::before { left: 8px; }
+            .timeline-dot { left: 1px; }
+            .contact-grid { flex-direction: column; align-items: center; }
 
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-text .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .stat-number {
-                font-size: 2rem;
-            }
-
-            .section-header h2 {
-                font-size: 2rem;
-            }
-
-            .process-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .timeline::before {
-                left: 8px;
-            }
-
-            .timeline-dot {
-                left: 1px;
-            }
-
-            .contact-grid {
-                flex-direction: column;
-                align-items: center;
-            }
+            /* Slightly bigger lightbox buttons on mobile */
+            .lightbox-nav { width: 48px; height: 48px; }
         }
 
         @media (max-width: 480px) {
-            .hero-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
+            .hero-stats { grid-template-columns: 1fr; }
+            .hero-cta { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav id="navbar">
@@ -1476,18 +732,14 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <button class="mobile-menu-btn" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="bg-3d">
-            <div class="isometric-grid"></div>
-        </div>
+        <div class="bg-3d"><div class="isometric-grid"></div></div>
         <div class="floating-shapes">
             <div class="shape shape-1"></div>
             <div class="shape shape-2"></div>
@@ -1510,23 +762,12 @@
                         <a href="#contact" class="btn btn-secondary">Get in Touch</a>
                     </div>
                 </div>
+
                 <div class="hero-stats">
-                    <div class="stat-card">
-                        <span class="stat-number">40+</span>
-                        <span class="stat-label">UK Projects</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">$15M+</span>
-                        <span class="stat-label">International Value</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">150K+</span>
-                        <span class="stat-label">Safe Man-Hours</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-number">£25K</span>
-                        <span class="stat-label">Client Saving</span>
-                    </div>
+                    <div class="stat-card"><span class="stat-number">40+</span><span class="stat-label">UK Projects</span></div>
+                    <div class="stat-card"><span class="stat-number">$15M+</span><span class="stat-label">International Value</span></div>
+                    <div class="stat-card"><span class="stat-number">150K+</span><span class="stat-label">Safe Man-Hours</span></div>
+                    <div class="stat-card"><span class="stat-number">£25K</span><span class="stat-label">Client Saving</span></div>
                 </div>
             </div>
         </div>
@@ -1540,16 +781,18 @@
                 <p>Combining UK consultancy experience with international project delivery</p>
                 <div class="section-divider"></div>
             </div>
+
             <div class="about-grid">
                 <div class="about-image">
-                    <img src="vijay.png" alt="Vijay Venkatasamy">
+                    <img src="vijay.png" alt="Vijay Venkatasamy" />
                 </div>
+
                 <div class="about-content fade-in">
                     <h3>Building Safe, Cost-Effective Structures</h3>
                     <p>Graduate Structural Engineer with hands-on experience across 40+ commercial, retail, industrial, and residential projects. Focused on delivering cost-effective structural solutions and catching design issues before they reach site.</p>
                     <p>Competent in Eurocodes and British Standards with practical exposure to SER certification requirements. My technical expertise spans reinforced concrete, structural steelwork, timber design, and composite floor systems — from detailed connection design to foundation engineering.</p>
                     <p>My UK consultancy experience is complemented by international project delivery on water-treatment infrastructure in India, Bangladesh, and Malaysia, valued at over US$15 million. This includes RC and steel design for digesters, clarifiers, pumping stations, and site supervision of major WTP construction.</p>
-                    
+
                     <div class="education-cards">
                         <div class="edu-card">
                             <div class="edu-icon">
@@ -1561,6 +804,7 @@
                                 <p class="year">2023 – 2024</p>
                             </div>
                         </div>
+
                         <div class="edu-card">
                             <div class="edu-icon">
                                 <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
@@ -1579,15 +823,14 @@
 
     <!-- Experience Section -->
     <section class="experience" id="experience">
-        <div class="bg-3d">
-            <div class="isometric-grid"></div>
-        </div>
+        <div class="bg-3d"><div class="isometric-grid"></div></div>
         <div class="container">
             <div class="section-header">
                 <h2>Professional Experience</h2>
                 <p>From international water infrastructure to UK structural consultancy</p>
                 <div class="section-divider"></div>
             </div>
+
             <div class="timeline">
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot"></div>
@@ -1609,6 +852,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
@@ -1628,6 +872,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
@@ -1657,12 +902,14 @@
             <div class="shape shape-3"></div>
             <div class="shape shape-4"></div>
         </div>
+
         <div class="container">
             <div class="section-header">
                 <h2>Featured Projects</h2>
                 <p>Detailed case studies demonstrating practical structural solutions</p>
                 <div class="section-divider"></div>
             </div>
+
             <div class="project-cards">
                 <!-- Project 1: Crane Gantry -->
                 <div class="project-card fade-in">
@@ -1675,32 +922,36 @@
                             <span class="project-tag">Constructed</span>
                         </div>
                     </div>
+
                     <div class="project-body">
-                        <!-- Image Gallery -->
                         <div class="project-gallery" id="gallery1">
                             <div class="gallery-container">
                                 <div class="gallery-slide active">
-                                    <img src="crane-gantry-1.png" alt="Crane Gantry Foundation Section Detail">
+                                    <img src="crane-gantry-1.png" alt="Crane Gantry Foundation Section Detail" />
                                 </div>
                                 <div class="gallery-slide">
-                                    <img src="crane-gantry-2.png" alt="Crane Gantry Foundation Plan">
+                                    <img src="crane-gantry-2.png" alt="Crane Gantry Foundation Plan" />
                                 </div>
                             </div>
+
                             <button class="gallery-nav prev" onclick="changeSlide('gallery1', -1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                             </button>
                             <button class="gallery-nav next" onclick="changeSlide('gallery1', 1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </button>
+
                             <div class="gallery-dots">
                                 <button class="gallery-dot active" onclick="goToSlide('gallery1', 0)"></button>
                                 <button class="gallery-dot" onclick="goToSlide('gallery1', 1)"></button>
                             </div>
                         </div>
+
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>Existing foundation and plinth ran close to proposed crane column positions, creating eccentric loading conditions that varied along the building length.</p>
                         </div>
+
                         <div class="project-details" id="project1-details">
                             <div class="project-contributions">
                                 <h4>My Contribution</h4>
@@ -1717,6 +968,7 @@
                                 <p>Balancing structural efficiency against buildability — a single "optimal" solution wouldn't suit all site constraints.</p>
                             </div>
                         </div>
+
                         <button class="expand-btn" onclick="toggleProject('project1-details', this)">
                             <span>Show Details</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -1735,28 +987,32 @@
                             <span class="project-tag">Installed</span>
                         </div>
                     </div>
+
                     <div class="project-body">
-                        <!-- Image Gallery -->
                         <div class="project-gallery single-image" id="gallery2">
                             <div class="gallery-container">
                                 <div class="gallery-slide active">
-                                    <img src="parapet-wall-1.png" alt="Parapet Wall Stabilisation Section">
+                                    <img src="parapet-wall-1.png" alt="Parapet Wall Stabilisation Section" />
                                 </div>
                             </div>
+
                             <button class="gallery-nav prev" onclick="changeSlide('gallery2', -1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                             </button>
                             <button class="gallery-nav next" onclick="changeSlide('gallery2', 1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </button>
+
                             <div class="gallery-dots">
                                 <button class="gallery-dot active" onclick="goToSlide('gallery2', 0)"></button>
                             </div>
                         </div>
+
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>No drilling or mechanical fixings permitted through the roof. Existing waterproofing meant any penetration would cause leakage.</p>
                         </div>
+
                         <div class="project-details" id="project2-details">
                             <div class="project-contributions">
                                 <h4>My Contribution</h4>
@@ -1773,6 +1029,7 @@
                                 <p>Counterweight system eliminated all roof penetrations — understanding the client's real constraint, not just the structural problem.</p>
                             </div>
                         </div>
+
                         <button class="expand-btn" onclick="toggleProject('project2-details', this)">
                             <span>Show Details</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -1791,36 +1048,40 @@
                             <span class="project-tag">Constructed</span>
                         </div>
                     </div>
+
                     <div class="project-body">
-                        <!-- Image Gallery -->
                         <div class="project-gallery" id="gallery3">
                             <div class="gallery-container">
                                 <div class="gallery-slide active">
-                                    <img src="shopfront-1.png" alt="Shopfront Portal Frame Connection Details">
+                                    <img src="shopfront-1.png" alt="Shopfront Portal Frame Connection Details" />
                                 </div>
                                 <div class="gallery-slide">
-                                    <img src="shopfront-2.png" alt="Shopfront Portal Frame Detail 2">
+                                    <img src="shopfront-2.png" alt="Shopfront Portal Frame Detail 2" />
                                 </div>
                                 <div class="gallery-slide">
-                                    <img src="shopfront-3.png" alt="Shopfront Portal Frame Detail 3">
+                                    <img src="shopfront-3.png" alt="Shopfront Portal Frame Detail 3" />
                                 </div>
                             </div>
+
                             <button class="gallery-nav prev" onclick="changeSlide('gallery3', -1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                             </button>
                             <button class="gallery-nav next" onclick="changeSlide('gallery3', 1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </button>
+
                             <div class="gallery-dots">
                                 <button class="gallery-dot active" onclick="goToSlide('gallery3', 0)"></button>
                                 <button class="gallery-dot" onclick="goToSlide('gallery3', 1)"></button>
                                 <button class="gallery-dot" onclick="goToSlide('gallery3', 2)"></button>
                             </div>
                         </div>
+
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>Existing blockwork infill panels being replaced with full-height glazing. Diagonal cross-bracing providing lateral stability conflicted with the new layout.</p>
                         </div>
+
                         <div class="project-details" id="project3-details">
                             <div class="project-contributions">
                                 <h4>My Contribution</h4>
@@ -1837,6 +1098,7 @@
                                 <p>Connection design isn't just about strength — access, sequence, and tolerances matter just as much on a live retail site.</p>
                             </div>
                         </div>
+
                         <button class="expand-btn" onclick="toggleProject('project3-details', this)">
                             <span>Show Details</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -1855,28 +1117,32 @@
                             <span class="project-tag">£25K Saving</span>
                         </div>
                     </div>
+
                     <div class="project-body">
-                        <!-- Image Gallery -->
                         <div class="project-gallery single-image" id="gallery4">
                             <div class="gallery-container">
                                 <div class="gallery-slide active">
-                                    <img src="underpinning-1.png" alt="Residential Underpinning Section Detail">
+                                    <img src="underpinning-1.png" alt="Residential Underpinning Section Detail" />
                                 </div>
                             </div>
+
                             <button class="gallery-nav prev" onclick="changeSlide('gallery4', -1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                             </button>
                             <button class="gallery-nav next" onclick="changeSlide('gallery4', 1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </button>
+
                             <div class="gallery-dots">
                                 <button class="gallery-dot active" onclick="goToSlide('gallery4', 0)"></button>
                             </div>
                         </div>
+
                         <div class="project-challenge">
                             <h4>The Challenge</h4>
                             <p>Tree removal had altered the moisture regime in shrinkable clay, creating both immediate subsidence and future heave risk.</p>
                         </div>
+
                         <div class="project-details" id="project4-details">
                             <div class="project-contributions">
                                 <h4>My Contribution</h4>
@@ -1893,6 +1159,7 @@
                                 <p>£25,000 saved — Targeted underpinning retained existing structure, avoiding full rebuild. Heave protection future-proofed the solution.</p>
                             </div>
                         </div>
+
                         <button class="expand-btn" onclick="toggleProject('project4-details', this)">
                             <span>Show Details</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -1911,8 +1178,8 @@
                 <p>University of Leeds — MSc Structural Engineering</p>
                 <div class="section-divider"></div>
             </div>
+
             <div class="uni-cards">
-                <!-- Dissertation -->
                 <div class="uni-card fade-in">
                     <div class="uni-card-header">
                         <div>
@@ -1943,7 +1210,6 @@
                     </button>
                 </div>
 
-                <!-- HS2 Project -->
                 <div class="uni-card fade-in">
                     <div class="uni-card-header">
                         <div>
@@ -1980,15 +1246,14 @@
 
     <!-- All Projects Summary -->
     <section class="project-summary" id="all-projects">
-        <div class="bg-3d">
-            <div class="isometric-grid"></div>
-        </div>
+        <div class="bg-3d"><div class="isometric-grid"></div></div>
         <div class="container">
             <div class="section-header">
                 <h2>Project Experience</h2>
                 <p>40+ projects across retail, industrial, commercial, and residential sectors</p>
                 <div class="section-divider"></div>
             </div>
+
             <div class="summary-grid">
                 <div class="summary-category fade-in">
                     <h3>
@@ -1996,74 +1261,37 @@
                         UK Health & Beauty Retailer
                     </h3>
                     <ul class="summary-list">
-                        <li>
-                            <span class="project-name">Dundee Gallagher (SER)</span>
-                            <span class="project-desc">Mezzanine alterations, signage, floor infill, fire wall</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Fort Kinnaird (SER)</span>
-                            <span class="project-desc">Canopy design, hanging bulkheads, M&E supports</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Glasgow</span>
-                            <span class="project-desc">Signage support, floor infill, hanging bulkhead</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Multiple Retail Parks</span>
-                            <span class="project-desc">Canopy installations, shopfront modifications</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Fragrance Retail Unit</span>
-                            <span class="project-desc">Chandelier support design</span>
-                        </li>
+                        <li><span class="project-name">Dundee Gallagher (SER)</span><span class="project-desc">Mezzanine alterations, signage, floor infill, fire wall</span></li>
+                        <li><span class="project-name">Fort Kinnaird (SER)</span><span class="project-desc">Canopy design, hanging bulkheads, M&E supports</span></li>
+                        <li><span class="project-name">Glasgow</span><span class="project-desc">Signage support, floor infill, hanging bulkhead</span></li>
+                        <li><span class="project-name">Multiple Retail Parks</span><span class="project-desc">Canopy installations, shopfront modifications</span></li>
+                        <li><span class="project-name">Fragrance Retail Unit</span><span class="project-desc">Chandelier support design</span></li>
                     </ul>
                 </div>
+
                 <div class="summary-category fade-in">
                     <h3>
                         <svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
                         Industrial & Manufacturing
                     </h3>
                     <ul class="summary-list">
-                        <li>
-                            <span class="project-name">National Food Manufacturer</span>
-                            <span class="project-desc">SuDS strategy, structural assessment, crane platform</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Glass Manufacturer</span>
-                            <span class="project-desc">Crane gantry foundations</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Building Products Manufacturer</span>
-                            <span class="project-desc">Silo base design, structural assessment</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Automotive Products</span>
-                            <span class="project-desc">Sprinkler tanks, pipe supports, drainage</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Automotive Dealership</span>
-                            <span class="project-desc">Warehouse design and drainage concept</span>
-                        </li>
+                        <li><span class="project-name">National Food Manufacturer</span><span class="project-desc">SuDS strategy, structural assessment, crane platform</span></li>
+                        <li><span class="project-name">Glass Manufacturer</span><span class="project-desc">Crane gantry foundations</span></li>
+                        <li><span class="project-name">Building Products Manufacturer</span><span class="project-desc">Silo base design, structural assessment</span></li>
+                        <li><span class="project-name">Automotive Products</span><span class="project-desc">Sprinkler tanks, pipe supports, drainage</span></li>
+                        <li><span class="project-name">Automotive Dealership</span><span class="project-desc">Warehouse design and drainage concept</span></li>
                     </ul>
                 </div>
+
                 <div class="summary-category fade-in">
                     <h3>
                         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
                         Social Housing & Residential
                     </h3>
                     <ul class="summary-list">
-                        <li>
-                            <span class="project-name">Underpinning Schemes</span>
-                            <span class="project-desc">Multiple properties on shrinkable clay</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Wall Stabilisation</span>
-                            <span class="project-desc">Remedial ties, joist restraints, strengthening plates</span>
-                        </li>
-                        <li>
-                            <span class="project-name">Heave Protection</span>
-                            <span class="project-desc">Cordek void formers, isolation joints</span>
-                        </li>
+                        <li><span class="project-name">Underpinning Schemes</span><span class="project-desc">Multiple properties on shrinkable clay</span></li>
+                        <li><span class="project-name">Wall Stabilisation</span><span class="project-desc">Remedial ties, joist restraints, strengthening plates</span></li>
+                        <li><span class="project-name">Heave Protection</span><span class="project-desc">Cordek void formers, isolation joints</span></li>
                     </ul>
                 </div>
             </div>
@@ -2078,6 +1306,7 @@
                 <p>Digital workflows and automation systems developed to improve practice efficiency</p>
                 <div class="section-divider"></div>
             </div>
+
             <div class="process-grid">
                 <div class="process-card fade-in">
                     <h3>
@@ -2088,6 +1317,7 @@
                     </h3>
                     <p>Developed an automated system for generating scope of works documents and fee proposals. The workflow draws on a structured knowledge base of previous project scopes to ensure consistency and reduce preparation time for new enquiries.</p>
                 </div>
+
                 <div class="process-card fade-in">
                     <h3>
                         <span class="process-icon">
@@ -2097,6 +1327,7 @@
                     </h3>
                     <p>Built a searchable knowledge base covering technical documentation, standard details, and project precedents. The system enables rapid retrieval of relevant information when preparing calculations, reports, and design packages.</p>
                 </div>
+
                 <div class="process-card fade-in">
                     <h3>
                         <span class="process-icon">
@@ -2106,6 +1337,7 @@
                     </h3>
                     <p>Project tracking and reference numbering system for new and existing clients, ensuring consistent project management and easy retrieval of project information.</p>
                 </div>
+
                 <div class="process-card fade-in">
                     <h3>
                         <span class="process-icon">
@@ -2127,12 +1359,14 @@
             <div class="shape shape-3"></div>
             <div class="shape shape-4"></div>
         </div>
+
         <div class="container">
             <div class="section-header">
                 <h2>Get in Touch</h2>
                 <p>I would welcome the opportunity to discuss how my experience in structural design, project delivery, and practical problem-solving could contribute to your team.</p>
                 <div class="section-divider"></div>
             </div>
+
             <div class="contact-grid">
                 <a href="mailto:vijayvvs1998@gmail.com" class="contact-item">
                     <div class="contact-icon">
@@ -2143,6 +1377,7 @@
                         <span class="value">vijayvvs1998@gmail.com</span>
                     </div>
                 </a>
+
                 <a href="tel:+447425619651" class="contact-item">
                     <div class="contact-icon">
                         <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -2152,6 +1387,7 @@
                         <span class="value">+44 7425 619651</span>
                     </div>
                 </a>
+
                 <a href="https://linkedin.com/in/vijayvvs1998" target="_blank" class="contact-item">
                     <div class="contact-icon">
                         <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
@@ -2161,6 +1397,7 @@
                         <span class="value">linkedin.com/in/vijayvvs1998</span>
                     </div>
                 </a>
+
                 <div class="contact-item">
                     <div class="contact-icon">
                         <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -2174,10 +1411,23 @@
         </div>
     </section>
 
-    <!-- Lightbox -->
+    <!-- Lightbox (UPDATED: has prev/next + swipe support) -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-        <span class="lightbox-close">&times;</span>
-        <img id="lightbox-img" src="" alt="Enlarged view">
+        <button class="lightbox-nav prev" aria-label="Previous image" onclick="event.stopPropagation(); lightboxPrev();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <img id="lightbox-img" src="" alt="Enlarged view" onclick="event.stopPropagation();" />
+
+        <button class="lightbox-nav next" aria-label="Next image" onclick="event.stopPropagation(); lightboxNext();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+
+        <button class="lightbox-close" aria-label="Close" onclick="event.stopPropagation(); closeLightbox();">&times;</button>
     </div>
 
     <!-- Footer -->
@@ -2189,11 +1439,8 @@
         // Navbar scroll effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
         });
 
         // Smooth scroll for navigation links
@@ -2201,12 +1448,7 @@
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
@@ -2214,7 +1456,6 @@
         function toggleProject(detailsId, button) {
             const details = document.getElementById(detailsId);
             const isExpanded = details.classList.contains('expanded');
-            
             details.classList.toggle('expanded');
             button.classList.toggle('expanded');
             button.querySelector('span').textContent = isExpanded ? 'Show Details' : 'Hide Details';
@@ -2224,7 +1465,6 @@
         function toggleUni(detailsId, button) {
             const details = document.getElementById(detailsId);
             const isExpanded = details.classList.contains('expanded');
-            
             details.classList.toggle('expanded');
             button.classList.toggle('expanded');
             button.querySelector('span').textContent = isExpanded ? 'Show More' : 'Show Less';
@@ -2236,16 +1476,16 @@
             const slides = gallery.querySelectorAll('.gallery-slide');
             const dots = gallery.querySelectorAll('.gallery-dot');
             if (slides.length <= 1) return;
-            
+
             let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
-            
+
             slides[currentIndex].classList.remove('active');
             dots[currentIndex].classList.remove('active');
-            
+
             currentIndex += direction;
             if (currentIndex >= slides.length) currentIndex = 0;
             if (currentIndex < 0) currentIndex = slides.length - 1;
-            
+
             slides[currentIndex].classList.add('active');
             dots[currentIndex].classList.add('active');
         }
@@ -2254,21 +1494,42 @@
             const gallery = document.getElementById(galleryId);
             const slides = gallery.querySelectorAll('.gallery-slide');
             const dots = gallery.querySelectorAll('.gallery-dot');
-            
+
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
-            
+
             slides[index].classList.add('active');
             dots[index].classList.add('active');
         }
 
-        // Lightbox functions
-        function openLightbox(imgSrc) {
-            const lightbox = document.getElementById('lightbox');
+        // ------------------------------
+        // Lightbox (UPDATED: prev/next + keyboard + swipe on mobile)
+        // ------------------------------
+        const lightboxState = { images: [], index: 0 };
+
+        function setLightboxImage() {
             const lightboxImg = document.getElementById('lightbox-img');
-            lightboxImg.src = imgSrc;
+            lightboxImg.src = lightboxState.images[lightboxState.index];
+
+            const prevBtn = document.querySelector('.lightbox-nav.prev');
+            const nextBtn = document.querySelector('.lightbox-nav.next');
+            const showNav = lightboxState.images.length > 1;
+            prevBtn.style.display = showNav ? 'flex' : 'none';
+            nextBtn.style.display = showNav ? 'flex' : 'none';
+        }
+
+        function openLightboxFromGallery(galleryId, index) {
+            const gallery = document.getElementById(galleryId);
+            const imgs = Array.from(gallery.querySelectorAll('.gallery-slide img')).map(i => i.src);
+
+            lightboxState.images = imgs;
+            lightboxState.index = index;
+
+            const lightbox = document.getElementById('lightbox');
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            setLightboxImage();
         }
 
         function closeLightbox() {
@@ -2277,28 +1538,111 @@
             document.body.style.overflow = '';
         }
 
-        // Close lightbox with Escape key
+        function lightboxPrev() {
+            if (lightboxState.images.length <= 1) return;
+            lightboxState.index = (lightboxState.index - 1 + lightboxState.images.length) % lightboxState.images.length;
+            setLightboxImage();
+        }
+
+        function lightboxNext() {
+            if (lightboxState.images.length <= 1) return;
+            lightboxState.index = (lightboxState.index + 1) % lightboxState.images.length;
+            setLightboxImage();
+        }
+
+        // Keyboard support: Esc closes, arrows navigate (only when lightbox is open)
         document.addEventListener('keydown', (e) => {
+            const isOpen = document.getElementById('lightbox').classList.contains('active');
+            if (!isOpen) return;
+
             if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') lightboxPrev();
+            if (e.key === 'ArrowRight') lightboxNext();
         });
 
-        // Add click handlers to all gallery images
-        document.querySelectorAll('.gallery-slide img').forEach(img => {
-            img.addEventListener('click', () => openLightbox(img.src));
+        // Add click handlers to gallery images (capture gallery id + index)
+        document.querySelectorAll('.project-gallery').forEach(gallery => {
+            const galleryId = gallery.id;
+            const imgs = gallery.querySelectorAll('.gallery-slide img');
+
+            imgs.forEach((img, idx) => {
+                img.addEventListener('click', () => openLightboxFromGallery(galleryId, idx));
+            });
         });
+
+        // Swipe support (mobile): swipe left/right on the enlarged image to navigate
+        (function enableLightboxSwipe() {
+            const img = document.getElementById('lightbox-img');
+            let startX = 0;
+            let startY = 0;
+            let tracking = false;
+
+            const SWIPE_MIN_X = 45;     // px horizontal distance
+            const SWIPE_MAX_Y = 80;     // px vertical drift allowed
+            const SWIPE_MAX_TIME = 800; // ms (optional)
+
+            let startTime = 0;
+
+            function onTouchStart(e) {
+                const isOpen = document.getElementById('lightbox').classList.contains('active');
+                if (!isOpen) return;
+
+                const t = e.touches[0];
+                startX = t.clientX;
+                startY = t.clientY;
+                startTime = Date.now();
+                tracking = true;
+            }
+
+            function onTouchMove(e) {
+                const isOpen = document.getElementById('lightbox').classList.contains('active');
+                if (!isOpen || !tracking) return;
+
+                // If user is clearly swiping horizontally, prevent page scroll
+                const t = e.touches[0];
+                const dx = t.clientX - startX;
+                const dy = t.clientY - startY;
+
+                if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+                    e.preventDefault();
+                }
+            }
+
+            function onTouchEnd(e) {
+                const isOpen = document.getElementById('lightbox').classList.contains('active');
+                if (!isOpen || !tracking) return;
+
+                tracking = false;
+
+                const endTime = Date.now();
+                const elapsed = endTime - startTime;
+
+                // changedTouches on end
+                const t = e.changedTouches[0];
+                const dx = t.clientX - startX;
+                const dy = t.clientY - startY;
+
+                if (elapsed > SWIPE_MAX_TIME) return;
+                if (Math.abs(dy) > SWIPE_MAX_Y) return;
+                if (Math.abs(dx) < SWIPE_MIN_X) return;
+
+                if (dx < 0) lightboxNext(); // swipe left => next
+                else lightboxPrev();        // swipe right => prev
+            }
+
+            // Use passive: false so we can preventDefault in onTouchMove
+            img.addEventListener('touchstart', onTouchStart, { passive: true });
+            img.addEventListener('touchmove', onTouchMove, { passive: false });
+            img.addEventListener('touchend', onTouchEnd, { passive: true });
+        })();
 
         // Fade in on scroll
         const fadeElements = document.querySelectorAll('.fade-in');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         fadeElements.forEach(el => observer.observe(el));
 
@@ -2306,7 +1650,7 @@
         const mobileBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
         let menuOpen = false;
-        
+
         mobileBtn.addEventListener('click', () => {
             menuOpen = !menuOpen;
             if (menuOpen) {
