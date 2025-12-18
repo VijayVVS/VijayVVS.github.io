@@ -417,7 +417,7 @@
             border-radius: 4px;
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
             cursor: default;
-            touch-action: pan-y; /* allow vertical page gestures to be blocked while we handle horizontal swipe */
+            touch-action: pan-y;
         }
 
         .lightbox-close {
@@ -435,7 +435,6 @@
         }
         .lightbox-close:hover { color: var(--gold); }
 
-        /* Lightbox navigation (prev/next inside enlarged view) */
         .lightbox-nav {
             position: absolute;
             top: 50%;
@@ -447,7 +446,7 @@
             height: 44px;
             border-radius: 50%;
             cursor: pointer;
-            display: none; /* only show when gallery has >1 image */
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 10000;
@@ -577,7 +576,16 @@
         /* Project Summary Section */
         .project-summary { background: var(--cream); position: relative; }
         .project-summary .bg-3d { opacity: 0.3; }
-        .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; position: relative; z-index: 1; }
+
+        /* ✅ CHANGED: allow 4 cards nicely (was 3) */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
         .summary-category {
             background: var(--white);
             border-radius: 12px;
@@ -692,7 +700,9 @@
             .about-image img { max-width: 300px; margin: 0 auto; display: block; }
             .project-cards { grid-template-columns: 1fr; }
             .uni-cards { grid-template-columns: 1fr; }
-            .summary-grid { grid-template-columns: 1fr; }
+
+            /* ✅ CHANGED: responsive 4 -> 2 */
+            .summary-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
@@ -706,9 +716,10 @@
             .timeline::before { left: 8px; }
             .timeline-dot { left: 1px; }
             .contact-grid { flex-direction: column; align-items: center; }
-
-            /* Slightly bigger lightbox buttons on mobile */
             .lightbox-nav { width: 48px; height: 48px; }
+
+            /* ✅ CHANGED: responsive 2 -> 1 */
+            .summary-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 480px) {
@@ -791,7 +802,9 @@
                     <h3>Building Safe, Cost-Effective Structures</h3>
                     <p>Graduate Structural Engineer with hands-on experience across 40+ commercial, retail, industrial, and residential projects. Focused on delivering cost-effective structural solutions and catching design issues before they reach site.</p>
                     <p>Competent in Eurocodes and British Standards with practical exposure to SER certification requirements. My technical expertise spans reinforced concrete, structural steelwork, timber design, and composite floor systems — from detailed connection design to foundation engineering.</p>
-                    <p>My UK consultancy experience is complemented by large-scale international delivery across water, wastewater, and effluent treatment infrastructure in India, Bangladesh, and Malaysia, with individual project values exceeding US$15 million. My responsibilities spanned detailed structural design for sewage treatment plants (STPs), including the 200 MLD Pagla STP (Dhaka) and the 150 MLD Patna STP (India); project management and procurement for a major effluent treatment plant (ETP) for Petronas, Malaysia; and full-time site supervision of a 178.3 MLD water treatment plant (WTP), overseeing reinforced concrete and steel structures for digesters, clarifiers, aeration tanks, pumping stations, and sludge handling facilities.</p>
+
+                    <!-- ✅ CHANGED: includes Patna 150 MLD explicitly -->
+                    <p>My UK consultancy experience is complemented by international project delivery on water-treatment infrastructure in India, Bangladesh, and Malaysia, valued at over US$15 million. This includes RC and steel design for digesters, clarifiers, pumping stations, and site supervision of major WTP/STP construction including Dhaka’s 200 MLD Pagla STP and Patna’s 150 MLD STP.</p>
 
                     <div class="education-cards">
                         <div class="edu-card">
@@ -1257,12 +1270,13 @@
             <div class="summary-grid">
                 <div class="summary-category fade-in">
                     <h3>
+                        <!-- ✅ UNCHANGED icon (as requested) -->
                         <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/></svg>
                         UK Health & Beauty Retailer
                     </h3>
                     <ul class="summary-list">
                         <li><span class="project-name">Dundee Gallagher (SER)</span><span class="project-desc">Mezzanine alterations, signage, floor infill, fire wall</span></li>
-                        <li><span class="project-name">Fort Kinnaird (SER)</span><span class="project-desc">Canopy design, hanging bulkheads, M&E supports</span></li>
+                        <li><span class="project-name">Fort Kinnaird (SER)</span><span class="project-desc">Canopy design, hanging bulkheads, M&amp;E supports</span></li>
                         <li><span class="project-name">Glasgow</span><span class="project-desc">Signage support, floor infill, hanging bulkhead</span></li>
                         <li><span class="project-name">Multiple Retail Parks</span><span class="project-desc">Canopy installations, shopfront modifications</span></li>
                         <li><span class="project-name">Fragrance Retail Unit</span><span class="project-desc">Chandelier support design</span></li>
@@ -1271,8 +1285,9 @@
 
                 <div class="summary-category fade-in">
                     <h3>
+                        <!-- ✅ UNCHANGED icon (as requested) -->
                         <svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
-                        Industrial & Manufacturing
+                        Industrial &amp; Manufacturing
                     </h3>
                     <ul class="summary-list">
                         <li><span class="project-name">National Food Manufacturer</span><span class="project-desc">SuDS strategy, structural assessment, crane platform</span></li>
@@ -1285,13 +1300,33 @@
 
                 <div class="summary-category fade-in">
                     <h3>
+                        <!-- ✅ UNCHANGED icon (as requested) -->
                         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                        Social Housing & Residential
+                        Social Housing &amp; Residential
                     </h3>
                     <ul class="summary-list">
                         <li><span class="project-name">Underpinning Schemes</span><span class="project-desc">Multiple properties on shrinkable clay</span></li>
                         <li><span class="project-name">Wall Stabilisation</span><span class="project-desc">Remedial ties, joist restraints, strengthening plates</span></li>
                         <li><span class="project-name">Heave Protection</span><span class="project-desc">Cordek void formers, isolation joints</span></li>
+                    </ul>
+                </div>
+
+                <!-- ✅ NEW: WABAG card + icon -->
+                <div class="summary-category fade-in">
+                    <h3>
+                        <!-- Water / infrastructure icon -->
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2s6 7 6 12a6 6 0 0 1-12 0c0-5 6-12 6-12z"/>
+                            <path d="M8.5 14.2c.6 1.6 2 2.8 3.5 3.2" fill="none" stroke="currentColor" stroke-width="0"/>
+                        </svg>
+                        WABAG – Water Infrastructure
+                    </h3>
+                    <ul class="summary-list">
+                        <li><span class="project-name">Pagla STP, Dhaka (200 MLD)</span><span class="project-desc">RC/steel design for treatment structures and ancillaries</span></li>
+                        <li><span class="project-name">Patna STP, India (150 MLD)</span><span class="project-desc">Structural design for STP units and supporting facilities</span></li>
+                        <li><span class="project-name">WTP Construction (178.3 MLD)</span><span class="project-desc">Site supervision &amp; delivery — 150,000+ safe man-hours</span></li>
+                        <li><span class="project-name">Pumping Stations</span><span class="project-desc">Feasibility studies and technical design reports</span></li>
+                        <li><span class="project-name">ETP Procurement (US$11.45M)</span><span class="project-desc">Package procurement support for Petronas ETP Malaysia</span></li>
                     </ul>
                 </div>
             </div>
@@ -1411,7 +1446,7 @@
         </div>
     </section>
 
-    <!-- Lightbox (UPDATED: has prev/next + swipe support) -->
+    <!-- Lightbox -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
         <button class="lightbox-nav prev" aria-label="Previous image" onclick="event.stopPropagation(); lightboxPrev();">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1502,9 +1537,7 @@
             dots[index].classList.add('active');
         }
 
-        // ------------------------------
-        // Lightbox (UPDATED: prev/next + keyboard + swipe on mobile)
-        // ------------------------------
+        // Lightbox
         const lightboxState = { images: [], index: 0 };
 
         function setLightboxImage() {
@@ -1550,7 +1583,6 @@
             setLightboxImage();
         }
 
-        // Keyboard support: Esc closes, arrows navigate (only when lightbox is open)
         document.addEventListener('keydown', (e) => {
             const isOpen = document.getElementById('lightbox').classList.contains('active');
             if (!isOpen) return;
@@ -1560,7 +1592,6 @@
             if (e.key === 'ArrowRight') lightboxNext();
         });
 
-        // Add click handlers to gallery images (capture gallery id + index)
         document.querySelectorAll('.project-gallery').forEach(gallery => {
             const galleryId = gallery.id;
             const imgs = gallery.querySelectorAll('.gallery-slide img');
@@ -1570,16 +1601,15 @@
             });
         });
 
-        // Swipe support (mobile): swipe left/right on the enlarged image to navigate
         (function enableLightboxSwipe() {
             const img = document.getElementById('lightbox-img');
             let startX = 0;
             let startY = 0;
             let tracking = false;
 
-            const SWIPE_MIN_X = 45;     // px horizontal distance
-            const SWIPE_MAX_Y = 80;     // px vertical drift allowed
-            const SWIPE_MAX_TIME = 800; // ms (optional)
+            const SWIPE_MIN_X = 45;
+            const SWIPE_MAX_Y = 80;
+            const SWIPE_MAX_TIME = 800;
 
             let startTime = 0;
 
@@ -1598,7 +1628,6 @@
                 const isOpen = document.getElementById('lightbox').classList.contains('active');
                 if (!isOpen || !tracking) return;
 
-                // If user is clearly swiping horizontally, prevent page scroll
                 const t = e.touches[0];
                 const dx = t.clientX - startX;
                 const dy = t.clientY - startY;
@@ -1614,10 +1643,8 @@
 
                 tracking = false;
 
-                const endTime = Date.now();
-                const elapsed = endTime - startTime;
+                const elapsed = Date.now() - startTime;
 
-                // changedTouches on end
                 const t = e.changedTouches[0];
                 const dx = t.clientX - startX;
                 const dy = t.clientY - startY;
@@ -1626,17 +1653,15 @@
                 if (Math.abs(dy) > SWIPE_MAX_Y) return;
                 if (Math.abs(dx) < SWIPE_MIN_X) return;
 
-                if (dx < 0) lightboxNext(); // swipe left => next
-                else lightboxPrev();        // swipe right => prev
+                if (dx < 0) lightboxNext();
+                else lightboxPrev();
             }
 
-            // Use passive: false so we can preventDefault in onTouchMove
             img.addEventListener('touchstart', onTouchStart, { passive: true });
             img.addEventListener('touchmove', onTouchMove, { passive: false });
             img.addEventListener('touchend', onTouchEnd, { passive: true });
         })();
 
-        // Fade in on scroll
         const fadeElements = document.querySelectorAll('.fade-in');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -1646,7 +1671,6 @@
 
         fadeElements.forEach(el => observer.observe(el));
 
-        // Mobile menu toggle
         const mobileBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
         let menuOpen = false;
