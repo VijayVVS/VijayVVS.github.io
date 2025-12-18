@@ -1677,12 +1677,14 @@
                     </div>
                     <div class="project-body">
                         <!-- Image Gallery -->
-                        <div class="project-gallery single-image" id="gallery1">
+                        <div class="project-gallery" id="gallery1">
                             <div class="gallery-container">
                                 <div class="gallery-slide active">
                                     <img src="crane-gantry-1.png" alt="Crane Gantry Foundation Section Detail">
                                 </div>
-                                <!-- Add more images: copy the div above, remove 'active' class -->
+                                <div class="gallery-slide">
+                                    <img src="crane-gantry-2.png" alt="Crane Gantry Foundation Plan">
+                                </div>
                             </div>
                             <button class="gallery-nav prev" onclick="changeSlide('gallery1', -1)">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -1692,6 +1694,7 @@
                             </button>
                             <div class="gallery-dots">
                                 <button class="gallery-dot active" onclick="goToSlide('gallery1', 0)"></button>
+                                <button class="gallery-dot" onclick="goToSlide('gallery1', 1)"></button>
                             </div>
                         </div>
                         <div class="project-challenge">
@@ -1790,10 +1793,16 @@
                     </div>
                     <div class="project-body">
                         <!-- Image Gallery -->
-                        <div class="project-gallery single-image" id="gallery3">
+                        <div class="project-gallery" id="gallery3">
                             <div class="gallery-container">
                                 <div class="gallery-slide active">
                                     <img src="shopfront-1.png" alt="Shopfront Portal Frame Connection Details">
+                                </div>
+                                <div class="gallery-slide">
+                                    <img src="shopfront-2.png" alt="Shopfront Portal Frame Detail 2">
+                                </div>
+                                <div class="gallery-slide">
+                                    <img src="shopfront-3.png" alt="Shopfront Portal Frame Detail 3">
                                 </div>
                             </div>
                             <button class="gallery-nav prev" onclick="changeSlide('gallery3', -1)">
@@ -1804,6 +1813,8 @@
                             </button>
                             <div class="gallery-dots">
                                 <button class="gallery-dot active" onclick="goToSlide('gallery3', 0)"></button>
+                                <button class="gallery-dot" onclick="goToSlide('gallery3', 1)"></button>
+                                <button class="gallery-dot" onclick="goToSlide('gallery3', 2)"></button>
                             </div>
                         </div>
                         <div class="project-challenge">
