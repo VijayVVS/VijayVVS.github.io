@@ -476,7 +476,7 @@
         .project-challenge p { color: rgba(255,255,255,0.8); font-size: 0.9rem; line-height: 1.5; }
 
         .project-details { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; }
-        .project-details.expanded { max-height: 600px; padding-top: 16px; }
+        .project-details.expanded { max-height: 800px; padding-top: 16px; }
 
         .project-contributions h4 {
             font-size: 0.8rem;
@@ -633,7 +633,7 @@
         .process-icon svg { width: 20px; height: 20px; fill: var(--navy-dark); }
         .process-card p { color: var(--gray-600); font-size: 0.95rem; }
 
-        /* ✅ AI Defect System Visuals (NEW) */
+        /* AI Defect System Visuals */
         .ai-flow {
             display: flex;
             align-items: center;
@@ -810,7 +810,6 @@
             <div class="hero-content">
                 <div class="hero-text">
                     <h1>Vijay Venkatasamy</h1>
-                    <!-- ✅ UPDATED subtitle to include Digital Engineering (subtle + recruiter-friendly) -->
                     <p class="subtitle">Graduate Structural Engineer | Digital Engineering & Workflow Automation</p>
                     <div class="credentials">
                         <span class="credential-badge">GMICE</span>
@@ -853,10 +852,8 @@
                     <p>Graduate Structural Engineer with hands-on experience across 40+ commercial, retail, industrial, and residential projects. Focused on delivering cost-effective structural solutions and catching design issues before they reach site.</p>
                     <p>Competent in Eurocodes and British Standards with practical exposure to SER certification requirements. My technical expertise spans reinforced concrete, structural steelwork, timber design, and composite floor systems — from detailed connection design to foundation engineering.</p>
 
-                    <!-- ✅ CHANGED: includes Patna 150 MLD explicitly -->
                     <p>My UK consultancy experience is complemented by large-scale international delivery across water, wastewater, and effluent treatment infrastructure in India, Bangladesh, and Malaysia, with individual project values exceeding US$15 million. My responsibilities included detailed structural design of reinforced concrete and steel structures for major sewage treatment projects, including the 200 MLD Pagla STP (Dhaka) and the 150 MLD Patna STP (India); project management and procurement for a major effluent treatment plant (ETP) for Petronas, Malaysia; and full-time site supervision of the complete delivery of a 178.3 MLD water treatment plant (WTP).</p>
 
-                    <!-- ✅ NEW: subtle AI/digital paragraph that blends with your tone -->
                     <p>Alongside traditional structural engineering, I develop digital and AI-assisted workflows to improve consistency, traceability, and compliance within engineering practice. My focus is responsible implementation — automating repetitive administrative tasks while keeping all engineering decisions under professional judgement and review.</p>
 
                     <div class="education-cards">
@@ -915,7 +912,6 @@
                             <li>Designed composite floor infills using proprietary metal deck systems, optimising beam sizes</li>
                             <li>Supported SER-certified projects under Scottish Building Regulations</li>
                             <li>Developed remedial solutions including crack-stitching, wall stabilisation, and bressummer installations</li>
-                            <!-- ✅ NEW: one clean bullet that adds digital credibility -->
                             <li>Developed internal digital and AI-assisted workflows supporting defect management, document drafting, and project administration to improve consistency and response times</li>
                         </ul>
                     </div>
@@ -1234,6 +1230,73 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Project 5: AI Defect Reporting System - NEW -->
+                <div class="project-card fade-in">
+                    <div class="project-header">
+                        <span class="project-number">05</span>
+                        <h3>AI-Enabled Defect Reporting System</h3>
+                        <div class="project-meta">
+                            <span class="project-tag">Social Housing</span>
+                            <span class="project-tag">Claude AI + React</span>
+                            <span class="project-tag">Awaab's Law</span>
+                        </div>
+                    </div>
+
+                    <div class="project-body">
+                        <div class="project-gallery single-image" id="gallery5">
+                            <div class="gallery-container">
+                                <div class="gallery-slide active">
+                                    <div style="background: linear-gradient(135deg, #1a365d 0%, #0f2440 100%); padding: 48px 32px; text-align: center; border-radius: 8px; min-height: 280px; display: flex; flex-direction: column; justify-content: center;">
+                                        <div style="font-size: 2.5rem; margin-bottom: 20px; letter-spacing: 8px;">📱 → 🤖 → 🧑‍🔧</div>
+                                        <div style="color: #d4a84b; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;">WhatsApp → AI Triage → Engineer Review</div>
+                                        <div style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">End-to-end defect management system</div>
+                                        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                                            <span style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.9);">Node.js</span>
+                                            <span style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.9);">Claude API</span>
+                                            <span style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.9);">Supabase</span>
+                                            <span style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.9);">React</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-challenge">
+                            <h4>The Challenge</h4>
+                            <p>Defect reporting in social housing is unstructured — vague messages, missing addresses, photos without context. Awaab's Law now mandates 24-hour acknowledgment with full audit trails.</p>
+                        </div>
+
+                        <div class="project-details" id="project5-details">
+                            <div class="project-contributions">
+                                <h4>My Contribution</h4>
+                                <ul>
+                                    <li>Designed end-to-end workflow: WhatsApp intake → AI triage → engineer dashboard</li>
+                                    <li>Implemented Claude AI (text + vision) for natural language extraction and photo analysis</li>
+                                    <li>Built conversation state management to handle multi-turn defect intake</li>
+                                    <li>Created React dashboard with two-way WhatsApp communication</li>
+                                    <li>Structured Supabase database schema for compliance reporting and audit trails</li>
+                                    <li>Developed engineer reply system with approved message templates</li>
+                                </ul>
+                            </div>
+                            <div class="project-outcome">
+                                <h4>Engineering Principle</h4>
+                                <p>AI handles the messy intake; engineers own the decisions. Technology supports the workflow — it doesn't replace professional judgement.</p>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <a href="https://vijayvvs.github.io/ai-defect-reporting-case-study/" target="_blank" 
+                                   style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #d4a84b 0%, #e8c77b 100%); color: #0f2440; border-radius: 8px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(212,168,75,0.3);">
+                                    View Full Case Study →
+                                </a>
+                            </div>
+                        </div>
+
+                        <button class="expand-btn" onclick="toggleProject('project5-details', this)">
+                            <span>Show Details</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1351,6 +1414,7 @@
                     </ul>
                 </div>
 
+                <!-- UPDATED: Social Housing with link -->
                 <div class="summary-category fade-in">
                     <h3>
                         <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -1360,8 +1424,12 @@
                         <li><span class="project-name">Underpinning Schemes</span><span class="project-desc">Multiple properties on shrinkable clay</span></li>
                         <li><span class="project-name">Wall Stabilisation</span><span class="project-desc">Remedial ties, joist restraints, strengthening plates</span></li>
                         <li><span class="project-name">Heave Protection</span><span class="project-desc">Cordek void formers, isolation joints</span></li>
-                        <!-- ✅ NEW: subtle digital note -->
-                        <li><span class="project-name">Digital Compliance Tools</span><span class="project-desc">AI-assisted defect reporting workflow (WhatsApp + dashboard)</span></li>
+                        <li>
+                            <a href="https://vijayvvs.github.io/ai-defect-reporting-case-study/" target="_blank" style="text-decoration: none; display: block;">
+                                <span class="project-name" style="color: #d4a84b;">AI Defect Reporting System ↗</span>
+                                <span class="project-desc">WhatsApp + Claude AI for Awaab's Law compliance</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -1423,7 +1491,7 @@
                     <p>Project tracking and reference numbering system for new and existing clients, ensuring consistent project management and easy retrieval of project information.</p>
                 </div>
 
-                <!-- ✅ UPDATED: AI-Assisted Defect Management (Visual + Flow + Compliance) -->
+                <!-- UPDATED: AI-Assisted Defect Management with Case Study Link -->
                 <div class="process-card fade-in">
                     <h3>
                         <span class="process-icon">
@@ -1437,7 +1505,7 @@
                     <p>
                         Designed and developed a <strong>WhatsApp-based AI-assisted defect reporting system</strong> for social housing,
                         enabling tenants to report issues using natural language and images while ensuring
-                        <strong>Awaab’s Law compliance</strong> and full engineer oversight.
+                        <strong>Awaab's Law compliance</strong> and full engineer oversight.
                     </p>
 
                     <div class="ai-flow">
@@ -1453,7 +1521,7 @@
                     </div>
 
                     <ul class="ai-points">
-                        <li>⚖️ Statutory response tracking aligned with <strong>Awaab’s Law</strong></li>
+                        <li>⚖️ Statutory response tracking aligned with <strong>Awaab's Law</strong></li>
                         <li>🧠 AI-assisted text & image classification (human-in-the-loop)</li>
                         <li>🗂️ Structured defect records with full audit trail</li>
                         <li>💬 Two-way tenant ↔ engineer communication via dashboard</li>
@@ -1464,6 +1532,11 @@
                         AI supports data capture and prioritisation only — all technical decisions,
                         responses, and remedial actions remain under professional engineer control.
                     </div>
+
+                    <a href="https://vijayvvs.github.io/ai-defect-reporting-case-study/" target="_blank" 
+                       style="display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; padding: 12px 20px; background: var(--gold); color: var(--navy-dark); border-radius: 6px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.3s ease;">
+                        View Full Case Study →
+                    </a>
                 </div>
             </div>
         </div>
