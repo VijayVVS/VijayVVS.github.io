@@ -1145,8 +1145,9 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
 
 
 /* ══════════════════════════════════════════════
-   WATERMARK POSITIONS — uniform left:30px
+   WATERMARK POSITIONS — all left:30px, uniform
 ══════════════════════════════════════════════ */
+#about::after,
 #experience::after,
 #projects::after,
 #research::after,
@@ -1156,28 +1157,55 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
   left: 30px;
 }
 
-/* About: watermark sits BELOW the photo, bottom-left */
+/* About watermark: anchored BELOW the photo area, not centre */
 #about::after {
-  left: 30px;
   top: auto !important;
-  bottom: 3rem;
+  bottom: 2rem;
   transform: none !important;
-  width: 280px;
-  height: 300px;
+  width: 260px;
+  height: 280px;
 }
 
 /* ══════════════════════════════════════════════
-   CONTENT ALIGNMENT — headings + cards share same left edge
-   Offset = 280px (clears 340px watermark width at 30px left)
+   CONTENT ALIGNMENT
+   Single consistent left edge for ALL sections.
+   Watermark: left:30px + width:340px = ends at 370px from section edge.
+   Container padding:3rem (~48px). Gap we want: 20px.
+   So offset from container content start = 370 - 48 + 20 = 342px → use 300px
+   (container itself is centered, on 1440px screen gap ≈ 40px extra already)
+   Settled on 280px margin-left for all content blocks.
 ══════════════════════════════════════════════ */
-/* Research */
+
+/* ── Experience ── */
+#experience > .container > .section-label,
+#experience > .container > .section-ghost,
+#experience > .container > h2,
+#experience .experience-layout {
+  margin-left: 280px;
+}
+
+/* ── Projects (featured work) ── */
+#projects > .container > .section-label,
+#projects > .container > h2,
+#projects .projects-grid {
+  margin-left: 280px;
+}
+
+/* ── All Projects (summary grid) ── */
+#all-projects > .container > .section-label,
+#all-projects > .container > h2,
+#all-projects .summary-grid {
+  margin-left: 280px;
+}
+
+/* ── Research ── */
 #research > .container > .section-label,
 #research > .container > h2,
 #research .uni-grid {
   margin-left: 280px;
 }
 
-/* Process — label, heading, subtitle p, grid */
+/* ── Process ── */
 #process > .container > .section-label,
 #process > .container > h2,
 #process > .container > p.reveal,
@@ -1185,7 +1213,7 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
   margin-left: 280px;
 }
 
-/* Contact — the heading lives inside contact-grid col 1, shift whole grid */
+/* ── Contact — heading lives inside grid col 1, shift whole grid ── */
 .contact-grid {
   margin-left: 280px;
   padding-top: 3rem;
