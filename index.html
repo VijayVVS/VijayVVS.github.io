@@ -50,7 +50,7 @@ h3{font-size:1.2rem}
 a{color:var(--accent);text-decoration:none;transition:color .2s}
 a:hover{color:var(--accent-2)}
 .container{max-width:1360px;margin:0 auto;padding:0 3rem}
-section{position:relative;z-index:1;padding:7rem 0}
+section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
 ::selection{background:var(--accent);color:#0d0b08}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#0a0805}
@@ -909,7 +909,7 @@ section{background:var(--bg)}
 ══════════════════════════════════════════════ */
 .experience-layout{
   display:grid;
-  grid-template-columns:1fr 340px;
+  grid-template-columns:1fr 400px;
   gap:4rem;
   align-items:start;
 }
@@ -934,7 +934,7 @@ section{background:var(--bg)}
   margin-bottom:.5rem;gap:.5rem;
 }
 .skill-bar-name{font-family:var(--fm);font-size:.75rem;color:var(--text-dim);letter-spacing:.04em;white-space:nowrap}
-.skill-bar-pct{font-family:var(--fm);font-size:.7rem;color:var(--accent);white-space:nowrap}
+.skill-bar-pct{font-family:var(--fm);font-size:.7rem;color:var(--accent);white-space:nowrap;min-width:90px;text-align:right}
 .skill-bar-track{
   height:4px;background:rgba(181,69,27,.1);border-radius:2px;overflow:hidden;
 }
@@ -1822,10 +1822,10 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
 <div class="divider"></div>
 
 <!-- ══ CONTACT ══ -->
-<section id="contact" style="overflow:hidden">
+<section id="contact">
+  <span class="section-ghost">05</span>
+  <span class="section-stamp">SEC·05</span>
   <div class="container">
-    <span class="section-ghost">05</span>
-    <span class="section-stamp">SEC·05</span>
     <div class="contact-grid">
       <div>
         <p class="section-label reveal-l">Contact</p>
