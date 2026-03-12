@@ -445,7 +445,7 @@ section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
 
 /* ══ CONTACT ══ */
 #contact{background:var(--bg-2)}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;padding-top:4.5rem}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;padding-top:3rem}
 #contact .section-stamp{top:1.2rem}
 .contact-desc{color:var(--text-dim);line-height:1.8;margin-bottom:2rem;font-size:.95rem}
 .contact-links{display:flex;flex-direction:column;gap:.75rem}
@@ -1143,10 +1143,54 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
 #cursor-ring{border:1.5px solid rgba(181,69,27,.5)}
 
 
-/* ══ WATERMARK CLEARANCE — shift card grids right to avoid overlap ══ */
-#research .uni-grid{margin-left:280px}
-#process .process-grid{margin-left:280px}
-#contact .contact-grid{padding-left:260px}
+
+/* ══════════════════════════════════════════════
+   WATERMARK POSITIONS — uniform left:30px
+══════════════════════════════════════════════ */
+#experience::after,
+#projects::after,
+#research::after,
+#all-projects::after,
+#process::after,
+#contact::after {
+  left: 30px;
+}
+
+/* About: watermark sits BELOW the photo, bottom-left */
+#about::after {
+  left: 30px;
+  top: auto !important;
+  bottom: 3rem;
+  transform: none !important;
+  width: 280px;
+  height: 300px;
+}
+
+/* ══════════════════════════════════════════════
+   CONTENT ALIGNMENT — headings + cards share same left edge
+   Offset = 280px (clears 340px watermark width at 30px left)
+══════════════════════════════════════════════ */
+/* Research */
+#research > .container > .section-label,
+#research > .container > h2,
+#research .uni-grid {
+  margin-left: 280px;
+}
+
+/* Process — label, heading, subtitle p, grid */
+#process > .container > .section-label,
+#process > .container > h2,
+#process > .container > p.reveal,
+#process .process-grid {
+  margin-left: 280px;
+}
+
+/* Contact — the heading lives inside contact-grid col 1, shift whole grid */
+.contact-grid {
+  margin-left: 280px;
+  padding-top: 3rem;
+}
+
 </style>
 </head>
 <body>
