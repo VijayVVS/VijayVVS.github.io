@@ -110,14 +110,9 @@ section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
 .hero-3d-wrap{
   position:relative;
   width:100%;
+  min-height:620px;
   animation:fadeUp .8s ease both;
   animation-delay:1s;
-}
-#frame-canvas{
-  width:100%!important;
-  height:auto!important;
-  display:block;
-  border-radius:4px;
 }
 .stat-overlay{
   position:absolute;
@@ -131,6 +126,10 @@ section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
   z-index:4;
   min-width:90px;
 }
+.stat-overlay.tl{top:.75rem;left:18%;transform:translateX(-50%)}
+.stat-overlay.tr{top:.75rem;right:18%;transform:translateX(50%)}
+.stat-overlay.bl{bottom:.75rem;left:18%;transform:translateX(-50%)}
+.stat-overlay.br{bottom:.75rem;right:18%;transform:translateX(50%)}
 .stat-overlay .stat-number{
   font-size:1.5rem;font-weight:700;
   color:var(--accent);display:block;
@@ -142,10 +141,6 @@ section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
   color:var(--text-dim);letter-spacing:.08em;
   text-transform:uppercase;white-space:nowrap;
 }
-.stat-overlay.tl{top:.75rem;left:.75rem}
-.stat-overlay.tr{top:.75rem;right:.75rem}
-.stat-overlay.bl{bottom:.75rem;left:.75rem}
-.stat-overlay.br{bottom:.75rem;right:.75rem}
 
 
 /* Hero scroll indicator */
@@ -1133,10 +1128,78 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
 #cursor{background:var(--accent)}
 #cursor-ring{border:1.5px solid rgba(181,69,27,.5)}
 
+/* ══ SHIMMER / SHINE ON HOVER ══ */
+.project-card .card-glare,
+.uni-card::after,
+.summary-cat::after,
+.process-card::after{
+  content:'';position:absolute;top:0;left:-100%;
+  width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(196,113,46,.12),rgba(232,168,106,.08),transparent);
+  transform:skewX(-25deg);
+  transition:none;pointer-events:none;z-index:2;
+}
+.project-card:hover .card-glare,
+.uni-card:hover::after,
+.summary-cat:hover::after,
+.process-card:hover::after{
+  animation:shimmerSlide .65s ease forwards;
+}
+@keyframes shimmerSlide{
+  from{left:-100%}
+  to{left:150%}
+}
 
+/* ══ ENHANCED GLITCH — HERO NAME ══ */
+.hero-name::before,.hero-name::after{
+  content:attr(data-text);
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  color:#f5e6cc;-webkit-text-fill-color:#f5e6cc;
+  background:none;overflow:hidden;
+  opacity:0;pointer-events:none;
+}
+.hero-name.glitching::before{
+  opacity:1;
+  color:#e8a86a;-webkit-text-fill-color:#e8a86a;
+  animation:glitchTop .2s steps(2) forwards;
+  clip-path:polygon(0 0,100% 0,100% 35%,0 35%);
+}
+.hero-name.glitching::after{
+  opacity:1;
+  color:#8f4f1a;-webkit-text-fill-color:#8f4f1a;
+  animation:glitchBottom .2s steps(2) forwards;
+  clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);
+}
+@keyframes glitchTop{
+  0%{transform:translate(-3px,-1px)}
+  25%{transform:translate(3px,1px)}
+  50%{transform:translate(-2px,0px)}
+  75%{transform:translate(4px,-1px)}
+  100%{transform:translate(0);opacity:0}
+}
+@keyframes glitchBottom{
+  0%{transform:translate(3px,1px)}
+  25%{transform:translate(-4px,-1px)}
+  50%{transform:translate(2px,1px)}
+  75%{transform:translate(-3px,0px)}
+  100%{transform:translate(0);opacity:0}
+}
+
+/* ══ THREE.JS FRAME CONTAINER ══ */
+#three-frame-container{
+  position:absolute;inset:0;
+  border-radius:4px;overflow:hidden;
+}
+#three-frame-container canvas{
+  width:100%!important;height:100%!important;
+  display:block;
+}
 
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
@@ -1195,9 +1258,9 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
         </div>
       </div>
       <div class="hero-3d-wrap" id="hero-3d-wrap">
-        <canvas id="frame-canvas"></canvas>
+        <div id="three-frame-container"></div>
         <div class="stat-overlay tl"><span class="stat-number">40+</span><span class="stat-label">UK Projects</span></div>
-        <div class="stat-overlay tr"><span class="stat-number">$15M+</span><span class="stat-label">Intl Value</span></div>
+        <div class="stat-overlay tr"><span class="stat-number">$15M+</span><span class="stat-label">International Value</span></div>
         <div class="stat-overlay bl"><span class="stat-number">150K+</span><span class="stat-label">Safe Man-Hours</span></div>
         <div class="stat-overlay br"><span class="stat-number">4</span><span class="stat-label">Sectors</span></div>
       </div>
@@ -2381,183 +2444,268 @@ function showToast(msg){
   const ee=document.getElementById('easter-egg');
   if(ee){ee.addEventListener('click',function(e){if(e.target===this)this.classList.remove('active');});}
 })();
-/* ── STRUCTURAL FRAME — pure Canvas 2D isometric, no dependencies ── */
+/* ── STRUCTURAL FRAME — Three.js + GSAP scroll-driven explosion ── */
 (function(){
-  const canvas = document.getElementById('frame-canvas');
-  if(!canvas) return;
+  const container = document.getElementById('three-frame-container');
+  if(!container || typeof THREE === 'undefined') return;
 
-  const wrap = document.getElementById('hero-3d-wrap');
-  const SZ = 520;
-  canvas.width  = SZ;
-  canvas.height = SZ;
-  const ctx = canvas.getContext('2d');
+  /* ── Scene, Camera, Renderer ── */
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0d0b08, 0.012);
 
-  // Isometric projection
-  // rotY drives auto-rotation, mouseX/Y for tilt
-  let rotY = 0.42;
-  let tiltX = 0.18; // slight lean back
-  let tgtMouseX = 0, tgtMouseY = 0;
-  let curMouseX = 0, curMouseY = 0;
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 200);
+  camera.position.set(0, 2, 22);
+  camera.lookAt(0, 2, 0);
 
-  // Building params
-  const BAYS_X = 2, BAYS_Z = 2;
-  const BAY_W = 1, BAY_D = 1, STORY_H = 0.72;
-  const STORIES = 5;
-  const SCALE = 110; // world units → pixels
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x000000, 0);
+  container.appendChild(renderer.domElement);
 
-  // Colour palette — amber copper
-  const C = {
-    col:    '#c4712e',
-    colShade:'#8f4f1a',
-    beam:   '#d4823e',
-    brace:  '#7a3d10',
-    node:   '#e8a86a',
-    nodeFill:'rgba(232,168,106,0.18)',
-    glow:   'rgba(196,113,46,0.22)',
-  };
-
-  // Project 3D → 2D isometric
-  function project(wx, wy, wz, rY, rX) {
-    // Rotate around Y axis
-    const cosY = Math.cos(rY), sinY = Math.sin(rY);
-    const rx = wx * cosY + wz * sinY;
-    const rz = -wx * sinY + wz * cosY;
-    // Rotate around X axis (tilt)
-    const cosX = Math.cos(rX), sinX = Math.sin(rX);
-    const ry = wy * cosX - rz * sinX;
-    const rz2 = wy * sinX + rz * cosX;
-    // Perspective
-    const fov = 4.5;
-    const zOff = fov + rz2;
-    const px = (rx / zOff) * SCALE * fov;
-    const py = (ry / zOff) * SCALE * fov;
-    return { x: SZ/2 + px, y: SZ/2 - py };
+  function resizeRenderer() {
+    const w = container.clientWidth, h = container.clientHeight;
+    if(w === 0 || h === 0) return;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
   }
+  resizeRenderer();
+  window.addEventListener('resize', resizeRenderer, { passive: true });
 
-  // Build node list
-  const nodes = [];
-  const totalW = BAYS_X * BAY_W;
-  const totalD = BAYS_Z * BAY_D;
+  /* ── Lighting — warm amber ── */
+  scene.add(new THREE.AmbientLight(0x3d2b0e, 1.5));
+  const keyLight = new THREE.DirectionalLight(0xc4712e, 1.8);
+  keyLight.position.set(8, 12, 10);
+  scene.add(keyLight);
+  const fillLight = new THREE.DirectionalLight(0x8f4f1a, 0.6);
+  fillLight.position.set(-6, -4, -8);
+  scene.add(fillLight);
+
+  /* ── Building parameters ── */
+  const group = new THREE.Group();
+  scene.add(group);
+  const STORIES = 8, STORY_H = 2, BAY_W = 5;
+  const corners = [
+    [-BAY_W/2, 0, -BAY_W/2],
+    [ BAY_W/2, 0, -BAY_W/2],
+    [ BAY_W/2, 0,  BAY_W/2],
+    [-BAY_W/2, 0,  BAY_W/2]
+  ];
   const totalH = STORIES * STORY_H;
 
+  /* ── Materials ── */
+  const beamMat = new THREE.MeshStandardMaterial({
+    color: 0xc4712e, metalness: 0.8, roughness: 0.25, emissive: 0x3d1a08, emissiveIntensity: 0.15
+  });
+  const braceMat = new THREE.MeshStandardMaterial({
+    color: 0x8f4f1a, metalness: 0.7, roughness: 0.3, emissive: 0x2a0f04, emissiveIntensity: 0.1
+  });
+  const nodeMat = new THREE.MeshStandardMaterial({
+    color: 0xe8a86a, emissive: 0xc4712e, emissiveIntensity: 0.5, metalness: 0.9, roughness: 0.1
+  });
+  const glassMat = new THREE.MeshStandardMaterial({
+    color: 0xc4712e, transparent: true, opacity: 0.06, side: THREE.DoubleSide
+  });
+
+  /* ── Helper: create beam mesh between two points ── */
+  const allFragments = [];
+  function addBeam(ax, ay, az, bx, by, bz, mat, thickness) {
+    const dir = new THREE.Vector3(bx-ax, by-ay, bz-az);
+    const len = dir.length();
+    dir.normalize();
+    const geo = new THREE.CylinderGeometry(thickness, thickness, len, 6);
+    geo.rotateX(Math.PI / 2);
+    const mesh = new THREE.Mesh(geo, mat);
+    const mid = new THREE.Vector3((ax+bx)/2, (ay+by)/2, (az+bz)/2);
+    mesh.position.copy(mid);
+    mesh.lookAt(new THREE.Vector3(bx, by, bz));
+    group.add(mesh);
+    storeFragment(mesh);
+    return mesh;
+  }
+
+  function addNode(x, y, z) {
+    const geo = new THREE.SphereGeometry(0.22, 12, 12);
+    const mesh = new THREE.Mesh(geo, nodeMat.clone());
+    mesh.position.set(x, y, z);
+    mesh.userData.isNode = true;
+    group.add(mesh);
+    storeFragment(mesh);
+    return mesh;
+  }
+
+  function storeFragment(mesh) {
+    const orig = mesh.position.clone();
+    const origQ = mesh.quaternion.clone();
+    const dir = orig.clone().normalize();
+    if(dir.length() < 0.01) dir.set(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).normalize();
+    const scatter = 25 + Math.random() * 40;
+    const explPos = new THREE.Vector3(
+      dir.x * scatter + (Math.random()-0.5) * 20,
+      dir.y * scatter + (Math.random()-0.5) * 30,
+      dir.z * scatter + (Math.random()-0.5) * 20
+    );
+    const explQ = new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(Math.random()*Math.PI*2, Math.random()*Math.PI*2, Math.random()*Math.PI*2)
+    );
+    allFragments.push({ mesh, origPos: orig, origQ, explPos, explQ });
+  }
+
+  /* ── Build the structure ── */
+  // Columns
+  for(let c = 0; c < 4; c++) {
+    const [cx, , cz] = corners[c];
+    for(let s = 0; s < STORIES; s++) {
+      addBeam(cx, s*STORY_H, cz, cx, (s+1)*STORY_H, cz, beamMat, 0.12);
+    }
+  }
+  // Beams (floor connections)
   for(let s = 0; s <= STORIES; s++) {
-    for(let bx = 0; bx <= BAYS_X; bx++) {
-      for(let bz = 0; bz <= BAYS_Z; bz++) {
-        nodes.push({
-          wx: bx * BAY_W - totalW/2,
-          wy: s  * STORY_H - totalH/2,
-          wz: bz * BAY_D  - totalD/2,
-          s, bx, bz
-        });
-      }
+    const y = s * STORY_H;
+    for(let c = 0; c < 4; c++) {
+      const [ax,,az] = corners[c];
+      const [bx,,bz] = corners[(c+1)%4];
+      addBeam(ax, y, az, bx, y, bz, beamMat, 0.09);
+    }
+  }
+  // Cross beams (floor diagonals at every other storey)
+  for(let s = 0; s <= STORIES; s += 2) {
+    const y = s * STORY_H;
+    addBeam(corners[0][0], y, corners[0][2], corners[2][0], y, corners[2][2], braceMat, 0.06);
+    addBeam(corners[1][0], y, corners[1][2], corners[3][0], y, corners[3][2], braceMat, 0.06);
+  }
+  // Diagonal bracing on each face, alternating storeys
+  for(let s = 0; s < STORIES; s += 2) {
+    for(let c = 0; c < 4; c++) {
+      const [ax,,az] = corners[c];
+      const [bx,,bz] = corners[(c+1)%4];
+      addBeam(ax, s*STORY_H, az, bx, (s+1)*STORY_H, bz, braceMat, 0.05);
+      addBeam(bx, s*STORY_H, bz, ax, (s+1)*STORY_H, az, braceMat, 0.05);
+    }
+  }
+  // Nodes at every joint
+  for(let s = 0; s <= STORIES; s++) {
+    for(let c = 0; c < 4; c++) {
+      addNode(corners[c][0], s * STORY_H, corners[c][2]);
+    }
+  }
+  // Glass panels on two faces
+  for(let s = 0; s < STORIES; s++) {
+    for(let face = 0; face < 2; face++) {
+      const [ax,,az] = corners[face];
+      const [bx,,bz] = corners[face+1];
+      const geo = new THREE.PlaneGeometry(BAY_W, STORY_H);
+      const mesh = new THREE.Mesh(geo, glassMat);
+      mesh.position.set((ax+bx)/2, s*STORY_H + STORY_H/2, (az+bz)/2);
+      if(face === 0) mesh.rotation.y = 0;
+      else mesh.rotation.y = Math.PI/2;
+      group.add(mesh);
+      storeFragment(mesh);
     }
   }
 
-  function getNode(s, bx, bz) {
-    return nodes.find(n => n.s===s && n.bx===bx && n.bz===bz);
+  // Centre the building
+  group.position.y = -totalH / 2 + 2;
+
+  /* ── Explosion state ── */
+  const explosionState = { progress: 1 }; // 1 = assembled, 0 = exploded
+  const stressState = { intensity: 0 }; // 0 = normal amber, 1 = full red stress
+
+  function updateFragments() {
+    const p = explosionState.progress;
+    allFragments.forEach(f => {
+      f.mesh.position.lerpVectors(f.explPos, f.origPos, p);
+      const qStart = f.explQ.clone();
+      qStart.slerp(f.origQ, p);
+      f.mesh.quaternion.copy(qStart);
+    });
+    // Stress coloring on nodes
+    const si = stressState.intensity;
+    allFragments.forEach(f => {
+      if(f.mesh.userData.isNode && f.mesh.material) {
+        const amberR = 0.77, amberG = 0.44, amberB = 0.18;
+        const redR = 1.0, redG = 0.15, redB = 0.05;
+        f.mesh.material.emissive.setRGB(
+          amberR + (redR - amberR) * si,
+          amberG + (redG - amberG) * si,
+          amberB + (redB - amberB) * si
+        );
+        f.mesh.material.emissiveIntensity = 0.5 + si * 0.8;
+      }
+    });
   }
 
-  function drawLine(a, b, color, width, alpha=1) {
-    const pa = project(a.wx, a.wy, a.wz, rotY, tiltX + curMouseY);
-    const pb = project(b.wx, b.wy, b.wz, rotY, tiltX + curMouseY);
-    // Adjust for mouse X as slight Y-rotation — handled in rotY already
-    ctx.beginPath();
-    ctx.moveTo(pa.x, pa.y);
-    ctx.lineTo(pb.x, pb.y);
-    ctx.strokeStyle = color;
-    ctx.lineWidth   = width;
-    ctx.globalAlpha = alpha;
-    ctx.stroke();
-    ctx.globalAlpha = 1;
+  /* ── GSAP ScrollTrigger timeline ── */
+  if(typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: '+=1200',
+        scrub: 1.5,
+        pin: false
+      }
+    });
+    // Explode as user scrolls away from hero
+    tl.to(explosionState, {
+      progress: 0, duration: 3, ease: 'power2.in',
+      onUpdate: updateFragments
+    }, 0);
+    // Stress: ramp up during explosion
+    tl.to(stressState, {
+      intensity: 1, duration: 1.5, ease: 'power2.in',
+      onUpdate: updateFragments
+    }, 0);
+    // Stress: recover
+    tl.to(stressState, {
+      intensity: 0, duration: 1.5, ease: 'power2.out',
+      onUpdate: updateFragments
+    }, 1.5);
+    // Camera pull back
+    tl.to(camera.position, {
+      z: 30, y: 5, duration: 3, ease: 'power1.inOut'
+    }, 0);
   }
 
-  function drawNode(n, color, r) {
-    const p = project(n.wx, n.wy, n.wz, rotY, tiltX + curMouseY);
-    // Glow
-    const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*3);
-    g.addColorStop(0,'rgba(232,168,106,0.35)');
-    g.addColorStop(1,'rgba(196,113,46,0)');
-    ctx.beginPath(); ctx.arc(p.x,p.y,r*3,0,Math.PI*2);
-    ctx.fillStyle=g; ctx.fill();
-    // Dot
-    ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2);
-    ctx.fillStyle=color; ctx.fill();
-  }
+  /* ── Mouse parallax ── */
+  let tgtMX = 0, tgtMY = 0, curMX = 0, curMY = 0;
+  document.addEventListener('mousemove', e => {
+    tgtMX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+    tgtMY = (e.clientY / window.innerHeight - 0.5) * -0.2;
+  }, { passive: true });
 
-  function draw() {
-    ctx.clearRect(0,0,SZ,SZ);
-
-    // Columns
-    for(let bx=0; bx<=BAYS_X; bx++) {
-      for(let bz=0; bz<=BAYS_Z; bz++) {
-        for(let s=0; s<STORIES; s++) {
-          const a=getNode(s,bx,bz), b=getNode(s+1,bx,bz);
-          if(a&&b) drawLine(a,b,C.col,2.2);
-        }
-      }
-    }
-
-    // Beams — X direction
-    for(let s=0; s<=STORIES; s++) {
-      for(let bz=0; bz<=BAYS_Z; bz++) {
-        for(let bx=0; bx<BAYS_X; bx++) {
-          const a=getNode(s,bx,bz), b=getNode(s,bx+1,bz);
-          if(a&&b) drawLine(a,b,C.beam,1.6);
-        }
-      }
-    }
-
-    // Beams — Z direction
-    for(let s=0; s<=STORIES; s++) {
-      for(let bx=0; bx<=BAYS_X; bx++) {
-        for(let bz=0; bz<BAYS_Z; bz++) {
-          const a=getNode(s,bx,bz), b=getNode(s,bx,bz+1);
-          if(a&&b) drawLine(a,b,C.beam,1.6);
-        }
-      }
-    }
-
-    // Diagonal bracing — front face (bz=0), alternating storeys
-    for(let s=0; s<STORIES; s+=2) {
-      for(let bx=0; bx<BAYS_X; bx++) {
-        const a=getNode(s,  bx,  0);
-        const b=getNode(s+1,bx+1,0);
-        const c=getNode(s,  bx+1,0);
-        const d=getNode(s+1,bx,  0);
-        if(a&&b) drawLine(a,b,C.brace,1.1,0.7);
-        if(c&&d) drawLine(c,d,C.brace,1.1,0.7);
-      }
-    }
-
-    // Nodes — drawn on top
-    nodes.forEach(n => drawNode(n, C.node, 2.8));
-  }
-
-  // Auto-rotation + mouse
-  let mouseX = 0;
-  document.addEventListener('mousemove', e=>{
-    tgtMouseX = (e.clientX/window.innerWidth  - 0.5) *  0.3;
-    tgtMouseY = (e.clientY/window.innerHeight - 0.5) * -0.15;
-  },{passive:true});
-
-  let paused = false, rafId = null;
-  const obs = new IntersectionObserver(entries=>{
+  /* ── Render loop ── */
+  let paused = false;
+  const wrapEl = document.getElementById('hero-3d-wrap');
+  const obs = new IntersectionObserver(entries => {
     paused = !entries[0].isIntersecting;
-    if(!paused && !rafId) tick();
-  },{threshold:0});
-  obs.observe(canvas);
+  }, { threshold: 0 });
+  if(wrapEl) obs.observe(wrapEl);
 
-  function tick(){
-    if(paused){rafId=null;return;}
-    rotY += 0.006;
-    curMouseX += (tgtMouseX - curMouseX) * 0.05;
-    curMouseY += (tgtMouseY - curMouseY) * 0.05;
-    rotY += (tgtMouseX - curMouseX) * 0.01;
-    draw();
-    rafId = requestAnimationFrame(tick);
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+    if(paused) return;
+    const t = clock.getElapsedTime();
+    // Slow auto-rotation
+    group.rotation.y += 0.003;
+    // Mouse parallax
+    curMX += (tgtMX - curMX) * 0.05;
+    curMY += (tgtMY - curMY) * 0.05;
+    camera.position.x = curMX * 5;
+    camera.lookAt(0, 2, 0);
+    // Pulse nodes
+    allFragments.forEach(f => {
+      if(f.mesh.userData.isNode) {
+        const sc = 1 + Math.sin(t * 2 + f.origPos.y * 0.8) * 0.2;
+        f.mesh.scale.setScalar(sc);
+      }
+    });
+    resizeRenderer();
+    renderer.render(scene, camera);
   }
-  // Fire immediately — no external deps, Canvas 2D is always available
-  tick();
+  animate();
 })();
 
 </script>
