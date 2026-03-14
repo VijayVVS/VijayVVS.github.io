@@ -106,14 +106,47 @@ section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
 .cred-badge{background:var(--accent-dim);border:1px solid var(--accent-bd);padding:.35rem .9rem;border-radius:2px;font-family:var(--fm);font-size:.7rem;color:var(--accent);letter-spacing:.08em;transition:all .3s ease}
 .cred-badge:hover{background:rgba(181,69,27,.18);transform:translateY(-2px)}
 
-/* Hero stats */
-.hero-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;animation:fadeUp .8s ease both;animation-delay:1s}
-.stat-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:1.5rem 1rem;text-align:center;transition:all .35s var(--ease);position:relative;overflow:visible}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:scaleX(0);transition:transform .4s ease}
-.stat-card:hover::before{transform:scaleX(1)}
-.stat-card:hover{background:rgba(181,69,27,.15);transform:translateY(-4px);border-color:rgba(181,69,27,.4);box-shadow:0 20px 40px rgba(0,0,0,.5)}
-.stat-number{font-size:2.2rem;font-weight:700;color:var(--accent);display:block;line-height:1;margin-bottom:.5rem;letter-spacing:-.02em;overflow:visible}
-.stat-label{font-family:var(--fm);font-size:.7rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase}
+/* ══ HERO 3D FRAME ══ */
+.hero-3d-wrap{
+  position:relative;
+  width:100%;
+  animation:fadeUp .8s ease both;
+  animation-delay:1s;
+}
+#frame-canvas{
+  width:100%!important;
+  height:auto!important;
+  display:block;
+  border-radius:4px;
+}
+.stat-overlay{
+  position:absolute;
+  background:rgba(13,11,8,.88);
+  border:1px solid rgba(196,113,46,.28);
+  backdrop-filter:blur(10px);
+  padding:.55rem .85rem;
+  border-radius:3px;
+  text-align:center;
+  pointer-events:none;
+  z-index:4;
+  min-width:90px;
+}
+.stat-overlay .stat-number{
+  font-size:1.5rem;font-weight:700;
+  color:var(--accent);display:block;
+  line-height:1;margin-bottom:.3rem;
+  letter-spacing:-.02em;
+}
+.stat-overlay .stat-label{
+  font-family:var(--fm);font-size:.58rem;
+  color:var(--text-dim);letter-spacing:.08em;
+  text-transform:uppercase;white-space:nowrap;
+}
+.stat-overlay.tl{top:.75rem;left:.75rem}
+.stat-overlay.tr{top:.75rem;right:.75rem}
+.stat-overlay.bl{bottom:.75rem;left:.75rem}
+.stat-overlay.br{bottom:.75rem;right:.75rem}
+
 
 /* Hero scroll indicator */
 .hero-scroll{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(240,230,210,.4);font-family:var(--fm);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;z-index:3;animation:fadeIn 1s ease 1.4s both}
@@ -979,9 +1012,9 @@ section{background:var(--bg)}
 #hero .hero-eyebrow{color:var(--accent) !important}
 #hero .hero-title,#hero .hero-desc{color:rgba(237,224,200,.55) !important}
 #hero .hero-cta .btn-outline{color:rgba(237,224,200,.75) !important;border-color:rgba(237,224,200,.2) !important}
-#hero .stat-card{background:rgba(196,113,46,.08) !important;border-color:rgba(196,113,46,.18) !important}
-#hero .stat-number{color:var(--accent) !important}
-#hero .stat-label{color:rgba(237,224,200,.45) !important}
+#hero .stat-overlay{background:rgba(13,11,8,.88)!important;border-color:rgba(196,113,46,.28)!important}
+#hero .stat-number{color:var(--accent)!important}
+#hero .stat-label{color:rgba(237,224,200,.45)!important}
 #hero .cred-badge{background:rgba(196,113,46,.12) !important;border-color:rgba(196,113,46,.28) !important;color:rgba(220,170,100,.9) !important}
 /* Hero grid: copper on dark */
 #hero::before{
@@ -1103,6 +1136,7 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
 
 
 </style>
+
 </head>
 <body>
 
@@ -1160,11 +1194,12 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
           <a href="#contact" class="btn btn-outline">Get in Touch</a>
         </div>
       </div>
-      <div class="hero-stats">
-        <div class="stat-card"><span class="stat-number">40+</span><span class="stat-label">UK Projects</span></div>
-        <div class="stat-card"><span class="stat-number">$15M+</span><span class="stat-label">International Value</span></div>
-        <div class="stat-card"><span class="stat-number">150K+</span><span class="stat-label">Safe Man-Hours</span></div>
-        <div class="stat-card"><span class="stat-number">4</span><span class="stat-label">Sectors Covered</span></div>
+      <div class="hero-3d-wrap" id="hero-3d-wrap">
+        <canvas id="frame-canvas"></canvas>
+        <div class="stat-overlay tl"><span class="stat-number">40+</span><span class="stat-label">UK Projects</span></div>
+        <div class="stat-overlay tr"><span class="stat-number">$15M+</span><span class="stat-label">Intl Value</span></div>
+        <div class="stat-overlay bl"><span class="stat-number">150K+</span><span class="stat-label">Safe Man-Hours</span></div>
+        <div class="stat-overlay br"><span class="stat-number">4</span><span class="stat-label">Sectors</span></div>
       </div>
     </div>
   </div>
@@ -1932,7 +1967,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   })
 });
 // Cache elements
-const hcEl=document.querySelector('.hero-content'),hsEl=document.querySelector('.hero-stats');
+const hcEl=document.querySelector('.hero-content'),hsEl=document.getElementById('hero-3d-wrap');
 const pbEl=document.getElementById('progress-bar');
 const heroH=window.innerHeight;
 let scrollTicking=false;
@@ -1980,7 +2015,7 @@ window.addEventListener('scroll',()=>{if(!scrollTicking){scrollTicking=true;requ
     });
   }
   document.querySelectorAll('.project-card').forEach(c=>applyTilt(c,10));
-  document.querySelectorAll('.uni-card,.summary-cat,.process-card,.stat-card').forEach(c=>applyTilt(c,5));
+  document.querySelectorAll('.uni-card,.summary-cat,.process-card').forEach(c=>applyTilt(c,5));
 })();
 
 /* ── GALLERY ────────────────────────────────── */
@@ -2139,11 +2174,19 @@ function closeScroll(id){
 function closeScrollIfBg(e,id){ if(e.target===e.currentTarget) closeScroll(id); }
 
 /* ── LOADER ─────────────────────────────────── */
-window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    document.getElementById('loader').classList.add('hidden');
-  }, 900);
-});
+(function(){
+  function hideLoader(){
+    setTimeout(()=>{
+      const l=document.getElementById('loader');
+      if(l) l.classList.add('hidden');
+    },800);
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',hideLoader);
+  } else {
+    hideLoader();
+  }
+})();
 
 /* ── CUSTOM CURSOR ───────────────────────────── */
 (function(){
@@ -2338,6 +2381,185 @@ function showToast(msg){
   const ee=document.getElementById('easter-egg');
   if(ee){ee.addEventListener('click',function(e){if(e.target===this)this.classList.remove('active');});}
 })();
+/* ── STRUCTURAL FRAME — pure Canvas 2D isometric, no dependencies ── */
+(function(){
+  const canvas = document.getElementById('frame-canvas');
+  if(!canvas) return;
+
+  const wrap = document.getElementById('hero-3d-wrap');
+  const SZ = 520;
+  canvas.width  = SZ;
+  canvas.height = SZ;
+  const ctx = canvas.getContext('2d');
+
+  // Isometric projection
+  // rotY drives auto-rotation, mouseX/Y for tilt
+  let rotY = 0.42;
+  let tiltX = 0.18; // slight lean back
+  let tgtMouseX = 0, tgtMouseY = 0;
+  let curMouseX = 0, curMouseY = 0;
+
+  // Building params
+  const BAYS_X = 2, BAYS_Z = 2;
+  const BAY_W = 1, BAY_D = 1, STORY_H = 0.72;
+  const STORIES = 5;
+  const SCALE = 110; // world units → pixels
+
+  // Colour palette — amber copper
+  const C = {
+    col:    '#c4712e',
+    colShade:'#8f4f1a',
+    beam:   '#d4823e',
+    brace:  '#7a3d10',
+    node:   '#e8a86a',
+    nodeFill:'rgba(232,168,106,0.18)',
+    glow:   'rgba(196,113,46,0.22)',
+  };
+
+  // Project 3D → 2D isometric
+  function project(wx, wy, wz, rY, rX) {
+    // Rotate around Y axis
+    const cosY = Math.cos(rY), sinY = Math.sin(rY);
+    const rx = wx * cosY + wz * sinY;
+    const rz = -wx * sinY + wz * cosY;
+    // Rotate around X axis (tilt)
+    const cosX = Math.cos(rX), sinX = Math.sin(rX);
+    const ry = wy * cosX - rz * sinX;
+    const rz2 = wy * sinX + rz * cosX;
+    // Perspective
+    const fov = 4.5;
+    const zOff = fov + rz2;
+    const px = (rx / zOff) * SCALE * fov;
+    const py = (ry / zOff) * SCALE * fov;
+    return { x: SZ/2 + px, y: SZ/2 - py };
+  }
+
+  // Build node list
+  const nodes = [];
+  const totalW = BAYS_X * BAY_W;
+  const totalD = BAYS_Z * BAY_D;
+  const totalH = STORIES * STORY_H;
+
+  for(let s = 0; s <= STORIES; s++) {
+    for(let bx = 0; bx <= BAYS_X; bx++) {
+      for(let bz = 0; bz <= BAYS_Z; bz++) {
+        nodes.push({
+          wx: bx * BAY_W - totalW/2,
+          wy: s  * STORY_H - totalH/2,
+          wz: bz * BAY_D  - totalD/2,
+          s, bx, bz
+        });
+      }
+    }
+  }
+
+  function getNode(s, bx, bz) {
+    return nodes.find(n => n.s===s && n.bx===bx && n.bz===bz);
+  }
+
+  function drawLine(a, b, color, width, alpha=1) {
+    const pa = project(a.wx, a.wy, a.wz, rotY, tiltX + curMouseY);
+    const pb = project(b.wx, b.wy, b.wz, rotY, tiltX + curMouseY);
+    // Adjust for mouse X as slight Y-rotation — handled in rotY already
+    ctx.beginPath();
+    ctx.moveTo(pa.x, pa.y);
+    ctx.lineTo(pb.x, pb.y);
+    ctx.strokeStyle = color;
+    ctx.lineWidth   = width;
+    ctx.globalAlpha = alpha;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+
+  function drawNode(n, color, r) {
+    const p = project(n.wx, n.wy, n.wz, rotY, tiltX + curMouseY);
+    // Glow
+    const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*3);
+    g.addColorStop(0,'rgba(232,168,106,0.35)');
+    g.addColorStop(1,'rgba(196,113,46,0)');
+    ctx.beginPath(); ctx.arc(p.x,p.y,r*3,0,Math.PI*2);
+    ctx.fillStyle=g; ctx.fill();
+    // Dot
+    ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2);
+    ctx.fillStyle=color; ctx.fill();
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,SZ,SZ);
+
+    // Columns
+    for(let bx=0; bx<=BAYS_X; bx++) {
+      for(let bz=0; bz<=BAYS_Z; bz++) {
+        for(let s=0; s<STORIES; s++) {
+          const a=getNode(s,bx,bz), b=getNode(s+1,bx,bz);
+          if(a&&b) drawLine(a,b,C.col,2.2);
+        }
+      }
+    }
+
+    // Beams — X direction
+    for(let s=0; s<=STORIES; s++) {
+      for(let bz=0; bz<=BAYS_Z; bz++) {
+        for(let bx=0; bx<BAYS_X; bx++) {
+          const a=getNode(s,bx,bz), b=getNode(s,bx+1,bz);
+          if(a&&b) drawLine(a,b,C.beam,1.6);
+        }
+      }
+    }
+
+    // Beams — Z direction
+    for(let s=0; s<=STORIES; s++) {
+      for(let bx=0; bx<=BAYS_X; bx++) {
+        for(let bz=0; bz<BAYS_Z; bz++) {
+          const a=getNode(s,bx,bz), b=getNode(s,bx,bz+1);
+          if(a&&b) drawLine(a,b,C.beam,1.6);
+        }
+      }
+    }
+
+    // Diagonal bracing — front face (bz=0), alternating storeys
+    for(let s=0; s<STORIES; s+=2) {
+      for(let bx=0; bx<BAYS_X; bx++) {
+        const a=getNode(s,  bx,  0);
+        const b=getNode(s+1,bx+1,0);
+        const c=getNode(s,  bx+1,0);
+        const d=getNode(s+1,bx,  0);
+        if(a&&b) drawLine(a,b,C.brace,1.1,0.7);
+        if(c&&d) drawLine(c,d,C.brace,1.1,0.7);
+      }
+    }
+
+    // Nodes — drawn on top
+    nodes.forEach(n => drawNode(n, C.node, 2.8));
+  }
+
+  // Auto-rotation + mouse
+  let mouseX = 0;
+  document.addEventListener('mousemove', e=>{
+    tgtMouseX = (e.clientX/window.innerWidth  - 0.5) *  0.3;
+    tgtMouseY = (e.clientY/window.innerHeight - 0.5) * -0.15;
+  },{passive:true});
+
+  let paused = false, rafId = null;
+  const obs = new IntersectionObserver(entries=>{
+    paused = !entries[0].isIntersecting;
+    if(!paused && !rafId) tick();
+  },{threshold:0});
+  obs.observe(canvas);
+
+  function tick(){
+    if(paused){rafId=null;return;}
+    rotY += 0.006;
+    curMouseX += (tgtMouseX - curMouseX) * 0.05;
+    curMouseY += (tgtMouseY - curMouseY) * 0.05;
+    rotY += (tgtMouseX - curMouseX) * 0.01;
+    draw();
+    rafId = requestAnimationFrame(tick);
+  }
+  // Fire immediately — no external deps, Canvas 2D is always available
+  tick();
+})();
+
 </script>
 </body>
 </html>
