@@ -185,6 +185,8 @@ section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
 .tl-role-header .tl-date{margin-bottom:0}
 .tl-roles-group{margin-bottom:.9rem}
 .tl-roles-group .tl-role-header:last-child:not(:first-of-type){margin-top:.5rem;opacity:.7}
+.tl-roles-group.tl-past .tl-role-header{opacity:.7}
+.tl-roles-group.tl-past .tl-role-header+.tl-role-header{margin-top:.5rem}
 @media(max-width:480px){.tl-role-header{flex-direction:column;gap:.15rem}}
 .tl-list{list-style:none;display:flex;flex-direction:column;gap:.4rem}
 .tl-list li{color:var(--text-dim);font-size:.88rem;display:flex;gap:.75rem;line-height:1.6}
@@ -1338,9 +1340,10 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
       </div>
       <div class="tl-item reveal">
         <div class="tl-dot"></div>
-        <div class="tl-roles-group">
+        <div class="tl-roles-group tl-past">
           <div class="tl-company">VA Tech WABAG Ltd · India</div>
-          <div class="tl-role-header"><div class="tl-role">Civil Engineer Trainee</div><div class="tl-date">Aug 2021 — Aug 2023</div></div>
+          <div class="tl-role-header"><div class="tl-role">Engineer - Design (Civil)</div><div class="tl-date">Feb 2023 — Aug 2023</div></div>
+          <div class="tl-role-header"><div class="tl-role">Civil Engineer Trainee</div><div class="tl-date">Aug 2021 — Jan 2023</div></div>
         </div>
         <ul class="tl-list">
           <li>Designed RC and steel structures for the 200 MLD Pagla STP (Dhaka) and 150 MLD Patna STP — digesters, clarifiers, dosing facilities, admin buildings</li>
