@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vijay Venkatasamy | Structural Engineer</title>
-  <meta name="description" content="Structural Engineer with 40+ UK projects across retail, industrial, commercial, and residential sectors. GMICE."/>
+  <title>Vijay Venkatasamy | Civil & Structural Engineer</title>
+  <meta name="description" content="Civil & Structural Engineer with 40+ UK projects across retail, industrial, commercial, and residential sectors. GMICE."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   <style>
@@ -180,6 +180,12 @@ section{position:relative;z-index:1;padding:7rem 0;overflow:hidden}
 .tl-date{font-family:var(--fm);font-size:.68rem;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;margin-bottom:.3rem}
 .tl-role{font-size:1.1rem;font-weight:600;color:var(--text);margin-bottom:.15rem}
 .tl-company{font-size:.88rem;color:var(--text-dim);margin-bottom:.9rem}
+.tl-role-header{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.15rem}
+.tl-role-header .tl-role{margin-bottom:0}
+.tl-role-header .tl-date{margin-bottom:0}
+.tl-roles-group{margin-bottom:.9rem}
+.tl-roles-group .tl-role-header:last-child:not(:first-of-type){margin-top:.5rem;opacity:.7}
+@media(max-width:480px){.tl-role-header{flex-direction:column;gap:.15rem}}
 .tl-list{list-style:none;display:flex;flex-direction:column;gap:.4rem}
 .tl-list li{color:var(--text-dim);font-size:.88rem;display:flex;gap:.75rem;line-height:1.6}
 .tl-list li::before{content:'//';font-family:var(--fm);color:var(--accent);font-size:.7rem;flex-shrink:0;margin-top:.1rem}
@@ -1243,7 +1249,7 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
   <div class="container">
     <div class="hero-grid">
       <div class="hero-content">
-        <p class="hero-eyebrow">Structural Engineer · GMICE</p>
+        <p class="hero-eyebrow">Civil & Structural Engineer · GMICE</p>
         <h1 class="hero-name" data-text="Vijay&#10;Venkatasamy">Vijay<br>Venkatasamy</h1>
         <p class="hero-title" style="min-height:1.8rem"><span id="typewriter"></span><span class="typewriter-cursor"></span></p>
         <div class="credentials">
@@ -1282,7 +1288,7 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
       <div>
         <h2 class="reveal" style="margin-bottom:1.5rem">Engineering with <span style="color:var(--accent)">precision &amp; purpose</span></h2>
         <div class="about-text">
-          <p class="reveal">Structural Engineer with hands-on experience across 40+ commercial, retail, industrial, and residential projects. Focused on catching design issues before they reach site and finding solutions that work within real constraints — budget, access, programme.</p>
+          <p class="reveal">Civil & Structural Engineer with hands-on experience across 40+ commercial, retail, industrial, and residential projects. Focused on catching design issues before they reach site and finding solutions that work within real constraints — budget, access, programme.</p>
           <p class="reveal">Competent in Eurocodes and British Standards with practical exposure to SER certification. Technical work spans reinforced concrete, structural steelwork, timber, and composite floor systems — from connection design to foundation engineering.</p>
           <p class="reveal">Before moving to the UK, I spent two years on water and wastewater infrastructure in India, Bangladesh, and Malaysia, including structural design for treatment plants, procurement for a US$11.45M Petronas ETP, and site supervision of a 178.3 MLD WTP with zero safety incidents across 150,000+ man-hours.</p>
         </div>
@@ -1314,9 +1320,11 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
       <div class="timeline">
       <div class="tl-item reveal">
         <div class="tl-dot"></div>
-        <div class="tl-date">Nov 2024 — Present</div>
-        <div class="tl-role">Structural Engineer</div>
-        <div class="tl-company">Francis Bradshaw Consulting · Wilmslow, UK</div>
+        <div class="tl-roles-group">
+          <div class="tl-company">Francis Bradshaw Consulting · Wilmslow, UK</div>
+          <div class="tl-role-header"><div class="tl-role">Civil & Structural Engineer</div><div class="tl-date">Feb 2026 — Present</div></div>
+          <div class="tl-role-header"><div class="tl-role">Graduate Structural Engineer</div><div class="tl-date">Nov 2024 — Jan 2026</div></div>
+        </div>
         <ul class="tl-list">
           <li>Designed structural solutions for 40+ projects across retail, commercial, industrial, and residential sectors</li>
           <li>Engineered a sequenced mass concrete underpinning scheme for clay shrinkage damage, saving approximately £25,000 in rebuild costs</li>
@@ -1330,9 +1338,10 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
       </div>
       <div class="tl-item reveal">
         <div class="tl-dot"></div>
-        <div class="tl-date">Aug 2021 — Aug 2023</div>
-        <div class="tl-role">Civil Engineer Trainee</div>
-        <div class="tl-company">VA Tech WABAG Ltd · India</div>
+        <div class="tl-roles-group">
+          <div class="tl-company">VA Tech WABAG Ltd · India</div>
+          <div class="tl-role-header"><div class="tl-role">Civil Engineer Trainee</div><div class="tl-date">Aug 2021 — Aug 2023</div></div>
+        </div>
         <ul class="tl-list">
           <li>Designed RC and steel structures for the 200 MLD Pagla STP (Dhaka) and 150 MLD Patna STP — digesters, clarifiers, dosing facilities, admin buildings</li>
           <li>Managed procurement for a US$11.45M effluent treatment plant for Petronas (Malaysia)</li>
@@ -1344,9 +1353,10 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
       </div>
       <div class="tl-item reveal">
         <div class="tl-dot"></div>
-        <div class="tl-date">2018 — 2021</div>
-        <div class="tl-role">Engineering Internships</div>
-        <div class="tl-company">AK Consultant | Shree Constructions | VA Tech WABAG</div>
+        <div class="tl-roles-group">
+          <div class="tl-company">AK Consultant | Shree Constructions | VA Tech WABAG</div>
+          <div class="tl-role-header"><div class="tl-role">Engineering Internships</div><div class="tl-date">2018 — 2021</div></div>
+        </div>
         <ul class="tl-list">
           <li>Foundational experience in structural calculations, AutoCAD and Tekla drafting</li>
           <li>Site supervision and quality inspection across residential (G+2/G+3) and water treatment projects</li>
@@ -1894,7 +1904,7 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
       <div class="reveal">
         <div class="contact-avail">
           <div class="avail-head">Current Role</div>
-          <div class="avail-body">Structural Engineer at Francis Bradshaw Consulting, Wilmslow — working across retail, commercial, industrial, and residential sectors.</div>
+          <div class="avail-body">Civil & Structural Engineer at Francis Bradshaw Consulting, Wilmslow — working across retail, commercial, industrial, and residential sectors.</div>
           <br/><br/>
           <div class="avail-head">Chartership</div>
           <div class="avail-body">Working towards CEng MICE (ICE) and IStructE membership. GMICE registered.</div>
@@ -1944,7 +1954,7 @@ footer{background:#0a0805;border-top:1px solid rgba(196,113,46,.2)}
 <footer>
   <div class="container">
     <div class="footer-inner">
-      <span class="footer-copy">© 2026 Vijay Venkatasamy · Structural Engineer</span>
+      <span class="footer-copy">© 2026 Vijay Venkatasamy · Civil & Structural Engineer</span>
       <ul class="footer-links">
         <li><a href="https://www.linkedin.com/in/vijayvvs1998/" target="_blank">LinkedIn</a></li>
         <li><a href="mailto:vijayvvs1998@gmail.com">Email</a></li>
@@ -2375,7 +2385,7 @@ function closeScrollIfBg(e,id){ if(e.target===e.currentTarget) closeScroll(id); 
 /* ── TYPEWRITER ──────────────────────────────── */
 (function(){
   const el=document.getElementById('typewriter');if(!el)return;
-  const phrases=['Structural Engineer','RC, Steel & Timber Designer','British Standards & Eurocode Practitioner','GMICE · Chartership in Progress','40+ UK Projects Delivered'];
+  const phrases=['Civil & Structural Engineer','RC, Steel & Timber Designer','British Standards & Eurocode Practitioner','GMICE · Chartership in Progress','40+ UK Projects Delivered'];
   let pi=0,ci=0,deleting=false;
   function tick(){
     const phrase=phrases[pi];
