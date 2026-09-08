@@ -1,0 +1,198 @@
+/* ============================================================
+   motion.css — reveal states, keyframes, reduced-motion contract
+
+   The JS adds .is-in when an element enters the viewport. CSS owns
+   the *look* of the transition; JS owns only the timing/stagger.
+   If JS fails, the .no-js / fallback rules below still show content.
+   ============================================================ */
+
+/* ---- Base reveal states ------------------------------------
+   Elements start displaced + transparent, then settle.
+   --i is the stagger index, set inline or by JS.               */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 22px), 0);
+  transition:
+    opacity   var(--d-reveal) var(--e-out),
+    transform var(--d-reveal) var(--e-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+  will-change: opacity, transform;
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Variants */
+[data-reveal='left']  { transform: translate3d(-28px, 0, 0); }
+[data-reveal='right'] { transform: translate3d( 28px, 0, 0); }
+[data-reveal='scale'] { transform: scale(0.94); }
+[data-reveal='blur']  { filter: blur(8px); transition: opacity var(--d-reveal) var(--e-out),
+                                                      transform var(--d-reveal) var(--e-out),
+                                                      filter var(--d-reveal) var(--e-out); }
+[data-reveal='blur'].is-in { filter: blur(0); }
+
+[data-reveal='left'].is-in,
+[data-reveal='right'].is-in { transform: translate3d(0, 0, 0); }
+[data-reveal='scale'].is-in { transform: scale(1); }
+
+/* Horizontal rules that draw themselves */
+[data-draw] {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--e-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+[data-draw].is-in { transform: scaleX(1); }
+
+/* Vertical lines (the timeline spine) */
+[data-draw-y] {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.2s var(--e-out);
+}
+[data-draw-y].is-in { transform: scaleY(1); }
+
+/* ---- Word-by-word hero entrance ---------------------------- */
+.line-mask {
+  overflow: hidden;
+  display: block;
+  /* At --lh-tight (0.88) the line box is shorter than Archivo's glyphs, so a
+     bare overflow:hidden slices the caps. Pad the mask and pull it back. */
+  padding-block: 0.12em;
+  margin-block: -0.12em;
+}
+.line-mask > span {
+  display: block;
+  transform: translate3d(0, 105%, 0);
+  transition: transform 1s var(--e-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+.is-loaded .line-mask > span { transform: translate3d(0, 0, 0); }
+
+/* ---- Keyframes --------------------------------------------- */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+@keyframes pulse-node {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.25); }
+}
+@keyframes scan-down {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  35%  { opacity: 1; }
+  100% { transform: translateY(340%);  opacity: 0; }
+}
+@keyframes shimmer {
+  0%   { background-position: -180% 0; }
+  100% { background-position:  180% 0; }
+}
+
+.float      { animation: float-y 5.5s var(--e-in-out) infinite; }
+.pulse-node { animation: pulse-node 2.6s var(--e-in-out) infinite; }
+.scroll-cue-line { animation: scan-down 2.6s var(--e-in-out) infinite; }
+
+/* Accent text that catches a slow highlight */
+.shimmer {
+  background: linear-gradient(100deg,
+    var(--accent) 0%, var(--accent-lit) 45%, var(--accent) 70%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+
+/* ---- Magnetic button (JS sets --mx/--my) -------------------- */
+.magnetic {
+  transform: translate3d(var(--mx, 0), var(--my, 0), 0);
+  transition: transform var(--d-base) var(--e-spring);
+}
+
+/* ============================================================
+   REDUCED MOTION — a hard contract.
+   Everything resolves to its final state instantly. No exceptions,
+   including the decorative loops, which are the ones that actually
+   trigger vestibular symptoms.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal],
+  [data-reveal].is-in {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  [data-draw], [data-draw-y] { transform: none !important; }
+  .line-mask > span { transform: none !important; }
+  .float, .pulse-node, .scroll-cue-line, .shimmer { animation: none !important; }
+  .shimmer { color: var(--accent); background: none; -webkit-text-fill-color: currentColor; }
+  .magnetic { transform: none !important; }
+}
+
+/* ============================================================
+   NO-JS FALLBACK — if the script never runs, show everything.
+   The <html> element carries .no-js until main.js removes it.
+   ============================================================ */
+.no-js [data-reveal],
+.no-js [data-draw],
+.no-js [data-draw-y] {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+.no-js .line-mask > span { transform: none !important; }
+.no-js .scroll-sheet { grid-template-rows: 1fr; visibility: visible; }
+
+
+/* ============================================================
+   PRINT — a portfolio gets printed and PDF'd. Reveal everything,
+   drop the decorative layers, and let the parchment show its detail.
+   ============================================================ */
+@media print {
+  [data-reveal], [data-draw], [data-draw-y] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .line-mask > span { transform: none !important; }
+  .scroll-sheet { grid-template-rows: 1fr !important; visibility: visible !important; }
+  .grid-field, #truss-canvas, .scroll-cue, .nav { display: none !important; }
+  .section { break-inside: avoid; }
+}
+
+/* ============================================================
+   VIEW TRANSITIONS
+   Cross-document transitions for the trip out to the case study and back,
+   and a same-document transition when jumping between sections from the
+   nav. Progressive: browsers without support simply navigate as before.
+   ============================================================ */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root) {
+  animation: vt-out 0.32s var(--e-in-out) both;
+}
+::view-transition-new(root) {
+  animation: vt-in 0.42s var(--e-out) both;
+}
+@keyframes vt-out {
+  to { opacity: 0; transform: translateY(-14px); }
+}
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(18px); }
+}
+
+/* The nav mark and the section being jumped to are carried across so the
+   transition reads as movement within one document, not a reload. */
+.nav-mark { view-transition-name: nav-mark; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none !important; }
+}

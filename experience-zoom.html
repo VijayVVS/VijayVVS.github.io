@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<!--
+  POWERS OF TEN — the Experience section as one continuous zoom.
+
+  SERVE IT OVER HTTP. Double-clicking will fail: ESM imports from a CDN are
+  blocked on a file:// origin.
+
+      cd C:\Users\vijay\portfolio-v2
+      python -m http.server 8765
+      then open  http://localhost:8765/experience-zoom.html
+
+  ------------------------------------------------------------------------
+  THE CONCEPT
+
+  One continuous descent through five orders of magnitude, from a 200 MLD
+  treatment works down to one Hollo-Bolt connection. The zoom level IS the CV: India
+  and infrastructure at 10^2 m, the UK and precision at 10^-2 m.
+
+  The verb, not the noun. Every station that failed in v1 was an object doing
+  one motion. Here the motion is the idea: each scale ARRIVES AS A DRAWING AND
+  RESOLVES INTO BUILT FORM as you reach it, then returns to line as you pass.
+  Line becomes mass becomes line. That is what a structural engineer's day
+  actually is, and it is not something a designer would think to build.
+
+  ------------------------------------------------------------------------
+  WHAT THIS FIXES FROM v1 (measured defects, not opinions)
+
+  1. BLOOM THRESHOLD 0.90 ON A PAGE WHOSE GROUND LUMINANCE IS 0.961.
+     The background was itself a bloom source, so its glow lifted everything:
+     the sheet rendered (229,229,229) instead of #f8fafc (248,250,252) and the
+     photograph's blacks lifted from ~0 to (52,53,53). Threshold here is 0.975,
+     above the ground, so only the primer orange blooms.
+
+  2. ACES APPLIED TWICE. OutputPass tone-maps the whole composited buffer,
+     which filmic-curves a page colour that was already display-ready. The
+     canvas here paints its own ground INSIDE the tone-mapped world, so the
+     curve is applied once to a scene, never to a UI colour.
+
+  3. GRAIN BEFORE OutputPass produces uneven noise. It is last here, after
+     OutputPass, so the noise sits evenly in [0,1].
+
+  4. three's examples/jsm import 'three' as a BARE SPECIFIER. Without the
+     importmap the whole scene silently falls back and the catch block reports
+     nothing. The importmap is present and the failure path is loud.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Experience — Powers of Ten</title>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
+    "gsap": "https://esm.sh/gsap@3.12.5",
+    "gsap/ScrollTrigger": "https://esm.sh/gsap@3.12.5/ScrollTrigger",
+    "lenis": "https://unpkg.com/lenis@1.1.0/dist/lenis.mjs"
+  }
+}
+</script>
+
+<style>
+:root{
+  /* Lifted verbatim from css/tokens.css so the 3D and the page agree. */
+  --page-bg:#f8fafc; --bg-raised:#ffffff; --bg-inset:#ebf0f5; --bg-invert:#1e293b;
+  --text:#334155; --text-dim:#475569; --text-muted:#64748b; --text-faint:#7f91aa;
+  --accent:#c3490a; --accent-lit:#ea580c; --accent-deep:#9a3a08;
+  --steel:#64748b; --steel-dark:#475569; --steel-light:#94a3b8;
+  --font-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --font-body:"Space Grotesk",system-ui,sans-serif;
+  --font-mono:"Space Mono",ui-monospace,"Courier New",monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* html AND body must use overflow-x:clip. `hidden` silently breaks
+   position:sticky, which is the whole mechanism this section runs on. */
+html,body{overflow-x:clip;background:var(--page-bg);color:var(--text);
+  font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+
+/* Lenis owns scroll. CSS smooth scrolling must not compete with it. */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+
+/* ---- the runway -------------------------------------------------------- */
+/* 640svh of scroll drives one pinned viewport. Five decades of scale, so
+   ~128svh each — long enough that a decade has time to resolve and be read. */
+#zoom{position:relative;height:640svh}
+#stage{position:sticky;top:0;height:100svh;overflow:hidden}
+canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* ---- HUD --------------------------------------------------------------- */
+.hud{position:absolute;inset:0;pointer-events:none;
+  padding:clamp(1rem,4vw,3rem);display:grid;
+  grid-template-rows:auto 1fr auto;gap:1rem}
+
+.hud-top{display:flex;justify-content:space-between;align-items:flex-start;
+  font-family:var(--font-mono);font-size:clamp(.62rem,1.1vw,.75rem);
+  letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted)}
+
+/* The scale readout. This is the section's whole thesis in one element:
+   the number IS the career. It is monospace and tabular so the digits do not
+   jitter as they change — a readout that dances reads as decoration. */
+.scale-readout{text-align:right;line-height:1.2}
+.scale-value{display:block;font-family:var(--font-mono);
+  font-size:clamp(1.6rem,5.5vw,3.2rem);font-variant-numeric:tabular-nums;
+  color:var(--accent);letter-spacing:-.02em}
+.scale-value sup{font-size:.5em;vertical-align:super}
+.scale-unit{display:block;font-size:.62rem;letter-spacing:.22em;
+  color:var(--text-faint)}
+
+/* Caption sits LEFT because the geometry occupies the right half.
+   In v1 content landed on top of the scene; that is not a taste call, the
+   overlap made both unreadable. */
+.hud-mid{display:flex;align-items:center}
+.caption{max-width:min(38ch,44vw)}
+.cap-era{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:.75rem}
+.cap-title{font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.5rem,4vw,2.6rem);line-height:1.02;letter-spacing:-.02em;
+  color:var(--bg-invert);margin-bottom:.6rem}
+.cap-title em{font-style:normal;color:var(--accent)}
+.cap-body{font-size:clamp(.85rem,1.5vw,1rem);line-height:1.55;
+  color:var(--text-dim)}
+.cap-meta{margin-top:.9rem;font-family:var(--font-mono);font-size:.66rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint)}
+
+/* Every caption is stacked in the same cell and cross-faded by the timeline.
+   Nothing reflows, so nothing snaps. */
+.caption{grid-area:1/1;opacity:0;transform:translateY(14px);will-change:opacity,transform}
+.hud-mid{display:grid;align-items:center}
+
+.hud-bot{display:flex;justify-content:space-between;align-items:flex-end;
+  font-family:var(--font-mono);font-size:.6rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--text-faint)}
+
+/* The depth rail: five ticks, the active one filled. A section that moves
+   through discrete stations should say how many are left. */
+.rail{display:flex;gap:6px;align-items:center}
+.rail i{display:block;width:26px;height:2px;background:var(--steel-light);
+  opacity:.5;transition:opacity .4s,background .4s}
+.rail i.on{background:var(--accent);opacity:1}
+
+.hint{display:flex;align-items:center;gap:.5rem}
+.hint b{display:block;width:1px;height:26px;background:var(--steel-light);
+  transform-origin:top;animation:drop 2.2s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes drop{0%{transform:scaleY(0);opacity:0}
+  40%{transform:scaleY(1);opacity:1}100%{transform:scaleY(1);opacity:0}}
+
+.fallback{position:absolute;inset:0;display:none;place-items:center;
+  padding:2rem;text-align:center;font-family:var(--font-mono);
+  font-size:.8rem;color:var(--text-muted);background:var(--page-bg)}
+
+@media (prefers-reduced-motion:reduce){
+  .hint b{animation:none}
+  #zoom{height:auto}
+  #stage{position:relative;height:auto;min-height:60svh}
+}
+</style>
+</head>
+<body>
+
+<section id="zoom" aria-labelledby="zoom-h">
+  <h2 id="zoom-h" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">
+    Career timeline as a continuous zoom, from a 200 MLD treatment works to one Hollo-Bolt connection
+  </h2>
+
+  <div id="stage">
+    <canvas id="gl"></canvas>
+    <div class="fallback" id="fallback"></div>
+
+    <div class="hud" aria-hidden="true">
+      <div class="hud-top">
+        <div>SEC·02 &nbsp;/&nbsp; Experience<br>
+          <span style="color:var(--text-faint)">Powers of ten</span></div>
+        <div class="scale-readout">
+          <span class="scale-value" id="scaleValue">10<sup>2</sup></span>
+          <span class="scale-unit" id="scaleUnit">metres · site</span>
+        </div>
+      </div>
+
+      <div class="hud-mid">
+        <!-- Verbatim from the CV. Nothing here is invented; the numbers are
+             the ones on the record. -->
+        <div class="caption" data-cap="0">
+          <p class="cap-era">2021 — 2023 &nbsp;·&nbsp; VA Tech WABAG · India</p>
+          <h3 class="cap-title">200 MLD <em>Pagla STP</em></h3>
+          <p class="cap-body">Designed RC and steel structures for the 200 MLD Pagla
+            sewage treatment plant in Dhaka and the 150 MLD Patna STP — digesters,
+            clarifiers, dosing facilities, administration buildings.</p>
+          <p class="cap-meta">STAAD Pro · ETABS · RC design</p>
+        </div>
+
+        <div class="caption" data-cap="1">
+          <p class="cap-era">2021 — 2023 &nbsp;·&nbsp; Site supervision</p>
+          <h3 class="cap-title">178.3 MLD <em>water treatment</em></h3>
+          <p class="cap-body">Supervised construction of a 178.3 MLD water treatment
+            works — zero safety incidents across more than 150,000 man-hours. Approved
+            pour cards, prepared BOQs and bar bending schedules.</p>
+          <p class="cap-meta">150,000+ man-hours · zero incidents</p>
+        </div>
+
+        <div class="caption" data-cap="2">
+          <p class="cap-era">2024 — present &nbsp;·&nbsp; Francis Bradshaw · UK</p>
+          <h3 class="cap-title">20 m fire-rated <em>buffer wall</em></h3>
+          <p class="cap-body">Designed a 20 m high by 150 m long fire-rated buffer wall
+            integrated into a steel frame at 7 m centres. Detailed steel connections and
+            designed bases for silos, crane beams and crane legs.</p>
+          <p class="cap-meta">7 m centres · Eurocode · MasterSeries</p>
+        </div>
+
+        <div class="caption" data-cap="3">
+          <p class="cap-era">2024 — present &nbsp;·&nbsp; Remedial design</p>
+          <h3 class="cap-title">Sequenced <em>underpinning</em></h3>
+          <p class="cap-body">Engineered a sequenced mass concrete underpinning scheme
+            for clay shrinkage damage, saving approximately £25,000 in rebuild costs.</p>
+          <p class="cap-meta">≈ £25,000 saved · clay shrinkage</p>
+        </div>
+
+        <div class="caption" data-cap="4">
+          <p class="cap-era">2024 — present &nbsp;·&nbsp; Connection design</p>
+          <h3 class="cap-title">Hollo-Bolt <em>to SHS</em></h3>
+          <p class="cap-body">Designed a Hollo-Bolt connection to SHS — no internal
+            access needed. Connection design isn't just about strength — access,
+            sequence, and tolerances matter just as much on a live retail site.</p>
+          <p class="cap-meta">Blind fixing · no internal access</p>
+        </div>
+      </div>
+
+      <div class="hud-bot">
+        <div class="rail" id="rail">
+          <i class="on"></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="hint">Scroll to descend <b></b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment }   from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer }    from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }        from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass }   from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass }        from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass }        from 'three/addons/postprocessing/OutputPass.js';
+import gsap                  from 'gsap';
+import ScrollTrigger         from 'gsap/ScrollTrigger';
+import Lenis                 from 'lenis';
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* NEVER SWALLOW THE FAILURE. In v1 the whole scene fell back silently because
+   a bare specifier failed to resolve and the catch block reported nothing. */
+const fallbackEl = document.getElementById('fallback');
+function fail(where, err){
+  fallbackEl.style.display = 'grid';
+  fallbackEl.textContent =
+    `3D unavailable (${where}): ${err && err.message ? err.message : err}. ` +
+    `Serve over HTTP — file:// blocks CDN modules.`;
+  console.error('[experience-zoom]', where, err);
+}
+
+/* ------------------------------------------------------------------------ */
+/* INVERSE ACES — the fix for the wash-out, done with arithmetic rather than  */
+/* by nudging a hex value until it looks close.                              */
+/*                                                                           */
+/* The page ground is #f8fafc, sRGB 0.9725. OutputPass tone-maps EVERYTHING   */
+/* in the buffer, including a background that was already display-ready, so   */
+/* the sheet came out grey. And it is not a small error that can be dialled   */
+/* out: the ACES curve SATURATES. f(1.0) = 0.803, so no input at or below     */
+/* white can ever produce 0.973 — v1's ground measured (229,229,229) against  */
+/* a target of (248,250,252) for exactly this reason.                         */
+/*                                                                           */
+/* The only correct answer is to feed the background the HDR value that lands */
+/* on the target AFTER the curve. Solved numerically here, so if the exposure */
+/* or the palette changes the compensation follows instead of going stale.    */
+/* ------------------------------------------------------------------------ */
+const ACES = x => {
+  const a=2.51,b=0.03,c=2.43,d=0.59,e=0.14;
+  return THREE.MathUtils.clamp((x*(a*x+b))/(x*(c*x+d)+e), 0, 1);
+};
+
+/* Bisection: find the linear input whose tone-mapped output is `target`. */
+function unACES(target){
+  let lo = 0, hi = 64;
+  for (let i = 0; i < 60; i++){
+    const mid = (lo + hi) / 2;
+    if (ACES(mid) < target) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+/* Take an sRGB hex meant for the PAGE and return the scene colour that will
+   render as that hex once the composer has tone-mapped and encoded it. */
+function pageColour(hex, exposure){
+  const c = new THREE.Color(hex).convertSRGBToLinear();   // display -> linear
+  return new THREE.Color(
+    unACES(c.r) / exposure, unACES(c.g) / exposure, unACES(c.b) / exposure);
+}
+
+const PALETTE = {
+  ground : 0xf8fafc,
+  ink    : 0x1e293b,
+  steel  : 0x556274,
+  light  : 0x7d8ba0,
+  accent : 0xc3490a,
+  lit    : 0xea580c,
+};
+
+/* Five decades. The scale readout is the CV. */
+const STATIONS = [
+  { exp: 2,  unit: 'metres · site' },
+  { exp: 1,  unit: 'metres · structure' },
+  { exp: 0,  unit: 'metres · element' },
+  { exp: -1, unit: 'metres · connection' },
+  { exp: -2, unit: 'metres · fastener' },
+];
+
+/* Declared HERE, above init(). `const` is hoisted but not initialised, so
+   with this further down the file `init()` hit the temporal dead zone:
+   "Cannot access 'LAYER_GAP' before initialization". Source order matters for
+   const in a module the moment anything runs at import time. */
+/* POWERS OF TEN, LITERALLY.
+   In the Eames film every frame is composed the same; only the caption tells
+   you the scale. So each decade here is NORMALISED to the same apparent size
+   and the readout carries the meaning. The first cut skipped this and the
+   camera ended up inside the digesters at 10^2 while the fitting would have
+   been a speck -- the geometry was right and the framing was doing nothing.
+   Normalising is not a convenience; it IS the idea. */
+const LAYER_GAP     = 78;   // world units between decades
+const VIEW          = 52;   // camera-to-station distance (== the start Z)
+const TARGET_RADIUS = 21;   // every decade normalised to this bounding radius
+/* The caption owns the left half, so the camera sits left of the axis and the
+   geometry lands right of centre. In v1 content and geometry overlapped and
+   both became unreadable -- that was measured, not a matter of taste. */
+const FRAME_OFFSET  = -7.5;
+
+let renderer, scene, camera, composer, bloomPass, grainPass, clock;
+let layers = [];
+const pointer   = { x:0, y:0, tx:0, ty:0 };
+const scroll    = { v:0, tv:0 };
+
+
+function init(){
+  const canvas = document.getElementById('gl');
+
+  renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+    /* OPAQUE ON PURPOSE. UnrealBloomPass composites opaque — a transparent
+       canvas plus bloom is not supported. So the canvas paints the page
+       ground itself, inside the tone-mapped world, and the CSS grid field is
+       not drawn underneath it. */
+    alpha: false,
+    powerPreference: 'high-performance',
+  });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));   // uncapped = 15fps on 4K
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping      = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.04;
+
+  scene = new THREE.Scene();
+  /* Pre-compensated so it survives the tone-mapping curve as #f8fafc. */
+  const groundScene = pageColour(PALETTE.ground, renderer.toneMappingExposure);
+  scene.background = groundScene;
+  /* Fog is the depth-of-field. Real DOF costs a pass we do not need: at this
+     scale a white haze reads as atmosphere and hides the layers we have not
+     reached, which is also the reason the descent feels endless. */
+  /* Reaches past the next decade (VIEW + LAYER_GAP = 130) so an approaching
+     drawing emerges from haze rather than popping in. */
+  /* THE FOG MUST NOT TOUCH THE SUBJECT.
+     Near was 46 while the station the camera is looking at sits at VIEW = 52,
+     so the thing you are meant to be reading was already being washed toward a
+     near-white ground -- which is why it kept "feeling lighter" no matter how
+     the materials were tuned. Fog now begins well past the subject and only
+     softens the NEXT decade approaching at VIEW + LAYER_GAP = 130. */
+  scene.fog = new THREE.Fog(groundScene, VIEW + 34, VIEW + LAYER_GAP + 62);
+
+  camera = new THREE.PerspectiveCamera(38, innerWidth/innerHeight, 0.1, 400);
+  camera.position.set(0, 0, 0);
+
+  /* metalness > 0 with no environment map is a black blob. RoomEnvironment is
+     the no-download HDRI stand-in and is enough for brushed steel. */
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  /* Even with an environment, one directional light gives shadow DIRECTION —
+     without it everything is evenly lit and reads as a render, not a place. */
+  const key = new THREE.DirectionalLight(0xffffff, 1.5);
+  key.position.set(4, 7, 6);
+  scene.add(key);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xcbd5e1, 0.45));
+
+  buildLayers();
+  buildComposer();
+
+  clock = new THREE.Clock();
+  addEventListener('resize', onResize);
+  addEventListener('pointermove', e => {
+    pointer.tx = (e.clientX / innerWidth  - 0.5) * 2;
+    pointer.ty = (e.clientY / innerHeight - 0.5) * 2;
+  }, { passive:true });
+
+  wireScroll();
+  renderer.setAnimationLoop(tick);
+}
+
+/* ------------------------------------------------------------------------ */
+/* GEOMETRY — procedural, no downloads. The skill is explicit that primitives
+   with good treatment beat models with bad treatment, and every shape here is
+   something that exists on a real drawing.                                   */
+/* ------------------------------------------------------------------------ */
+
+function mat(colour, opts = {}){
+  return new THREE.MeshStandardMaterial({
+    color: colour, roughness: 0.38, metalness: 0.42, ...opts,
+  });
+}
+
+/* The drawing state of every layer: the same geometry as thin lines.
+   THIS IS THE VERB. A layer arrives as a drawing and resolves into built form
+   as you reach it, then returns to line as you pass. Line -> mass -> line. */
+function lineMaterial(){
+  return new THREE.LineBasicMaterial({
+    color: PALETTE.steel, transparent: true, opacity: 0.0,
+  });
+}
+
+function makeLayer(index, build){
+  const group = new THREE.Group();
+  group.position.z = -LAYER_GAP * index;
+
+  const solid = new THREE.Group();
+  const drawn = new THREE.Group();
+  build(solid, drawn);
+  group.add(solid, drawn);
+
+  const solids = [];
+  solid.traverse(o => { if (o.isMesh){ o.material.transparent = true; solids.push(o); } });
+  const lines = [];
+  drawn.traverse(o => { if (o.isLine || o.isLineSegments) lines.push(o); });
+
+  /* Normalise: measure what was built, then scale it to fill the frame the
+     same way every other decade does. Measured, not eyeballed. */
+  const box = new THREE.Box3().setFromObject(solid);
+  const sphere = box.getBoundingSphere(new THREE.Sphere());
+  if (sphere.radius > 0.001){
+    const k = TARGET_RADIUS / sphere.radius;
+    solid.scale.setScalar(k);
+    drawn.scale.setScalar(k);
+    /* Recentre on the group origin so the camera looks at the middle of the
+       thing, not at wherever its geometry happened to be authored. */
+    solid.position.sub(sphere.center.clone().multiplyScalar(k));
+    drawn.position.sub(sphere.center.clone().multiplyScalar(k));
+  }
+
+  scene.add(group);
+  return { group, solids, lines, index };
+}
+
+/* Wire copy of a mesh, so the drawing and the built form are the SAME object
+   in two states rather than two things that merely resemble each other. */
+function wireOf(geometry, m){
+  const seg = new THREE.LineSegments(new THREE.EdgesGeometry(geometry, 24), m);
+  return seg;
+}
+
+function buildLayers(){
+  const lm = () => lineMaterial();
+
+  /* 10^2 m — THE WORKS. Clarifier rings, digesters, admin block. A site plan
+     seen from above, which is how a treatment works is first ever drawn. */
+  layers.push(makeLayer(0, (solid, drawn) => {
+    const m = lm();
+    const ring = new THREE.TorusGeometry(6.2, 0.42, 12, 64);
+    const positions = [[-11,0.2],[2.5,-6],[13,4]];
+    positions.forEach(([x,z], i) => {
+      const mesh = new THREE.Mesh(ring, mat(i===1 ? PALETTE.accent : PALETTE.light));
+      mesh.rotation.x = Math.PI/2; mesh.position.set(x, -3, z);
+      solid.add(mesh);
+      const w = wireOf(ring, m); w.rotation.copy(mesh.rotation); w.position.copy(mesh.position);
+      drawn.add(w);
+    });
+    /* Digesters — the tall cylinders that make a works read as a works. */
+    const dig = new THREE.CylinderGeometry(2.6, 2.6, 7, 28);
+    [[-3,10],[3.4,12.5]].forEach(([x,z]) => {
+      const mesh = new THREE.Mesh(dig, mat(PALETTE.steel, {metalness:0.35, roughness:0.4}));
+      mesh.position.set(x, 0.5, z); solid.add(mesh);
+      const w = wireOf(dig, m); w.position.copy(mesh.position); drawn.add(w);
+    });
+    const slab = new THREE.BoxGeometry(46, 0.5, 40);
+    const g = new THREE.Mesh(slab, mat(0xe4e9ef, {roughness:0.92, metalness:0}));
+    g.position.set(0, -3.6, 2); solid.add(g);
+    drawn.add(wireOf(slab, m).translateY(-3.6).translateZ(2));
+  }));
+
+  /* 10^1 m — THE WALL. 20 m high, 150 m long, steel frame at 7 m centres.
+     The frame is instanced because that is literally what "at 7 m centres"
+     means: the same portal, repeated. */
+  layers.push(makeLayer(1, (solid, drawn) => {
+    const m = lm();
+    const col = new THREE.BoxGeometry(0.55, 13, 0.55);
+    const inst = new THREE.InstancedMesh(col, mat(PALETTE.steel,{metalness:0.5,roughness:0.35}), 14);
+    const dummy = new THREE.Object3D();
+    for (let i = 0; i < 14; i++){
+      dummy.position.set(-19.5 + i*3, 0, (i%2) ? -4.2 : 4.2);
+      dummy.updateMatrix(); inst.setMatrixAt(i, dummy.matrix);
+    }
+    solid.add(inst);
+    for (let i = 0; i < 14; i++){
+      const w = wireOf(col, m);
+      w.position.set(-19.5 + i*3, 0, (i%2) ? -4.2 : 4.2);
+      drawn.add(w);
+    }
+    const panel = new THREE.BoxGeometry(42, 12, 0.5);
+    const p = new THREE.Mesh(panel, mat(PALETTE.light,{roughness:0.75,metalness:0.05}));
+    p.position.set(0, 0, 0); solid.add(p); drawn.add(wireOf(panel, m));
+    const cap = new THREE.BoxGeometry(43, 0.6, 1.6);
+    const c = new THREE.Mesh(cap, mat(PALETTE.accent)); c.position.y = 6.4;
+    solid.add(c); drawn.add(wireOf(cap, m).translateY(6.4));
+  }));
+
+  /* 10^0 m — THE CRANE BEAM AND ITS BASE. An element, not a building. */
+  layers.push(makeLayer(2, (solid, drawn) => {
+    const m = lm();
+    /* An I-section built from three plates, because that is how it is drawn. */
+    const web    = new THREE.BoxGeometry(0.16, 2.4, 16);
+    const flange = new THREE.BoxGeometry(1.5, 0.22, 16);
+    const steel  = mat(PALETTE.steel, {metalness:0.62, roughness:0.28});
+    const w0 = new THREE.Mesh(web, steel); solid.add(w0); drawn.add(wireOf(web, m));
+    [1.31,-1.31].forEach(y => {
+      const f = new THREE.Mesh(flange, steel); f.position.y = y; solid.add(f);
+      drawn.add(wireOf(flange, m).translateY(y));
+    });
+    const base = new THREE.BoxGeometry(3.2, 1.1, 3.2);
+    [-6.4, 6.4].forEach(z => {
+      const b = new THREE.Mesh(base, mat(PALETTE.light,{roughness:0.85,metalness:0}));
+      b.position.set(0, -2.6, z); solid.add(b);
+      drawn.add(wireOf(base, m).translateY(-2.6).translateZ(z));
+    });
+    const stiff = new THREE.BoxGeometry(1.4, 2.2, 0.14);
+    [-4,0,4].forEach(z => {
+      const s = new THREE.Mesh(stiff, mat(PALETTE.accent)); s.position.z = z;
+      solid.add(s); drawn.add(wireOf(stiff, m).translateZ(z));
+    });
+  }));
+
+  /* 10^-1 m — THE UNDERPINNING SEQUENCE. Hit-and-miss pins: the alternating
+     pattern IS the engineering. Poured out of order, the wall is undermined. */
+  layers.push(makeLayer(3, (solid, drawn) => {
+    const m = lm();
+    const wall = new THREE.BoxGeometry(20, 5, 1.4);
+    const wm = new THREE.Mesh(wall, mat(0xd8dee6,{roughness:0.92,metalness:0}));
+    wm.position.y = 2.6; solid.add(wm); drawn.add(wireOf(wall, m).translateY(2.6));
+    const pin = new THREE.BoxGeometry(1.7, 2.6, 2.0);
+    for (let i = 0; i < 10; i++){
+      const first = i % 2 === 0;            // sequence 1 poured before sequence 2
+      const p = new THREE.Mesh(pin, mat(first ? PALETTE.accent : PALETTE.light,
+        {roughness:0.88, metalness:0}));
+      p.position.set(-9 + i*2, first ? -1.2 : -1.35, 0);
+      solid.add(p);
+      drawn.add(wireOf(pin, m).translateX(-9 + i*2).translateY(-1.2));
+    }
+  }));
+
+  /* 10^-2 m — A HOLLO-BOLT INTO AN SHS. His actual work, and a better story
+     than the generic bolt that was here first: a Hollo-Bolt is a BLIND fixing,
+     used precisely because you cannot reach inside a hollow section to hold a
+     nut. The sleeve flares out behind the wall it has just passed through, and
+     that flare IS the engineering — so it is the one part shown in primer. */
+  layers.push(makeLayer(4, (solid, drawn) => {
+    const m = lm();
+    const steelDark = mat(0x55637a, {metalness:0.72, roughness:0.3});
+
+    /* The SHS itself — square hollow section, cut away so the inside reads. */
+    const wall = 0.9, side = 13, len = 22;
+    const faces = [
+      [new THREE.BoxGeometry(len, wall, side), [0,  side/2, 0]],   // top
+      [new THREE.BoxGeometry(len, wall, side), [0, -side/2, 0]],   // bottom
+      [new THREE.BoxGeometry(len, side, wall), [0, 0, -side/2]],   // back
+    ];
+    faces.forEach(([g, pos]) => {
+      const mesh = new THREE.Mesh(g, steelDark);
+      mesh.position.set(...pos); solid.add(mesh);
+      drawn.add(wireOf(g, m).translateX(pos[0]).translateY(pos[1]).translateZ(pos[2]));
+    });
+
+    /* The fitting passes through the TOP face from outside. */
+    const shank = new THREE.CylinderGeometry(1.5, 1.5, 12, 28);
+    const sh = new THREE.Mesh(shank, mat(0x6b7a90,{metalness:0.85,roughness:0.24}));
+    sh.position.y = 3.2; solid.add(sh);
+    drawn.add(wireOf(shank, m).translateY(3.2));
+
+    const head = new THREE.CylinderGeometry(2.9, 2.9, 2.0, 6);
+    const hd = new THREE.Mesh(head, mat(0x6b7a90,{metalness:0.85,roughness:0.24}));
+    hd.position.y = 8.4; solid.add(hd);
+    drawn.add(wireOf(head, m).translateY(8.4));
+
+    /* THE SLEEVE, FLARED. Cone widening BELOW the face it passed through —
+       this is what makes the fixing blind, and why no internal access is
+       needed. Primer orange because it is the idea, not decoration. */
+    const sleeve = new THREE.CylinderGeometry(1.7, 3.5, 4.2, 20, 1, true);
+    const sl = new THREE.Mesh(sleeve,
+      new THREE.MeshStandardMaterial({ color:0xc3490a, metalness:0.5,
+        roughness:0.38, side:THREE.DoubleSide }));
+    sl.position.y = -0.6; solid.add(sl);
+    drawn.add(wireOf(sleeve, m).translateY(-0.6));
+
+    /* The plate being fixed TO the hollow section. */
+    const plate = new THREE.BoxGeometry(9, 0.8, 11);
+    const pl = new THREE.Mesh(plate, steelDark);
+    pl.position.y = 7.0; solid.add(pl);
+    drawn.add(wireOf(plate, m).translateY(7.0));
+  }));
+}
+
+/* ------------------------------------------------------------------------ */
+/* POST — the order is the whole argument. Bloom, vignette, OutputPass, THEN
+   grain. Grain before OutputPass gets tone-mapped and goes uneven.           */
+/* ------------------------------------------------------------------------ */
+
+function buildComposer(){
+  const target = new THREE.WebGLRenderTarget(innerWidth, innerHeight, {
+    type: THREE.HalfFloatType, samples: 2,
+  });
+  composer = new EffectComposer(renderer, target);
+  composer.addPass(new RenderPass(scene, camera));
+
+  /* THRESHOLD 0.975, NOT 0.90.
+     The page ground #f8fafc has luminance 0.961. A threshold below that makes
+     the BACKGROUND a bloom source, and its glow lifts the whole image — that
+     is the measured wash-out in v1: the sheet rendered (229,229,229) instead
+     of (248,250,252). Above 0.961 only the primer orange and the specular
+     highlights on steel bloom, which is what bloom is for. */
+  bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(innerWidth, innerHeight), 0.34, 0.55, 0.975);
+  composer.addPass(bloomPass);
+
+  composer.addPass(new ShaderPass({
+    uniforms: { tDiffuse:{value:null}, darkness:{value:0.18} },
+    vertexShader: `varying vec2 vUv; void main(){ vUv=uv;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    /* mediump is required — mobile GPUs reject a shader with no precision. */
+    fragmentShader: `precision mediump float;
+      uniform sampler2D tDiffuse; uniform float darkness; varying vec2 vUv;
+      void main(){
+        vec4 c = texture2D(tDiffuse, vUv);
+        vec2 p = vUv - 0.5;
+        /* Gentle: 0.16-0.18 on an off-white sheet. The skill's 0.55 default is
+           tuned for dark scenes and would read as a burnt edge here. */
+        float v = smoothstep(0.86, 0.24, length(p));
+        gl_FragColor = vec4(mix(c.rgb, c.rgb * (1.0 - darkness), 1.0 - v), c.a);
+      }`,
+  }));
+
+  composer.addPass(new OutputPass());
+
+  grainPass = new ShaderPass({
+    uniforms: { tDiffuse:{value:null}, amount:{value:0.055}, time:{value:0} },
+    vertexShader: `varying vec2 vUv; void main(){ vUv=uv;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader: `precision mediump float;
+      uniform sampler2D tDiffuse; uniform float amount; uniform float time;
+      varying vec2 vUv;
+      float rand(vec2 c){ return fract(sin(dot(c, vec2(12.9898,78.233))) * 43758.5453); }
+      void main(){
+        vec4 c = texture2D(tDiffuse, vUv);
+        /* On an off-white ground this reads as paper tooth, not video noise,
+           which is what suits a drawing. */
+        float n = rand(vUv + fract(time)) - 0.5;
+        gl_FragColor = vec4(c.rgb + n * amount, c.a);
+      }`,
+  });
+  composer.addPass(grainPass);
+}
+
+/* ------------------------------------------------------------------------ */
+/* SCROLL — Lenis owns it, ScrollTrigger reads from it. Never both.           */
+/* ------------------------------------------------------------------------ */
+
+let lenis;
+function wireScroll(){
+  lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.9 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  const caps  = gsap.utils.toArray('.caption');
+  const ticks = gsap.utils.toArray('#rail i');
+  const valEl = document.getElementById('scaleValue');
+  const unitEl = document.getElementById('scaleUnit');
+  let shown = -1;
+
+  ScrollTrigger.create({
+    trigger: '#zoom', start: 'top top', end: 'bottom bottom', scrub: true,
+    onUpdate: self => { scroll.tv = self.progress; },
+  });
+
+  /* Caption cross-fade. Each station owns a window of the runway; the fade is
+     driven by proximity to the station's centre so nothing pops. */
+  STATIONS.forEach((st, i) => {
+    ScrollTrigger.create({
+      trigger: '#zoom',
+      start:  `${(i / STATIONS.length) * 100}% top`,
+      end:    `${((i + 1) / STATIONS.length) * 100}% top`,
+      onToggle: self => {
+        if (!self.isActive) return;
+        if (shown === i) return;
+        shown = i;
+        caps.forEach((c, j) => gsap.to(c, {
+          opacity: j === i ? 1 : 0,
+          y: j === i ? 0 : 14,
+          duration: 0.7, ease: 'power2.out', overwrite: true,
+        }));
+        ticks.forEach((t, j) => t.classList.toggle('on', j <= i));
+        valEl.innerHTML = `10<sup>${st.exp}</sup>`;
+        unitEl.textContent = st.unit;
+      },
+    });
+  });
+
+  gsap.set(caps[0], { opacity:1, y:0 });
+}
+
+/* ------------------------------------------------------------------------ */
+/* THE LOOP — everything lerped, everything delta-driven.                     */
+/* ------------------------------------------------------------------------ */
+
+/* Framerate-independent damping. Raw `a += (b-a)*0.08` is 2x faster on a
+   144Hz screen than on 60Hz; this is identical on both. */
+function damp(current, target, ease, delta){
+  return current + (target - current) * (1 - Math.pow(1 - ease, delta * 60));
+}
+
+function tick(){
+  const delta = Math.min(clock.getDelta(), 0.1);   // a tab-switch must not lurch
+
+  scroll.v  = damp(scroll.v,  scroll.tv, 0.09, delta);
+  pointer.x = damp(pointer.x, pointer.tx, 0.06, delta);
+  pointer.y = damp(pointer.y, pointer.ty, 0.06, delta);
+
+  /* THE DESCENT. Camera travels the full stack of decades. */
+  const travel = LAYER_GAP * (STATIONS.length - 1);
+  camera.position.z = VIEW - scroll.v * travel;
+  /* Parallax is small and lagged — it should feel like a held breath, not a
+     head turn. */
+  camera.position.x = damp(camera.position.x, FRAME_OFFSET + pointer.x * 2.4, 0.05, delta);
+  camera.position.y = damp(camera.position.y, -pointer.y * 1.6, 0.05, delta);
+  camera.lookAt(FRAME_OFFSET * 0.35, 0, camera.position.z - VIEW);
+
+  /* LINE -> MASS -> LINE. Each layer resolves from drawing into built form as
+     the camera reaches it, and returns to drawing as it passes. `d` is the
+     distance from the camera to that layer's plane. */
+  for (const layer of layers){
+    /* SIGNED, not absolute. A layer behind the camera must disappear, not
+       fade back up as the distance grows again. */
+    const d = camera.position.z - layer.group.position.z;
+    if (d < 4){
+      for (const mesh of layer.solids) mesh.material.opacity = 0;
+      for (const line of layer.lines)  line.material.opacity = 0;
+      continue;
+    }
+
+    /* THE CAMERA IS ALWAYS EXACTLY `VIEW` FROM WHATEVER STATION IT IS ON.
+       Travel is LAYER_GAP x (n-1) and the layers are LAYER_GAP apart, so when
+       the camera is centred on station i the distance to it is the same
+       constant every time. The first version faded on `1 - d/30`, which at
+       d = 26 gives 0.13 -- so every layer rendered as a ghost at the exact
+       moment it was meant to be built. The scene was correct and the curve
+       was measuring the wrong thing.
+
+       Solidity therefore PEAKS AT THE VIEWING DISTANCE, not at zero, and the
+       drawing peaks one gap further out. That is the verb: a layer is a
+       drawing while it is approaching and built form when you arrive. */
+    /* A PLATEAU, NOT A PEAK. A triangular curve reaches 1.0 for exactly one
+       frame, so the layer was never actually opaque and every station rendered
+       as an x-ray of itself. Solid across +/-15 of the station, then a fade. */
+    const off   = Math.abs(d - VIEW);
+    const near  = off <= 15 ? 1
+                : THREE.MathUtils.clamp(1 - (off - 15) / 26, 0, 1);
+    const drawn = THREE.MathUtils.clamp(
+      1 - Math.abs(d - (VIEW + LAYER_GAP)) / 46, 0, 1);
+    for (const mesh of layer.solids){
+      /* TRANSPARENT ONLY WHILE FADING. A material left `transparent: true`
+         at full opacity is still sorted as transparent, so its own back faces
+         and neighbours bleed through it -- the bolt read as a ghost of itself
+         with the plates showing through. Depth writing must come back the
+         moment the layer is solid, or "resolves into built form" resolves
+         into an x-ray. */
+      const m = mesh.material;
+      m.opacity = near;
+      const solidNow = near > 0.985;
+      if (m.transparent === solidNow){
+        m.transparent = !solidNow;
+        m.depthWrite  = solidNow;
+        m.needsUpdate = true;
+      }
+      mesh.visible = near > 0.004;
+    }
+    for (const line of layer.lines){
+      line.material.opacity = drawn * 0.85;
+      line.visible = drawn > 0.004;
+    }
+    /* A slow yaw so the form is read in the round rather than as an elevation.
+       Tied to distance, so the layer you are ON is the one that is settling. */
+    layer.group.rotation.y = damp(layer.group.rotation.y,
+      (1 - near) * 0.26 + pointer.x * 0.05, 0.04, delta);
+  }
+
+  grainPass.uniforms.time.value += delta;
+
+  try { composer.render(); } catch (err) { fail('render', err); renderer.setAnimationLoop(null); }
+}
+
+/* THE ENTRY POINT RUNS LAST, DELIBERATELY.
+   This call used to sit in the middle of the module, which meant every `let`
+   and `const` declared below it was in the temporal dead zone when init()
+   touched it -- two separate crashes, LAYER_GAP and lenis, each looking like
+   a different bug. Declare everything, then run. */
+try { init(); } catch (err) { fail('init', err); }
+
+function onResize(){
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  bloomPass.setSize(innerWidth, innerHeight);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<!--
+  CRANE GANTRY FOUNDATIONS — dark, spotlit, drawing-led.
+
+  SERVE OVER HTTP:  cd C:\Users\vijay\portfolio-v2 && python -m http.server 8765
+  then open         http://localhost:8765/gantry-dark.html
+
+  ------------------------------------------------------------------------
+  WHY THIS IS DIFFERENT FROM EVERYTHING BEFORE IT
+
+  Every previous section generated abstract geometry -- point clouds of boxes
+  and cylinders -- while seven drawings of the actual built work sat unused in
+  assets/. The research on what currently wins is blunt about this: the site
+  people cite for craft (Iventions) "treats each project like a SPOTLIT
+  INSTALLATION -- WebGL used for atmosphere instead of spectacle." Real work,
+  lit. Not abstraction.
+
+  THE IDEA, AND IT IS NOT DECORATION
+
+  The two assets are not photographs. They are:
+      crane-gantry-1.png   Crane Gantry Foundation SECTION
+      crane-gantry-2.png   Crane Gantry Foundation PLAN
+
+  A plan and a section of the same foundation. Reading a drawing means holding
+  both in your head at once and moving between them -- that is the actual
+  cognitive act of the job. So scroll DISPLACES one into the other through a
+  noise field: the reveal IS the reading. The verb is "turns", not "fades".
+
+  The technique is the one the award sites use for their signature reveals:
+  two textures mixed by a noise map, driven by a `progress` uniform. Here the
+  noise is banded into contour steps so the wipe reads as a survey sweeping
+  across the sheet rather than a smoke dissolve.
+
+  ------------------------------------------------------------------------
+  WHY DARK, AND WHAT IT BUYS
+
+  A near-white page cannot be dramatic: pale grey on off-white has no contrast
+  to work with, which is why the light version stayed quiet no matter how it
+  was tuned. On a dark ground a single key light does the work -- and bloom can
+  finally run at the strength it was designed for instead of being throttled to
+  0.22 to stop the background blooming itself.
+
+  Every word of copy is verbatim from the live site. Nothing here is invented.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crane Gantry Foundations</title>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/",
+    "gsap": "https://esm.sh/gsap@3.12.5",
+    "gsap/ScrollTrigger": "https://esm.sh/gsap@3.12.5/ScrollTrigger",
+    "lenis": "https://unpkg.com/lenis@1.1.0/dist/lenis.mjs"
+  }
+}
+</script>
+
+<style>
+:root{
+  /* THE DARK GROUND. Derived from the existing --bg-invert #1e293b, taken
+     down to a near-black slate so a key light has somewhere to fall off to.
+     The accent moves to --accent-lit #ea580c: on the light page that value was
+     restricted to hover and large type because it failed AA on white, but on
+     this ground it clears comfortably and is the brighter, hotter primer. */
+  --ink:        #080b10;
+  --ink-2:      #0e131b;
+  --paper:      #e8edf3;
+  --paper-dim:  #9aa8b8;
+  --paper-mute: #64748b;
+  --accent:     #ea580c;
+  --steel:      #7d8ba0;
+  --font-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --font-body:"Space Grotesk",system-ui,sans-serif;
+  --font-mono:"Space Mono",ui-monospace,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:clip;background:var(--ink);color:var(--paper);
+  font-family:var(--font-body);-webkit-font-smoothing:antialiased}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+
+#stage-wrap{position:relative;height:420svh}
+#stage{position:sticky;top:0;height:100svh;overflow:hidden}
+canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+.hud{position:absolute;inset:0;pointer-events:none;
+  padding:clamp(1.1rem,4vw,3.2rem);display:grid;
+  grid-template-rows:auto 1fr auto}
+.hud-top{display:flex;justify-content:space-between;align-items:flex-start;
+  font-family:var(--font-mono);font-size:clamp(.6rem,1.05vw,.72rem);
+  letter-spacing:.2em;text-transform:uppercase;color:var(--paper-mute)}
+
+/* The view readout. A drawing is identified by which view it is; this is the
+   title block, not a label. */
+.view{text-align:right}
+.view b{display:block;font-family:var(--font-mono);font-weight:400;
+  font-size:clamp(1.1rem,3vw,1.7rem);letter-spacing:.16em;color:var(--accent)}
+.view span{font-size:.6rem;letter-spacing:.24em;color:var(--paper-mute)}
+
+.hud-mid{display:grid;align-items:center;position:relative}  /* relative, or the scrim's inset:0 resolves against .hud and blankets
+     the title block in the top row -- which is what ate SEC-03. */
+.copy{max-width:min(34ch,34vw);grid-area:1/1;position:relative;z-index:1}
+/* THE SCRIM. The plate turns and travels, so at some scroll position it will
+   always be somewhere behind the paragraph -- the previous build had the lede
+   reading straight across a lit drawing. A left-edge gradient guarantees the
+   copy sits on darkness no matter where the geometry is this frame, which is
+   how every studio site with type over a scene handles it. */
+.scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,
+    rgba(8,11,16,.97) 0%, rgba(8,11,16,.93) 26%,
+    rgba(8,11,16,.55) 40%, rgba(8,11,16,0) 54%)}
+.kicker{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:.9rem}
+h1{font-family:var(--font-display);font-weight:800;
+  font-size:clamp(1.9rem,5.2vw,3.6rem);line-height:.98;letter-spacing:-.025em;
+  margin-bottom:1rem}
+h1 em{font-style:normal;color:var(--accent)}
+/* Line masks: each line sits in its own overflow-hidden box and slides up out
+   of it, so the type uncovers rather than fading. Fades read as loading; this
+   reads as deliberate. */
+h1 .lm{display:block;overflow:hidden}
+h1 .ln{display:block;will-change:transform}
+.lede{font-size:clamp(.9rem,1.5vw,1.05rem);line-height:1.6;color:var(--paper-dim)}
+.facts{margin-top:1.4rem;display:grid;gap:.55rem}
+.facts li{list-style:none;display:grid;grid-template-columns:auto 1fr;gap:.7rem;
+  font-size:clamp(.78rem,1.25vw,.9rem);line-height:1.45;color:var(--paper-dim);
+  opacity:0;transform:translateY(10px)}
+.facts li i{font-style:normal;color:var(--accent);font-family:var(--font-mono);
+  font-size:.72em;padding-top:.25em}
+
+.hud-bot{display:flex;justify-content:space-between;align-items:flex-end;
+  font-family:var(--font-mono);font-size:.58rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-mute)}
+.bar{width:min(260px,32vw);height:1px;background:#26303d;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;width:0%;background:var(--accent);
+  display:block}
+
+.fallback{position:absolute;inset:0;display:none;place-items:center;padding:2rem;
+  text-align:center;font-family:var(--font-mono);font-size:.78rem;
+  color:var(--paper-mute);background:var(--ink)}
+
+@media (prefers-reduced-motion:reduce){
+  h1 .ln{transform:none !important}
+  .kicker,.lede,.hud-top,.hud-bot{opacity:1 !important}
+  #stage-wrap{height:auto}
+  #stage{position:relative;height:auto;min-height:70svh}
+  .facts li{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<section id="stage-wrap">
+  <div id="stage">
+    <canvas id="gl"></canvas>
+    <div class="fallback" id="fallback"></div>
+
+    <div class="hud">
+      <div class="hud-top">
+        <div>SEC·03 &nbsp;/&nbsp; Projects<br>
+          <span style="color:#4b596b">Crane gantry foundations</span></div>
+        <div class="view"><b id="viewName">SECTION</b><span id="viewNote">as drawn</span></div>
+      </div>
+
+      <div class="hud-mid">
+        <div class="scrim"></div>
+        <div class="copy">
+          <p class="kicker">Glass manufacturer &nbsp;·&nbsp; industrial</p>
+          <h1><span class="lm"><span class="ln">Crane gantry</span></span><span class="lm"><span class="ln"><em>foundations</em></span></span></h1>
+          <p class="lede">Existing foundation and plinth ran close to proposed crane
+            column positions, creating eccentric loading conditions that varied along
+            the building length.</p>
+          <ul class="facts">
+            <li><i>01</i><span>Developed three foundation types to suit varying proximity to existing foundation</span></li>
+            <li><i>02</i><span>Designed RC pad foundations — bearing, sliding, overturning checks</span></li>
+            <li><i>03</i><span>Designed RC strap beams for combined bending, shear and torsion</span></li>
+            <li><i>04</i><span>Detailed reinforcement with closed torsional links at 150 mm centres</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hud-bot">
+        <div class="bar"><i id="bar"></i></div>
+        <div>Scroll to turn the drawing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer }  from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass }      from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass }      from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass }      from 'three/addons/postprocessing/OutputPass.js';
+import gsap                from 'gsap';
+import ScrollTrigger       from 'gsap/ScrollTrigger';
+import Lenis               from 'lenis';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const fb = document.getElementById('fallback');
+function fail(where, err){
+  fb.style.display = 'grid';
+  fb.textContent = `3D unavailable (${where}): ${err?.message || err}. Serve over HTTP.`;
+  console.error('[gantry]', where, err);
+}
+
+const INK    = 0x080b10;
+const ACCENT = 0xea580c;
+
+let renderer, scene, camera, composer, bloom, grain, clock, sheet, motes, keyLight;
+const ptr    = { x:0, y:0, tx:0, ty:0 };
+const scroll = { v:0, tv:0 };
+
+/* ------------------------------------------------------------------------ */
+/* THE SHEET — two drawings, one surface, mixed by a banded noise sweep.      */
+/* ------------------------------------------------------------------------ */
+
+const SHEET_VERT = /* glsl */`
+  varying vec2 vUv;
+  varying vec3 vNormal;
+  varying vec3 vPos;
+  void main(){
+    vUv = uv;
+    vNormal = normalize(normalMatrix * normal);
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
+    vPos = mv.xyz;
+    gl_Position = projectionMatrix * mv;
+  }`;
+
+const SHEET_FRAG = /* glsl */`
+  precision mediump float;              // mobile GPUs reject a shader without it
+
+  uniform sampler2D tA;                 // SECTION
+  uniform sampler2D tB;                 // PLAN
+  uniform float uProgress;              // 0 = section, 1 = plan
+  uniform float uTime;
+  uniform vec3  uAccent;
+  uniform vec3  uLightPos;              // key light, view space
+  uniform float uReveal;                // 0 = unexposed, 1 = fully drawn
+  uniform vec2  uPointer;               // -1..1, for the sheen
+  varying vec2 vUv;
+  varying vec3 vNormal;
+  varying vec3 vPos;
+
+  // Value noise. Cheap, and banded below so it reads as a survey sweep
+  // rather than a smoke dissolve.
+  float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+  float noise(vec2 p){
+    vec2 i = floor(p), f = fract(p);
+    vec2 u = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1,0)), u.x),
+               mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), u.x), u.y);
+  }
+
+  void main(){
+    /* A sweep that runs ACROSS the sheet. The direction term has to dominate
+       the noise, or there is no travel in it -- at 0.45 against 0.55 the first
+       build read as a stain spreading outwards, not a line crossing. */
+    float n = vUv.x * 0.78 + noise(vUv * 4.0) * 0.22;
+
+    // Quantised, so the boundary steps like a contour instead of smearing.
+    float bands = 9.0;
+    float nb = floor(n * bands) / bands;
+
+    // Overshoot the ends so the sheet fully arrives, and rake the front a
+    // little with height so it does not cross dead square.
+    float p = uProgress * 1.24 - 0.12 + (vUv.y - 0.5) * 0.06;
+    float m = smoothstep(p - 0.10, p + 0.10, nb);
+
+    // Push one sheet out as the other pulls in -- displacement, not a fade.
+    vec2 dA = vUv + vec2(0.020, 0.0) * (1.0 - m);
+    vec2 dB = vUv - vec2(0.020, 0.0) * m;
+
+    vec3 a = texture2D(tA, dA).rgb;
+    vec3 b = texture2D(tB, dB).rgb;
+    vec3 col = mix(a, b, 1.0 - m);
+
+    /* THE DRAWINGS ARE INK ON WHITE, AND THIS PAGE IS NOT WHITE.
+       Dropping a white sheet onto a near-black ground would blow a hole in the
+       frame. So the sheet is INVERTED into the dark scheme: paper becomes the
+       ground, ink becomes light. The drawing now emits rather than reflects,
+       which is also why it reads as lit from within a dark room.
+
+       LEVELS, and they are not optional: these are SCANS, so the paper is not
+       white -- it sits mid-range with the scanner's own cast on it. A straight
+       one-minus-luminance inversion therefore lands the paper at mid-grey,
+       which is exactly what the first build did: a grey slab with white lines
+       on it and no black anywhere in the frame. Clamping to the scan's real
+       paper/ink window puts the paper back on the floor and lets the linework
+       carry all of the light. */
+    float lum = dot(col, vec3(0.2126, 0.7152, 0.0722));
+    float ink = pow(1.0 - smoothstep(0.30, 0.86, lum), 1.25);
+    vec3 lit = mix(vec3(0.030, 0.040, 0.055), vec3(0.86, 0.91, 0.99), ink);
+
+    /* THE ADVANCING EDGE, AS A LINE.
+       Measured against the quantised nb, a whole ninth of the sheet lit at
+       once -- a pink continent, not a sweep. The front has to be measured
+       against the CONTINUOUS n; only then is it a thin edge travelling over
+       banded ground. */
+    lit += uAccent * (1.0 - smoothstep(0.0, 0.014, abs(n - p))) * 1.5;
+    // And a faint step at each contour edge, so the banding reads as levels.
+    lit += uAccent * (1.0 - smoothstep(0.0, 0.05, abs(nb - p))) * 0.16;
+
+    // Key light falloff across the sheet: an installation, not a flat scan.
+    vec3 L = normalize(uLightPos - vPos);
+    float lam = max(dot(normalize(vNormal), L), 0.0);
+    float dist = length(uLightPos - vPos);
+    float atten = 1.0 / (1.0 + dist * dist * 0.0011);
+    lit *= 0.40 + 2.0 * lam * atten;
+
+    /* A SHEEN that tracks the pointer. A drawing under a lamp catches the
+       light as you move around it; without this the plate is inert whenever
+       the page is not scrolling, and a still frame is where a site either
+       feels alive or feels like a slide. */
+    float sx = 0.5 + uPointer.x * 0.42;
+    float sy = 0.5 - uPointer.y * 0.30;
+    float sheen = 1.0 - smoothstep(0.0, 0.55, length((vUv - vec2(sx, sy)) * vec2(1.0, 0.62)));
+    lit += vec3(0.42, 0.47, 0.56) * pow(sheen, 2.6) * 0.10;
+    lit += vec3(1.0, 0.92, 0.86) * pow(sheen, 4.0) * ink * 0.30;
+
+    /* THE EXPOSURE. The plate does not fade in -- it DEVELOPS, the way a print
+       comes up in a tray: the sheet is there first, then the linework arrives
+       across it. Fading the whole quad would just be a CSS transition wearing
+       a shader. */
+    /* c must span exactly 0..1, and the darkening must reach a true zero when
+       uReveal hits 1. The first cut used a coordinate topping out at 0.85
+       against a window of (uReveal-0.55, uReveal+0.12), so at full reveal the
+       far corner still evaluated ~0.6 darkened and the plate never finished
+       developing -- it just sat permanently dimmer than it should be. */
+    float c = vUv.x * 0.70 + vUv.y * 0.30;
+    float expo = smoothstep(uReveal, uReveal + 0.25, c);
+    lit = mix(lit, vec3(0.030, 0.040, 0.055), expo);
+    lit += uAccent * (1.0 - smoothstep(0.0, 0.045, abs(c - uReveal)))
+           * 0.9 * (1.0 - smoothstep(0.90, 1.0, uReveal));
+
+    gl_FragColor = vec4(lit, 1.0);
+  }`;
+
+try { init(); } catch (err) { fail('init', err); }
+
+function init(){
+  const canvas = document.getElementById('gl');
+  renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false,
+    powerPreference:'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(INK);
+  scene.fog = new THREE.FogExp2(INK, 0.021);
+
+  camera = new THREE.PerspectiveCamera(40, innerWidth/innerHeight, 0.1, 300);
+  camera.position.set(0, 0, 26);
+
+  /* A STUDIO, BUILT NOT DOWNLOADED.
+     RoomEnvironment is a light grey box -- on a dark set it lights everything
+     from everywhere and kills the drama. This is a dark room with one large
+     soft panel and a cold rim, rendered to a cubemap: the reflections are then
+     real, and no 2 MB HDRI has to be fetched. */
+  scene.environment = buildStudio();
+
+  const key = keyLight = new THREE.PointLight(0xffe4cd, 900, 90, 2.0);
+  key.position.set(-4.5, 11, 21);
+  scene.add(key);
+  const rim = new THREE.PointLight(0x8fb4ff, 320, 90, 2.0);
+  rim.position.set(16, -6, -12);
+  scene.add(rim);
+  scene.add(new THREE.AmbientLight(0x3d4a5c, 0.35));
+
+  buildSheet(key.position.clone());
+  buildMotes();
+  buildComposer();
+
+  clock = new THREE.Clock();
+  addEventListener('resize', onResize);
+  addEventListener('pointermove', e => {
+    ptr.tx = (e.clientX/innerWidth - 0.5) * 2;
+    ptr.ty = (e.clientY/innerHeight - 0.5) * 2;
+  }, { passive:true });
+
+  wireScroll();
+  renderer.setAnimationLoop(tick);
+}
+
+function buildStudio(){
+  const s = new THREE.Scene();
+  const box = new THREE.Mesh(
+    new THREE.BoxGeometry(60, 60, 60),
+    new THREE.MeshBasicMaterial({ color:0x0a0d12, side:THREE.BackSide }));
+  s.add(box);
+  const panel = new THREE.Mesh(new THREE.PlaneGeometry(26, 18),
+    new THREE.MeshBasicMaterial({ color:0xfff0e0 }));
+  panel.position.set(-16, 10, 14); panel.lookAt(0,0,0); s.add(panel);
+  const cold = new THREE.Mesh(new THREE.PlaneGeometry(20, 14),
+    new THREE.MeshBasicMaterial({ color:0x9dc0ff }));
+  cold.position.set(18, -4, -10); cold.lookAt(0,0,0); s.add(cold);
+  const pm = new THREE.PMREMGenerator(renderer);
+  return pm.fromScene(s, 0.02).texture;
+}
+
+function buildSheet(lightPos){
+  const loader = new THREE.TextureLoader();
+  const load = (p) => new Promise((res, rej) => loader.load(p,
+    t => { t.colorSpace = THREE.SRGBColorSpace;
+           t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+           res(t); }, undefined, rej));
+
+  Promise.all([
+    // The -clean- plates: every scan carried a white four-point sparkle
+    // watermark burned into the bottom-right corner. Invisible on white
+    // paper, but this page inverts the sheet, so it surfaced as a bright
+    // star floating over the drawing. Inpainted out of all seven scans;
+    // the originals are untouched on disk.
+    load('assets/opt/crane-gantry-1-clean-1600.webp'),   // SECTION
+    load('assets/opt/crane-gantry-2-clean-1600.webp'),   // PLAN
+  ]).then(([a, b]) => {
+    const aspect = 1427 / 736;
+    const w = 18.2, h = w / aspect;
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: SHEET_VERT, fragmentShader: SHEET_FRAG,
+      uniforms: {
+        tA:{value:a}, tB:{value:b}, uProgress:{value:0}, uTime:{value:0},
+        uAccent:{value:new THREE.Color(ACCENT)},
+        uLightPos:{value:new THREE.Vector3()},
+        uReveal:{value:0}, uPointer:{value:new THREE.Vector2()},
+      },
+    });
+    sheet = new THREE.Mesh(new THREE.PlaneGeometry(w, h, 60, 40), mat);
+    sheet.position.set(7.4, 0.3, 0);
+    sheet.userData.lightWorld = lightPos;
+    scene.add(sheet);
+
+    /* A thin border so the sheet reads as a physical plate, not a decal.
+       IT MUST BE A CHILD. Added to the scene at the same position it does not
+       inherit the sheet's rotation, so as the sheet turned the border stayed
+       square-on and slid out from behind it as a huge dark slab across the
+       copy -- which is exactly what the first render showed. */
+    const border = new THREE.Mesh(
+      new THREE.PlaneGeometry(w + 0.5, h + 0.5),
+      new THREE.MeshBasicMaterial({ color:0x161e29 }));
+    border.position.z = -0.03;
+    sheet.add(border);
+    reveal();
+  }).catch(err => fail('textures', err));
+}
+
+/* Dust IN THE BEAM. This is the cheap half of "volumetric": real scattering
+   costs a ray march, and on a dark set a handful of lit motes drifting through
+   the key sells the same air for nothing.
+
+   IN THE BEAM is the whole point, and the first build missed it: 420 motes
+   spread evenly over the full 34-unit box, at even brightness, read as a
+   STARFIELD -- a night sky behind the drawing, which is both cheap and the
+   wrong idea entirely. Dust is only visible where light hits it. So these
+   cluster near the sheet, and each one's brightness is set by its distance
+   from the key, leaving the far corners of the frame properly empty. */
+function buildMotes(){
+  const N = 260;
+  const pos = new Float32Array(N * 3);
+  const col = new Float32Array(N * 3);
+  const KEY = new THREE.Vector3(-4.5, 11, 21);
+  const warm = new THREE.Color(0xffd9b8);
+  for (let i = 0; i < N; i++){
+    // Biased towards the sheet: cube the uniform to pull the mass inwards.
+    const r = Math.pow(Math.random(), 3) * 16 + 1.5;
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(2 * Math.random() - 1);
+    const x = 5.6 + r * Math.sin(ph) * Math.cos(th);
+    const y =       r * Math.cos(ph) * 0.7;
+    const z =       r * Math.sin(ph) * Math.sin(th) * 0.8;
+    pos[i*3] = x; pos[i*3+1] = y; pos[i*3+2] = z;
+    const d = KEY.distanceTo(new THREE.Vector3(x, y, z));
+    const b = THREE.MathUtils.clamp(1.6 - d / 26, 0.04, 1);
+    col[i*3] = warm.r * b; col[i*3+1] = warm.g * b; col[i*3+2] = warm.b * b;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  motes = new THREE.Points(g, new THREE.PointsMaterial({
+    size: 0.05, vertexColors: true, transparent: true, opacity: 0.55,
+    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true,
+  }));
+  scene.add(motes);
+}
+
+function buildComposer(){
+  composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(
+    innerWidth, innerHeight, { type: THREE.HalfFloatType, samples: 2 }));
+  composer.addPass(new RenderPass(scene, camera));
+
+  /* BLOOM AT FULL STRENGTH, FINALLY.
+     On the light page this had to be throttled to 0.22 with the threshold
+     pushed above the ground's own luminance, because otherwise the background
+     bloomed itself. A dark ground has no such problem: 0.55 at threshold 0.62
+     is the skill's intended setting, and it is what makes the drawing look
+     lit rather than pasted. */
+  bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight),
+    0.55, 0.62, 0.62);
+  composer.addPass(bloom);
+
+  composer.addPass(new ShaderPass({
+    uniforms:{ tDiffuse:{value:null}, d:{value:0.62} },
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader:`precision mediump float;
+      uniform sampler2D tDiffuse; uniform float d; varying vec2 vUv;
+      void main(){
+        vec4 c = texture2D(tDiffuse, vUv);
+        /* 0.62 where the light page used 0.18. A dark set wants a real
+           vignette -- it is what makes one lit object the subject. */
+        float v = smoothstep(1.05, 0.28, length(vUv - 0.5));
+        gl_FragColor = vec4(c.rgb * mix(1.0 - d, 1.0, v), c.a);
+      }`,
+  }));
+
+  composer.addPass(new OutputPass());
+
+  grain = new ShaderPass({
+    uniforms:{ tDiffuse:{value:null}, amount:{value:0.045}, time:{value:0} },
+    vertexShader:`varying vec2 vUv; void main(){ vUv=uv;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+    fragmentShader:`precision mediump float;
+      uniform sampler2D tDiffuse; uniform float amount, time; varying vec2 vUv;
+      float r(vec2 c){ return fract(sin(dot(c, vec2(12.9898,78.233)))*43758.5453); }
+      void main(){
+        vec4 c = texture2D(tDiffuse, vUv);
+        gl_FragColor = vec4(c.rgb + (r(vUv + fract(time)) - 0.5) * amount, c.a);
+      }`,
+  });
+  composer.addPass(grain);              // LAST, after OutputPass
+}
+
+/* THE ARRIVAL. Three things resolve at once and at different rates -- the
+   plate turns into position, the drawing develops across it, and the type
+   uncovers itself. Staggering them is the whole difference between a page
+   that starts and a page that merely appears. */
+function reveal(){
+  const tl = gsap.timeline({ defaults:{ ease:'power3.out' } });
+  tl.fromTo(sheet.rotation, { y: 0.92, x: -0.20 },
+                            { y: 0.40, x: -0.05, duration: 2.0 }, 0)
+    .fromTo(sheet.position, { z: -9 }, { z: 0, duration: 2.0 }, 0)
+    .fromTo(sheet.material.uniforms.uReveal, { value: -0.28 },
+            { value: 1.0, duration: 1.9, ease:'power2.inOut' }, 0.25)
+    .fromTo('.kicker', { opacity:0, y:14 }, { opacity:1, y:0, duration:.7 }, 0.35)
+    .fromTo('h1 .ln', { yPercent:112 }, { yPercent:0, duration:.95,
+            stagger:.09, ease:'expo.out' }, 0.45)
+    .fromTo('.lede', { opacity:0, y:16 }, { opacity:1, y:0, duration:.8 }, 0.85)
+    .fromTo('.hud-top, .hud-bot', { opacity:0 }, { opacity:1, duration:.9 }, 0.9);
+}
+
+function wireScroll(){
+  const lenis = new Lenis({ lerp: 0.085 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  const bar = document.getElementById('bar');
+  const vName = document.getElementById('viewName');
+  const vNote = document.getElementById('viewNote');
+  let shown = 'SECTION';
+
+  ScrollTrigger.create({
+    trigger:'#stage-wrap', start:'top top', end:'bottom bottom', scrub:true,
+    onUpdate: self => {
+      scroll.tv = self.progress;
+      bar.style.width = (self.progress * 100).toFixed(1) + '%';
+      const name = self.progress < 0.5 ? 'SECTION' : 'PLAN';
+      if (name !== shown){
+        shown = name;
+        gsap.fromTo(vName, { opacity:0, y:-6 }, { opacity:1, y:0, duration:.45 });
+        vName.textContent = name;
+        vNote.textContent = name === 'SECTION' ? 'as drawn' : 'as set out';
+      }
+    },
+  });
+
+  gsap.to('.facts li', {
+    opacity:1, y:0, duration:.7, stagger:.12, ease:'power2.out',
+    scrollTrigger:{ trigger:'#stage-wrap', start:'top top+=10%' },
+  });
+}
+
+function damp(a, b, e, dt){ return a + (b - a) * (1 - Math.pow(1 - e, dt * 60)); }
+
+function tick(){
+  const dt = Math.min(clock.getDelta(), 0.1);
+  scroll.v = damp(scroll.v, scroll.tv, 0.09, dt);
+  ptr.x = damp(ptr.x, ptr.tx, 0.05, dt);
+  ptr.y = damp(ptr.y, ptr.ty, 0.05, dt);
+
+  if (sheet){
+    const u = sheet.material.uniforms;
+    u.uProgress.value = scroll.v;
+    u.uTime.value += dt;
+    u.uPointer.value.set(ptr.x, ptr.y);
+    // The key light in VIEW space, so the falloff tracks the camera.
+    sheet.material.uniforms.uLightPos.value
+      .copy(sheet.userData.lightWorld).applyMatrix4(camera.matrixWorldInverse);
+    // The sheet turns as the drawing turns. Small: a plate on a table, not a
+    // spinning logo.
+    sheet.rotation.y = damp(sheet.rotation.y, 0.40 - scroll.v * 0.17 + ptr.x * 0.06, 0.05, dt);
+    sheet.rotation.x = damp(sheet.rotation.x, -0.05 - ptr.y * 0.04, 0.05, dt);
+  }
+  if (motes){
+    motes.rotation.y += dt * 0.012;
+    motes.position.y = Math.sin(clock.elapsedTime * 0.12) * 0.4;
+  }
+
+  /* THE KEY LIGHT BREATHES. A fixed lamp renders identically every frame, and
+     a scene that is pixel-identical while nothing is scrolling reads as an
+     image, not a place. This is a few centimetres of wander -- below the
+     threshold you would consciously notice, above the one that makes a still
+     frame feel dead. */
+  if (keyLight){
+    const t = clock.elapsedTime;
+    keyLight.position.set(-4.5 + Math.sin(t * 0.21) * 1.1,
+                           11 + Math.sin(t * 0.17 + 1.3) * 0.8,
+                           21 + Math.cos(t * 0.13) * 0.7);
+    keyLight.intensity = 900 * (1 + Math.sin(t * 0.9) * 0.012);
+    if (sheet) sheet.userData.lightWorld.copy(keyLight.position);
+  }
+
+  camera.position.x = damp(camera.position.x, -2.6 + ptr.x * 1.5, 0.045, dt);
+  camera.position.y = damp(camera.position.y, -ptr.y * 1.0, 0.045, dt);
+  camera.position.z = damp(camera.position.z, 26 - scroll.v * 5.5, 0.05, dt);
+  camera.lookAt(5.4, 0.2, 0);
+
+  grain.uniforms.time.value += dt;
+  try { composer.render(); } catch (err){ fail('render', err); renderer.setAnimationLoop(null); }
+}
+
+function onResize(){
+  camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  bloom.setSize(innerWidth, innerHeight);
+}
+</script>
+</body>
+</html>

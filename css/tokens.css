@@ -1,0 +1,197 @@
+/* ============================================================
+   tokens.css — single source of truth.
+
+   ------------------------------------------------------------
+   DARK GROUND. Chosen the same way the light one was: by running
+   scratchpad/palette_dark.py, not by eye.
+
+   The original scorer carried a PRINT axis worth 0.10 whose entire
+   purpose was to penalise dark grounds. That axis exists to answer
+   "light or dark", and that question is now settled — so it is
+   reported as a known cost instead of being scored, and its weight
+   moved to the two axes that decide a dark palette: the weakest
+   text pair, and whether the accent survives colour blindness.
+
+   Five dark candidates, each repaired to clear AA first:
+
+     Graphite + safety orange        0.921
+     Ink slate + safety orange       0.918   (the gantry build)
+     Blueprint navy + drafting cyan  0.891
+     Deep slate + amber              0.887
+     Warm dark (the current live site) 0.846
+
+   Graphite and ink slate finished 0.003 apart — a tie. Swapping
+   ink slate's accent for a hotter orange broke it decisively:
+
+     Ink slate + #f97316             0.954   <- winner
+
+   It beats both on EVERY axis, not on average: same 100% AA, a
+   stronger weakest pair (5.39 vs graphite's 4.56), a more salient
+   accent (7.03 vs 6.59) and better colour-blind separation
+   (0.89 vs 0.86). No trade was made.
+
+   PRINT COST, stated rather than hidden: ground luminance is
+   0.003 against 0.954 for the light palette. A printed page or
+   PDF export of a dark site costs ink and greys out on office
+   lasers. `motion.css` already carries an @media print block —
+   that is where this is paid for, not by lightening the screen.
+
+   Every value below was measured against all four grounds
+   (page, raised, inset, panel); the ratios quoted are the WORST
+   of the four, so no combination in the stylesheet can fall
+   below what is written here.
+   ============================================================ */
+
+:root {
+  /* ---- Ground: near-black slate ----
+     Four steps, all within a hair of each other in luminance. On a
+     dark page, separation comes from the light falling on things,
+     not from stacking progressively lighter greys — that is what
+     made the first attempt look washed. */
+  --page-bg:      #080b10;   /* the room                               */
+  --bg:           #080b10;
+  --bg-raised:    #0e131b;   /* cards sit above the ground             */
+  --bg-inset:     #05070a;   /* wells, code, muted panels              */
+  --bg-invert:    #e8edf3;   /* the one light panel, now inverted      */
+
+  --hairline:     #1e2733;   /* decorative division only               */
+  --hairline-lit: #2b3644;
+  /* Real control edges — inputs, focus rings, anything you must SEE to
+     operate — need 3:1 under WCAG 1.4.11. The decorative hairlines
+     above are 1.31:1 and must never be used for one. Measured 3.48:1. */
+  --hairline-ui:  #5a687c;
+  --rule:         #cbd5e1;   /* the hard brutalist rule — 13.27:1      */
+
+  /* ---- Ink ----
+     Worst-case ratio across every ground in this file:
+       text        15.14:1  AAA
+       text-dim    10.97:1  AAA
+       text-muted   7.36:1  AAA
+       accent       6.36:1  AA  (7.03:1 on the page ground)
+       text-faint   4.07:1  large text only, never body                */
+  --text:         #e8edf3;
+  --text-dim:     #c3ccd6;
+  --text-muted:   #9aa8b8;
+  --text-faint:   #6b7a8d;   /* decoration / large only, not body      */
+
+  /* ---- Accent: safety orange, measured winner ---- */
+  --accent:       #f97316;
+  --accent-lit:   #fb923c;   /* hover / large type — 7.87:1 worst      */
+  --accent-deep:  #d9620c;   /* was #c2560a: 3.93:1 on the panel, i.e.
+                                below AA. Lifted until it cleared on
+                                every ground — 4.84:1 worst.           */
+  --accent-wash:  rgba(249, 115, 22, 0.10);
+  --accent-glow:  rgba(249, 115, 22, 0.28);
+
+  /* ---- Industrial grey: the structural neutral ---- */
+  --steel:        #7d8ba0;   /* 5.15:1 worst — AA body                 */
+  --steel-dark:   #5a687c;
+  --steel-light:  #9aa8b8;
+
+  /* ---- The drawing panel ----
+     On the light page this was a dark blueprint, because a dark panel
+     was the highest-contrast object available. That logic inverts
+     here: on a near-black ground the drawing becomes the LIT object —
+     paper drops to the floor and the linework carries the light,
+     exactly as gantry-dark.html renders it in WebGL. So the panel
+     stays dark and its CONTENT glows.                                 */
+  --blue-bg:      #121821;
+  --blue-deep:    #05070a;
+  --blue-text:    #e8edf3;   /* 15.14:1 on --blue-bg  AAA              */
+  --blue-dim:     #9aa8b8;   /*  7.36:1 on --blue-bg  AAA              */
+  --blue-line:    rgba(154, 168, 184, 0.20);   /* drafting grid        */
+  --blue-accent:  #fb923c;   /*  7.87:1 on --blue-bg  AAA              */
+  --roller:       #46536a;
+  --roller-dark:  #2b3644;
+
+  --ok:           #4ade80;   /* 10.23:1 worst  AAA                     */
+  --warn:         #fbbf24;   /* 10.68:1 worst  AAA                     */
+
+  /* ---- Type ---- */
+  --font-display: 'Archivo', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:    'Space Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  --font-alt:     'Space Grotesk', var(--font-display);
+
+  /* Brutalist scale — bigger jumps, heavier weights */
+  --t-hero:   clamp(3rem, 1rem + 9vw, 11rem);
+  --t-h2:     clamp(2.25rem, 1.3rem + 4.2vw, 5.5rem);
+  --t-h3:     clamp(1.25rem, 1.05rem + 1vw, 1.9rem);
+  --t-lead:   clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem);
+  --t-body:   1rem;
+  --t-small:  0.875rem;
+  /* 13px, not 12. Measured at 100% zoom, --t-micro was rendering SIX runs
+     of real prose at 12px — his job title under the name, the credential
+     line in the footer, the "skills applied" line, the drawing captions and
+     the instruction above the project list. Those are not labels; they are
+     sentences someone has to read. 13px lifts every small element by 8%,
+     which is inside the existing layout tolerances (checked: 0px horizontal
+     overflow at 360 and 390). The prose cases get a further step below. */
+  --t-micro:  0.8125rem;
+  /* Small type that is a SENTENCE rather than a tag. 14px is the floor for
+     anything you actually read left to right. */
+  --t-micro-prose: 0.875rem;
+
+  --lh-tight: 0.88;
+  --lh-snug:  1.08;
+  --lh-body:  1.6;
+
+  --tracking-label: 0.2em;
+  --tracking-tight: -0.045em;
+
+  /* ---- Space ---- */
+  --s-1: 0.25rem;  --s-2: 0.5rem;   --s-3: 0.75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;   --s-6: 2rem;     --s-7: 3rem;     --s-8: 4rem;
+  --s-9: 6rem;     --s-10: 8rem;    --s-11: 12rem;
+
+  --section-y: clamp(5rem, 3rem + 9vw, 12rem);
+  --gutter:    clamp(1.25rem, 0.5rem + 3.5vw, 5rem);
+  --measure:   66ch;
+  --maxw:      1600px;
+
+  /* ---- Form: brutalism means sharp ---- */
+  --r-sm: 0;  --r-md: 0;  --r-lg: 0;  --r-xl: 0;  --r-full: 0;
+  --border-w: 1.5px;
+  --border-heavy: 3px;
+
+  /* Shadows are hard offsets, not soft blurs — brutalist convention.
+     They used var(--rule) directly. --rule is now LIGHT (it has to be,
+     to read as a drawn line on a dark ground), and a light hard offset
+     is not a shadow, it is a halo. Shadows get their own ink. */
+  --shadow-ink:  #000308;
+  --shadow-sm:   2px 2px 0 var(--shadow-ink);
+  --shadow-md:   4px 4px 0 var(--shadow-ink);
+  --shadow-lg:   8px 8px 0 var(--shadow-ink);
+  --shadow-lift: 12px 12px 0 var(--shadow-ink);
+  --shadow-soft: 0 12px 40px -18px rgba(0, 0, 0, 0.85);
+  /* A dark page has no cast shadows to give depth, so lift is carried by
+     LIGHT instead — an object nearer the viewer catches more of it. */
+  --glow-soft:   0 0 60px -12px rgba(249, 115, 22, 0.30);
+  --glow-edge:   inset 0 1px 0 rgba(232, 237, 243, 0.07);
+
+  /* ---- Motion ---- */
+  --d-fast:   0.15s;
+  --d-base:   0.28s;
+  --d-slow:   0.55s;
+  --d-reveal: 0.7s;
+
+  --e-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --e-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --e-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Layers ---- */
+  --z-canvas: 0;
+  --z-base:   1;
+  --z-raised: 10;
+  --z-nav:    100;
+  --z-modal:  1000;
+  --z-cursor: 9999;
+
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-fast: 0.01ms; --d-base: 0.01ms;
+    --d-slow: 0.01ms; --d-reveal: 0.01ms;
+  }
+}

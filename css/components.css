@@ -1,0 +1,976 @@
+/* ============================================================
+   components.css — buttons, cards, timeline, chips, the scroll
+   ============================================================ */
+
+/* ---- Buttons ---------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 0.8rem 1.5rem;
+  min-height: 44px;
+  border-radius: var(--r-full);
+  font-size: var(--t-small);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  border: var(--border-w) solid var(--rule);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--d-fast) var(--e-out),
+              background var(--d-fast) var(--e-out),
+              border-color var(--d-fast) var(--e-out),
+              color var(--d-fast) var(--e-out);
+  will-change: transform;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--page-bg);   /* 7.03:1. #fff here measured 2.80:1 — a fail. */
+  font-weight: 700;
+}
+.btn-primary:hover {
+  background: var(--accent-lit);
+  color: var(--page-bg);   /* 8.71:1 */
+  box-shadow: var(--shadow-sm);
+  transform: translate(-2px,-2px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+}
+.btn-ghost:hover {
+  background: var(--rule);
+  color: var(--page-bg);   /* --rule is light now; 13.27:1 */
+  transform: translate(-2px,-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-arrow { transition: transform var(--d-base) var(--e-out); }
+.btn:hover .btn-arrow { transform: translateX(3px); }
+
+/* ---- Chips / tags ----------------------------------------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border: var(--border-w) solid var(--steel);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  /* ITS OWN GROUND, and this is not cosmetic.
+     The hero chips are transparent and sit over a live WebGL canvas, so their
+     contrast depended on whatever the erection sequence happened to be
+     rendering behind them that frame. Measured against the actual composited
+     pixels, "CSCS Card Holder" came out at 3.16:1 — --text-muted over a
+     primer-orange rafter passing behind it. A transparent control over moving
+     imagery cannot have a contrast guarantee; this gives it one. */
+  background: color-mix(in srgb, var(--page-bg) 82%, transparent);
+  backdrop-filter: blur(3px);
+  transition: border-color var(--d-fast) var(--e-out),
+              color var(--d-fast) var(--e-out);
+}
+.chip:hover { border-color: var(--accent-deep); color: var(--text-dim); }
+.chip-list { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+
+/* ---- Stat ------------------------------------------------- */
+.stat-value {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: var(--tracking-tight);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.stat-label {
+  margin-top: var(--s-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ---- Card ------------------------------------------------- */
+.card {
+  position: relative;
+  background: var(--bg-raised);
+  border: var(--border-w) solid var(--rule);
+  padding: var(--s-5);
+  transition: border-color var(--d-base) var(--e-out),
+              transform   var(--d-base) var(--e-out),
+              box-shadow  var(--d-base) var(--e-out);
+  will-change: transform;
+}
+.card:hover {
+  border-color: var(--rule);
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* A hairline that draws itself along the card top on hover */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: var(--s-5); right: var(--s-5);
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--d-slow) var(--e-out);
+}
+.card:hover::before { transform: scaleX(1); }
+
+.card-title { font-size: var(--t-h3); margin-bottom: var(--s-2); }
+.card-meta  { font-family: var(--font-mono); font-size: var(--t-micro);
+              letter-spacing: var(--tracking-label); text-transform: uppercase;
+              color: var(--accent); margin-bottom: var(--s-3); }
+.card-body  { color: var(--text-dim); font-size: var(--t-small); }
+
+/* ---- Timeline --------------------------------------------- */
+.timeline { position: relative; padding-left: var(--s-6); }
+.tl-item { position: relative; padding-bottom: var(--s-7); }
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--s-6) * -1 + 1px);
+  top: 7px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--accent);
+  transition: background var(--d-base) var(--e-out),
+              box-shadow var(--d-base) var(--e-out);
+}
+.tl-item:hover::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-wash);
+}
+.tl-org  { font-size: var(--t-h3); margin-bottom: var(--s-1); }
+/* --accent-lit, not --accent. The timeline sits over the borehole/drawing
+   station, and where a lit sheet passes behind it the measured ground rises to
+   about #34373d — at which point --accent falls to 4.26:1, just under AA.
+   --accent-lit holds 5.27:1 on that worst case and 8.71:1 on the page ground. */
+.tl-role { color: var(--accent-lit); font-size: var(--t-small); font-weight: 500; }
+/* --text-dim, not --text-muted. The timeline runs over the drawing station,
+   and where a lit sheet passes behind the dates the measured ground rises to
+   about #3b3e43 — at which point --text-muted lands on 4.43:1, a hair under
+   AA. --text-dim holds 6.61:1 there and 12.13:1 on the page ground. */
+.tl-date { font-family: var(--font-mono); font-size: var(--t-micro);
+           letter-spacing: 0.08em; color: var(--text-dim); }
+.tl-list { margin-top: var(--s-4); display: grid; gap: var(--s-3); }
+.tl-list li {
+  position: relative;
+  padding-left: var(--s-5);
+  color: var(--text-dim);
+  font-size: var(--t-small);
+}
+.tl-list li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.62em;
+  width: 10px; height: 1px;
+  background: var(--accent-deep);
+}
+
+/* ============================================================
+   THE SCROLL — your signature element.
+   A rolled technical drawing that unrolls to reveal the detail.
+   This is where the boldness is spent; everything else stays quiet.
+   ============================================================ */
+.scroll-unit {
+  border: var(--border-w) solid var(--rule);
+  border-radius: var(--r-lg);
+  background: var(--bg-raised);
+  overflow: hidden;
+  transition: border-color var(--d-base) var(--e-out);
+}
+.scroll-unit:hover { box-shadow: var(--shadow-md); transform: translate(-2px,-2px); }
+.scroll-unit[data-open='true'] { border-color: var(--accent); box-shadow: var(--shadow-md); }
+
+.scroll-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--s-4);
+  align-items: center;
+  width: 100%;
+  padding: var(--s-5);
+  text-align: left;
+}
+.scroll-num {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  border: var(--border-w) solid var(--accent);
+  padding: 0.25rem 0.5rem;
+}
+.scroll-name { font-size: var(--t-h3); }
+.scroll-sub  { color: var(--text-muted); font-size: var(--t-small); margin-top: 2px; }
+
+/* The roller: a small dowel that rotates as the sheet unrolls */
+.roller {
+  width: 34px; height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-full);
+  background: var(--rule);
+  box-shadow: none;
+  transition: transform var(--d-slow) var(--e-spring);
+  flex: none;
+}
+.scroll-unit[data-open='true'] .roller { transform: rotate(180deg); }
+.roller svg { width: 15px; height: 15px; color: var(--page-bg); }
+
+/* The sheet. Height is animated in JS (auto -> px) so it can be
+   interrupted mid-flight; the transform gives it the "unrolling" feel. */
+.scroll-sheet {
+  display: grid;
+  grid-template-rows: 0fr;
+  /* visibility:hidden is load-bearing, not cosmetic: overflow:hidden alone
+     leaves the collapsed content FOCUSABLE, so keyboard users tab into
+     links they cannot see. visibility:hidden removes it from the tab order
+     and the a11y tree, and unlike display:none it still animates. */
+  visibility: hidden;
+  transition: grid-template-rows var(--d-slow) var(--e-out),
+              visibility 0s linear var(--d-slow);
+}
+.scroll-unit[data-open='true'] .scroll-sheet {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows var(--d-slow) var(--e-out),
+              visibility 0s linear 0s;
+}
+
+.scroll-sheet > .scroll-clip { overflow: hidden; }
+
+.scroll-paper {
+  margin: 0 var(--s-4) var(--s-4);
+  padding: var(--s-6);
+  color: var(--blue-text);
+  /* Inverted from the old parchment. On an off-white sheet a cream panel
+     vanishes; a dark blueprint is now the highest-contrast object on the
+     page, which is what a signature element should be. */
+  background-color: var(--blue-bg);
+  background-image:
+    linear-gradient(to right,  var(--blue-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--blue-line) 1px, transparent 1px);
+  background-size: 26px 26px, 26px 26px;
+  border: var(--border-w) solid var(--rule);
+  transform-origin: top center;
+}
+
+.scroll-paper h4 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.35rem;
+  color: var(--blue-text);
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: var(--border-w) solid var(--blue-line);
+}
+.scroll-paper .label {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--blue-accent);
+  margin-bottom: var(--s-2);
+  display: block;
+}
+.scroll-paper p { color: var(--blue-text); margin-bottom: var(--s-4); }
+.scroll-paper ul { display: grid; gap: var(--s-3); margin-bottom: var(--s-5); }
+.scroll-paper li {
+  position: relative;
+  padding-left: var(--s-5);
+  font-size: var(--t-small);
+  line-height: 1.6;
+}
+.scroll-paper li::before {
+  content: '';
+  position: absolute; left: 0; top: 0.6em;
+  width: 11px; height: 1px;
+  background: var(--blue-accent);
+}
+.scroll-paper .figure {
+  margin-top: var(--s-5);
+  border: var(--border-w) solid var(--blue-line);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--blue-deep);
+}
+/* INVERTED, not framed. These are ink-on-paper scans; dropped onto a
+   near-black page inside a white box they punch a hole straight through it.
+   Greyscale first (the scans carry a warm cast that inverts to a sickly
+   blue), then invert, then a little contrast to put the paper properly on
+   the floor. This is the DOM-side version of what the sheet shader does. */
+.scroll-paper .figure img,
+.gal-track img {
+  filter: grayscale(1) invert(1) contrast(1.18) brightness(0.92);
+}
+.scroll-paper .figure img { width: 100%; height: auto; display: block; }
+.scroll-paper figcaption {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  color: var(--blue-dim);
+  padding: var(--s-3);
+  border-top: var(--border-w) solid var(--blue-line);
+}
+
+/* ---- Outcome callout on the parchment ---- */
+.outcome {
+  margin-top: var(--s-4);
+  padding: var(--s-4);
+  border-left: var(--border-heavy) solid var(--blue-accent);
+  background: rgba(251, 146, 60, 0.10);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+.outcome strong { color: var(--blue-text); }
+
+/* ---- Skill meter ------------------------------------------ */
+.skill-row {
+  display: grid;
+  /* minmax(0,1fr) so a long skill name shrinks instead of forcing the row wide */
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-3);
+  align-items: center;
+  padding-block: var(--s-3);
+  border-bottom: 1px solid var(--hairline);
+}
+.skill-row:last-child { border-bottom: none; }
+.skill-name { font-size: var(--t-small); }
+.skill-level {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.meter {
+  grid-column: 1 / -1;
+  height: 2px;
+  background: var(--hairline);
+  border-radius: var(--r-full);
+  overflow: hidden;
+}
+.meter-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--accent-deep), var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.1s var(--e-out);
+}
+
+/* ---- Contact ---------------------------------------------- */
+.contact-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding: var(--s-5) 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: clamp(1.05rem, 0.9rem + 0.8vw, 1.5rem);
+  transition: padding-left var(--d-base) var(--e-out),
+              border-color  var(--d-base) var(--e-out);
+}
+.contact-link:hover {
+  padding-left: var(--s-4);
+  border-color: var(--accent-deep);
+  color: var(--accent-lit);
+}
+.contact-link .what {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+
+/* The case-study CTA on the parchment is a standalone target, not inline
+   prose — give it a real 44px hit area on touch. */
+.scroll-paper a.inline {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-block: var(--s-2);
+  /* --roller-dark is another parchment-era ink: 1.45:1 against the panel, so
+     this link was effectively invisible until you zoomed. Same family of bug
+     as the chips above. --blue-accent is the panel's own link colour and
+     measures 7.87:1. */
+  color: var(--blue-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.scroll-paper a.inline:hover { color: var(--blue-text); }
+
+
+/* Closed drawer must leave the tab order and the accessibility tree entirely.
+   [hidden] already hides it, but inert also blocks focus on its descendants
+   in browsers that restore focusability via other means. */
+.nav-drawer[hidden] { display: none; }
+
+/* ============================================================
+   AWWWARDS SECTION TREATMENTS
+   ============================================================ */
+
+/* ---- Preloader --------------------------------------------- */
+.preloader {
+  position: fixed; inset: 0;
+  z-index: var(--z-modal);
+  display: grid; place-content: center; gap: var(--s-4);
+  background: var(--page-bg);
+  transition: opacity 0.6s var(--e-out), visibility 0s linear 0.6s;
+}
+.preloader[data-done='true'] { opacity: 0; visibility: hidden; pointer-events: none; }
+.pre-mark {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: center;
+}
+.pre-bar { width: min(220px, 50vw); height: var(--border-heavy); background: var(--hairline); overflow: hidden; }
+.pre-bar span {
+  display: block; height: 100%; width: 100%;
+  background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  animation: pre-load 2.4s var(--e-out) forwards;
+}
+@keyframes pre-load { to { transform: scaleX(1); } }
+
+/* ---- Custom cursor: a survey crosshair ---------------------- */
+.cursor {
+  position: fixed; top: 0; left: 0;
+  width: 28px; height: 28px;
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  transition: width var(--d-base) var(--e-out), height var(--d-base) var(--e-out);
+}
+.cursor-h, .cursor-v { position: absolute; background: var(--accent); }
+.cursor-h { left: 0; right: 0; top: 50%; height: 1px; }
+.cursor-v { top: 0; bottom: 0; left: 50%; width: 1px; }
+.cursor-ring {
+  position: absolute; inset: 25%;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  transition: inset var(--d-base) var(--e-out), opacity var(--d-base) var(--e-out);
+}
+.cursor[data-hot='true'] { width: 52px; height: 52px; }
+.cursor[data-hot='true'] .cursor-ring { inset: 12%; }
+.cursor[data-down='true'] .cursor-ring { inset: 38%; }
+@media (hover: none), (pointer: coarse) { .cursor { display: none; } }
+
+/* ---- Oversized section index -------------------------------- */
+.section-ghost {
+  position: absolute;
+  top: calc(var(--section-y) * -0.25);
+  right: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(7rem, 22vw, 22rem);
+  line-height: 0.7;
+  letter-spacing: -0.06em;
+  color: transparent;
+  /* VISIBLE, not merely present.
+     This was stroked in --hairline-lit (#2b3644), which is a DIVIDER colour:
+     1.61:1 against the page ground, so the oversized 01–07 were effectively
+     not there. On the old light page the equivalent was 1.29:1, i.e. it has
+     always been a ghost of a ghost.
+
+     --steel-dark measures 3.48:1 — legible as an outline at this size while
+     staying well clear of the headline beside it at 16.74:1, so it reads as
+     a watermark rather than competing for the eye. The stroke goes to 2px
+     because a 1.5px hairline disappears again at clamp(7rem, 22vw, 22rem).
+     The sibling .rail-num already strokes at 8.13:1 and needed no change. */
+  -webkit-text-stroke: 2px var(--steel-dark);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* ---- Horizontal rail ---------------------------------------- */
+.rail { position: relative; }
+.rail-stage {
+  position: sticky; top: 0;
+  height: 100svh;
+  display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden;
+}
+.rail-head { padding-inline: var(--gutter); margin-bottom: var(--s-6); }
+.rail-track {
+  display: flex;
+  gap: var(--s-5);
+  padding-inline: var(--gutter);
+  will-change: transform;
+}
+.rail-card {
+  flex: 0 0 min(420px, 78vw);
+  border: var(--border-w) solid var(--rule);
+  background: var(--bg-raised);
+  padding: var(--s-6);
+  display: flex; flex-direction: column;
+  min-height: min(58svh, 520px);
+}
+.rail-card .card-meta { color: var(--accent); }
+.rail-num {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 4rem;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--steel-light);
+  margin-bottom: var(--s-4);
+}
+.rail-hint {
+  padding-inline: var(--gutter);
+  margin-top: var(--s-5);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: flex; align-items: center; gap: var(--s-3);
+}
+.rail-hint::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, var(--hairline-lit), transparent);
+}
+/* Reduced motion / no-JS: fall back to a normal wrapping grid. */
+@media (prefers-reduced-motion: reduce) {
+  .rail-stage { position: static; height: auto; overflow: visible; }
+  .rail-track { flex-wrap: wrap; transform: none !important; }
+  .rail-card { flex: 1 1 320px; min-height: 0; }
+}
+.no-js .rail-stage { position: static; height: auto; overflow: visible; }
+.no-js .rail-track { flex-wrap: wrap; }
+
+/* ---- 3D tilt ------------------------------------------------ */
+[data-tilt] {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform var(--d-base) var(--e-out), box-shadow var(--d-base) var(--e-out);
+  position: relative;
+}
+[data-tilt]:hover { box-shadow: var(--shadow-lg); }
+/* specular sheen follows the pointer */
+[data-tilt]::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(320px circle at var(--gx, 50%) var(--gy, 50%),
+              rgba(249, 115, 22, 0.14), transparent 65%);
+  transition: opacity var(--d-base) var(--e-out);
+}
+[data-tilt]:hover::after { opacity: 1; }
+
+/* ---- Load-path timeline ------------------------------------- */
+.tl-spine {
+  position: absolute;
+  left: 5px; top: 6px; bottom: 6px;
+  width: var(--border-heavy);
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  will-change: transform;
+}
+.tl-item::before {
+  background: var(--bg);
+  border: var(--border-w) solid var(--steel);
+  transition: background var(--d-base) var(--e-out),
+              border-color var(--d-base) var(--e-out),
+              transform var(--d-base) var(--e-spring);
+}
+.tl-item.loaded::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.35);
+}
+
+/* ============================================================
+   SECTION OPENERS
+   The reason the page felt front-loaded: only the hero owned a full
+   viewport. Every section now opens with its own full-bleed moment —
+   oversized type plus a device drawn from what that section is actually
+   about — and the content follows underneath.
+
+   None of these pin. The pin budget (1-2 per page, per ui-ux-pro-max
+   motion data) is spent on the hero and the horizontal rail.
+   ============================================================ */
+.sec-open {
+  position: relative;
+  min-height: 88svh;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: center;
+  gap: var(--s-5);
+  padding-block: var(--s-9) var(--s-8);
+  overflow: hidden;
+}
+@media (min-width: 900px) {
+  .sec-open { grid-template-columns: 1.05fr 0.95fr; align-items: center; gap: var(--s-8); }
+}
+
+.sec-open-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.75rem, 1rem + 7.5vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+.sec-open-title em {
+  font-family: var(--font-alt);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+.sec-open-kicker {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex; align-items: center; gap: var(--s-3);
+  margin-bottom: var(--s-4);
+}
+.sec-open-kicker::after {
+  content: ''; flex: 1; height: 1px; background: var(--hairline-lit);
+}
+.sec-open-lede {
+  max-width: 46ch;
+  font-size: var(--t-lead);
+  color: var(--text-dim);
+  margin-top: var(--s-5);
+}
+
+/* the device sits in the second column, or behind on narrow screens */
+.sec-device { position: relative; display: grid; place-items: center; }
+.sec-device svg { width: 100%; height: auto; max-height: 62svh; overflow: visible; }
+@media (max-width: 899px) {
+  .sec-device { opacity: 0.32; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .sec-open > *:not(.sec-device) { position: relative; z-index: 1; }
+}
+
+/* ---- device: stroke drawing animation ---- */
+.dev-draw {
+  stroke-dasharray: var(--len, 1200);
+  stroke-dashoffset: var(--len, 1200);
+  transition: stroke-dashoffset 1.6s var(--e-out);
+}
+.is-in .dev-draw, .sec-open.is-in .dev-draw { stroke-dashoffset: 0; }
+.dev-fade { opacity: 0; transition: opacity 0.9s var(--e-out) 0.5s; }
+.sec-open.is-in .dev-fade { opacity: 1; }
+
+/* ---- About: duotone portrait ---- */
+.portrait-frame {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  border: var(--border-w) solid var(--rule);
+}
+.portrait-frame img {
+  display: block; width: 100%; height: auto;
+  /* No duotone. It is his photograph; show it as it is. */
+}
+.portrait-tag {
+  position: absolute; left: 0; bottom: 0;
+  background: var(--accent); color: #fff;
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  padding: var(--s-2) var(--s-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dev-draw { stroke-dashoffset: 0 !important; }
+  .dev-fade { opacity: 1 !important; }
+  .sec-open { min-height: 0; padding-block: var(--s-8); }
+}
+
+/* The portrait is a real object in the WebGL scene when 3D is running, so the
+   flat copy would be a duplicate. It stays in the DOM for no-JS, reduced
+   motion, print and crawlers — it is just hidden when the 3D layer is live. */
+/* the photo is a photograph in the layout again, not a 3D prop */
+@media print { .portrait-frame { display: block !important; } }
+
+/* ---- Drawing gallery (restored: crane gantry 2, shopfront 3) ---- */
+.gallery { position: relative; margin-top: var(--s-5); }
+.gal-track {
+  position: relative;
+  border: var(--border-w) solid var(--blue-line);
+  background: var(--blue-deep);
+  overflow: hidden;
+}
+.gal-slide { display: none; margin: 0; }
+.gal-slide.is-active { display: block; }
+.gal-slide img { width: 100%; height: auto; display: block; }
+.gal-slide figcaption {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  color: var(--blue-dim);
+  padding: var(--s-3);
+  border-top: var(--border-w) solid var(--blue-line);
+  background: var(--blue-bg);
+}
+.gal-nav {
+  position: absolute; top: 42%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  background: var(--blue-bg);
+  border: var(--border-w) solid var(--blue-line);
+  color: var(--blue-text);
+  transition: background var(--d-fast) var(--e-out), color var(--d-fast) var(--e-out);
+}
+.gal-nav:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.gal-nav svg { width: 18px; height: 18px; }
+.gal-nav.prev { left: var(--s-3); }
+.gal-nav.next { right: var(--s-3); }
+.gal-dots { display: flex; gap: var(--s-2); justify-content: center; margin-top: var(--s-3); }
+.gal-dot {
+  width: 28px; height: 4px;
+  background: var(--blue-line);
+  border: none;
+  transition: background var(--d-fast) var(--e-out);
+}
+.gal-dot.is-active { background: var(--accent); }
+@media (pointer: coarse) { .gal-dot { height: 44px; background: none; position: relative; }
+  .gal-dot::after { content:''; position:absolute; left:0; right:0; top:50%; height:4px;
+    transform: translateY(-50%); background: var(--blue-line); }
+  .gal-dot.is-active::after { background: var(--accent); } }
+
+/* The portrait is the 3D survey when WebGL runs; the flat photo stays for
+   no-JS, reduced motion, print and crawlers. */
+body[data-hero='3d'] .portrait-frame { display: none; }
+@media print { body[data-hero='3d'] .portrait-frame { display: block !important; } }
+
+
+.gal-slide img,
+.scroll-paper .figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* NO background on the image itself.
+     `object-fit: contain` letterboxes a 1.94:1 drawing inside a 1.29:1 box,
+     and `filter: invert(1)` inverts the element's OWN painted background along
+     with its pixels — so a --blue-deep backdrop here came out near-WHITE in
+     the letterbox bars, two bright slabs above and below every drawing. The
+     bars must show the (unfiltered) container instead, which is already
+     --blue-deep on .gal-track and .scroll-paper .figure. */
+  background: transparent;
+}
+
+
+/* ============================================================
+   DRAWING STAGE — deterministic sizing
+   Three earlier attempts fought the grid: <picture> has no intrinsic height,
+   so `height:100%` on the image resolved against the wrong box and the
+   drawing was cropped; then `1fr` collapsed to zero once the image left the
+   flow. So: the stage is a fixed-height positioned box, the image fills it
+   absolutely and is contained inside it, and the caption overlays the foot.
+   No height chain to break.
+
+   Portrait drawings (shopfront 928x1128, underpinning 992x1066) previously
+   rendered ~1450px tall and pushed the open panel to 2018px in a 900px
+   viewport — one drawing per screenful, scrolling up and down between them.
+   ============================================================ */
+.gal-track,
+.scroll-paper .figure {
+  position: relative;
+  height: clamp(260px, 46vh, 480px);
+  background: var(--blue-deep);
+  border: var(--border-w) solid var(--blue-line);
+  overflow: hidden;
+  display: block;
+}
+.gal-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--d-base) var(--e-out), visibility 0s linear var(--d-base);
+}
+.gal-slide.is-active {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity var(--d-base) var(--e-out), visibility 0s linear 0s;
+}
+.gal-slide picture,
+.scroll-paper .figure picture { display: block; position: absolute; inset: 0; }
+.gal-slide img,
+.scroll-paper .figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      /* whole drawing, letterboxed, never cropped */
+  background: transparent;  /* see the note above — invert() would flip it */
+}
+/* caption sits over the foot of the stage so it costs no layout height */
+.gal-slide figcaption,
+.scroll-paper .figure figcaption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  margin: 0;
+  padding: var(--s-2) var(--s-3);
+  background: color-mix(in srgb, var(--blue-deep) 88%, transparent);
+  border-top: var(--border-w) solid var(--blue-line);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  color: var(--blue-dim);
+}
+/* keep the nav clear of the caption */
+.gal-nav { top: calc(50% - 14px); }
+
+/* an open panel never exceeds one screen */
+.scroll-paper { max-height: 84svh; overflow-y: auto; overscroll-behavior: contain; }
+
+/* The caption overlay was sitting ON the drawing and hiding its bottom edge.
+   Inset the image above the caption strip instead, so `contain` fits the
+   drawing into the space that is actually left for it. */
+.gal-slide img,
+.scroll-paper .figure img { inset: 0 0 34px 0; }
+.gal-slide figcaption,
+.scroll-paper .figure figcaption {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  background: var(--blue-deep);
+  padding-block: 0;
+}
+
+/* ============================================================
+   OPEN PANEL: two columns on wide screens
+   With the challenge text and contribution list stacked above it, the
+   drawing was starting ~560px down a 900px viewport and running past the
+   fold — you still had to scroll to see the thing you just opened. Text
+   left, drawing right: the whole project reads in one screen.
+   ============================================================ */
+@media (min-width: 1000px) {
+  .scroll-paper {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    column-gap: var(--s-6);
+    align-content: start;
+  }
+  .scroll-paper > * { grid-column: 1; min-width: 0; }
+  .scroll-paper > h4 { grid-column: 1 / -1; }
+  .scroll-paper .gallery,
+  .scroll-paper .figure {
+    grid-column: 2;
+    grid-row: 2 / span 30;
+    align-self: start;
+    margin-top: 0;
+    /* Taller stage: portrait drawings (shopfront 928x1128) were letterboxing
+       down to ~339px wide inside a 608px column, which read as "hidden".
+       A taller box lets them use the column width. */
+    height: clamp(320px, 56vh, 520px);
+  }
+  /* Keep the callout in the text column. Spanning it full width ran it
+     underneath the gallery's dot navigation. */
+  .scroll-paper .outcome { grid-column: 1; margin-top: var(--s-4); }
+}
+
+/* The stage is .gal-track (inside .gallery), so heightening .gallery alone
+   changed nothing. Set it on the element that actually is the stage. */
+@media (min-width: 1000px) {
+  .scroll-paper .gal-track,
+  .scroll-paper .figure { height: clamp(320px, 54vh, 500px); }
+}
+
+/* ---- Small type that is prose, not a label -------------------------------
+   Measured at 100% zoom: these render sentences, so they take the prose step
+   (14px) rather than the label step. Everything else on --t-micro is a tag, a
+   date or an index and stays at 13px.
+
+   This lives at the END of components.css, not in base.css, because
+   .hero-eyebrow and figcaption are sized in layout.css and components.css —
+   both of which load after base.css, so the override lost on source order and
+   silently did nothing. */
+.hero-eyebrow,
+.rail-hint,
+figcaption,
+p.mono,
+p.measure.mono,
+/* .scroll-paper figcaption and .gal-slide figcaption are set earlier in this
+   file at (0,2,0); a bare `figcaption` at (0,0,1) loses to them regardless of
+   order, so those two are named explicitly. Specificity, not source order. */
+.scroll-paper figcaption,
+.scroll-paper .figure figcaption,
+.gal-slide figcaption {
+  font-size: var(--t-micro-prose);
+}
+
+/* ---- Chips inside the drawing panel --------------------------------------
+   These eight carried an INLINE override left from the parchment era:
+       style="border-color:var(--scroll-line);color:var(--roller-dark)"
+   --roller-dark is a dark ink, which was right on a cream sheet and is
+   invisible on a dark panel: measured 1.46:1, the "MATLAB / ANSYS / Monte
+   Carlo" row you had to zoom in to read. --scroll-line does not exist at all
+   any more, so `border-color` was invalid-at-computed-value-time and fell
+   back to currentColor — the same invisible ink, which is why the outlines
+   had gone too.
+
+   Inline styles bypass the token system that tokens.css is supposed to be the
+   single source of truth for. The overrides are gone from the HTML; the panel
+   colours them here, from the panel's own measured tokens. */
+.scroll-paper .chip {
+  color: var(--blue-dim);          /* 7.36:1 on --blue-bg — AAA */
+  border-color: var(--blue-line);
+  background: transparent;
+}
+.scroll-paper .chip:hover {
+  color: var(--blue-text);         /* 15.14:1 */
+  border-color: var(--blue-accent);
+}
+
+/* ---- Contact facts -------------------------------------------------------
+   Location / Current Role / Chartership are statements, not destinations, so
+   they share the contact row's rhythm without the arrow or the link
+   affordance. They were on the original panel and had been dropped. */
+.contact-fact {
+  display: block;
+  padding-block: var(--s-4);
+  border-bottom: 1px solid var(--hairline);
+  color: var(--text-dim);          /* 12.13:1 on the page ground */
+  line-height: var(--lh-body);
+  max-width: 62ch;
+}
+.contact-fact .what {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);        /* 8.13:1 */
+}
+.contact-desc { margin-bottom: var(--s-6); color: var(--text-dim); }
+
+/* ---- Chip lists inside the drawing panel ---------------------------------
+   `.scroll-paper ul` sets `display:grid` and `.scroll-paper li` draws the
+   dash marker — both at higher specificity than `.chip-list`. So a chip list
+   dropped into the panel rendered as full-width stacked rows each with a
+   leading dash, instead of a wrapped row of chips. Restore the chip layout
+   and cancel the marker. */
+.scroll-paper .chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-5);
+}
+.scroll-paper .chip-list li.chip {
+  padding: 0.35rem 0.7rem;
+  font-size: var(--t-micro);
+}
+.scroll-paper .chip-list li.chip::before { content: none; }

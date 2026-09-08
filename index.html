@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en-GB" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vijay Venkatasamy — Civil &amp; Structural Engineer</title>
+<meta name="description" content="Civil &amp; Structural Engineer (GMICE) in Greater Manchester. Practical structural solutions for complex constraints across retail, commercial, industrial and residential sectors in the UK.">
+<meta name="author" content="Vijay Venkatasamy">
+<link rel="canonical" href="https://vijayvvs.github.io/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vijayvvs.github.io/">
+<meta property="og:title" content="Vijay Venkatasamy — Civil &amp; Structural Engineer">
+<meta property="og:description" content="Practical structural solutions for complex constraints. 40+ UK projects across retail, commercial, industrial and residential sectors.">
+<meta property="og:image" content="https://vijayvvs.github.io/assets/opt/vijay-1600.webp">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Matches the dark ground. Left at #f8fafc the mobile browser chrome
+     (address bar / status bar) renders white above a near-black page. -->
+<meta name="theme-color" content="#080b10">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/motion.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Vijay Venkatasamy",
+  "jobTitle": "Civil & Structural Engineer",
+  "url": "https://vijayvvs.github.io/",
+  "email": "mailto:vijayvvs1998@gmail.com",
+  "telephone": "+44-7425-619651",
+  "address": { "@type": "PostalAddress", "addressLocality": "Stockport", "addressRegion": "Greater Manchester", "addressCountry": "GB" },
+  "worksFor": { "@type": "Organization", "name": "Francis Bradshaw Consulting" },
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "University of Leeds" },
+    { "@type": "CollegeOrUniversity", "name": "Anna University" }
+  ],
+  "knowsAbout": ["Structural Engineering","Eurocode Design","British Standards","Reinforced Concrete","Structural Steelwork","Foundation Engineering"],
+  "sameAs": ["https://linkedin.com/in/vijayvvs1998"]
+}
+</script>
+</head>
+
+<body>
+<div class="preloader" aria-hidden="true">
+  <p class="pre-mark">Vijay Venkatasamy · Structural</p>
+  <div class="pre-bar"><span></span></div>
+</div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="grid-field" aria-hidden="true"></div>
+<canvas id="stage-3d" aria-hidden="true"></canvas>
+<!-- Sits between the 3D stage and the content. See #stage-scrim in
+     layout.css: it is what guarantees copy stays readable wherever the
+     geometry happens to be, and it is why the light reads as coming from
+     one side. -->
+<div id="stage-scrim" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav">
+  <a class="nav-mark" href="#hero" aria-label="Vijay Venkatasamy — back to top">VV</a>
+
+  <nav class="nav-links" id="nav-links" aria-label="Sections">
+    <a class="nav-link" href="#about">About</a>
+    <a class="nav-link" href="#experience">Experience</a>
+    <a class="nav-link" href="#projects">Projects</a>
+    <a class="nav-link" href="#research">Research</a>
+    <a class="nav-link" href="#contact">Contact</a>
+  </nav>
+
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+    <span aria-hidden="true"></span>
+    <span class="sr-only">Open navigation menu</span>
+  </button>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero-stage">
+  <canvas id="frame-canvas" aria-hidden="true"></canvas>
+  <canvas id="truss-canvas" aria-hidden="true"></canvas>
+
+  <div class="shell hero-inner">
+    <p class="hero-eyebrow">Civil &amp; Structural Engineer · GMICE</p>
+
+    <h1 class="hero-name">
+      <span class="line-mask"><span style="--i:0">Vijay</span></span>
+      <span class="line-mask surname"><span style="--i:1">Venkatasamy</span></span>
+    </h1>
+
+    <ul class="chip-list" data-reveal style="margin-bottom:var(--s-5);--i:3">
+      <li class="chip">GMICE</li>
+      <li class="chip">GIStructE (in progress)</li>
+      <li class="chip">CSCS Card Holder</li>
+    </ul>
+
+    <p class="hero-lead" data-reveal style="--i:4">
+      Practical structural solutions for complex constraints. Designing across retail,
+      commercial, industrial, and residential sectors throughout the UK.
+    </p>
+
+    <div class="hero-actions" data-reveal style="--i:5">
+      <a class="btn btn-primary magnetic" href="#projects">
+        View projects <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="btn btn-ghost magnetic" href="#contact">Get in touch</a>
+      <a class="btn btn-ghost" href="assets/Vijay-Venkatasamy-Civil-Structural-Engineer-CV.pdf" download>
+        Download CV <span class="sr-only">(PDF, 67 KB)</span>
+      </a>
+    </div>
+
+    <dl class="hero-stats" data-stagger="1">
+      <div data-reveal><dd class="stat-value" data-count="40+">40+</dd><dt class="stat-label">UK projects</dt></div>
+      <div data-reveal><dd class="stat-value" data-count="$15M+">$15M+</dd><dt class="stat-label">International value</dt></div>
+      <div data-reveal><dd class="stat-value" data-count="150K+">150K+</dd><dt class="stat-label">Safe man-hours</dt></div>
+      <div data-reveal><dd class="stat-value" data-count="4">4</dd><dt class="stat-label">Sectors</dt></div>
+    </dl>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <span class="scroll-cue-line"></span>
+    Scroll
+  </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
+  <span class="section-ghost" aria-hidden="true">01</span>
+  <div class="shell">
+    <div class="sec-open" data-reveal>
+      <div>
+        <p class="sec-open-kicker">SEC·01 &nbsp;/&nbsp; About Me</p>
+        <h2 class="sec-open-title">Engineering with<br><em>precision &amp; purpose</em></h2>
+        <figure class="portrait-frame" style="margin-top:var(--s-6)">
+          <picture>
+            <source type="image/webp" srcset="assets/opt/vijay-800.webp 800w, assets/opt/vijay-1600.webp 1600w" sizes="(max-width:900px) 90vw, 34vw">
+            <img src="assets/vijay.png" alt="Portrait of Vijay Venkatasamy" width="1200" height="1500" loading="lazy" decoding="async">
+          </picture>
+          <figcaption class="portrait-tag">Stockport, UK</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="about-body">
+      <div data-stagger="1">
+        <p class="measure" data-reveal style="margin-bottom:var(--s-4);color:var(--text-dim)">
+          Civil &amp; Structural Engineer with hands-on experience across 40+ commercial, retail,
+          industrial, and residential projects. Focused on catching design issues before they reach
+          site and finding solutions that work within real constraints — budget, access, programme.
+        </p>
+        <p class="measure" data-reveal style="margin-bottom:var(--s-4);color:var(--text-dim)">
+          Competent in Eurocodes and British Standards with practical exposure to SER certification.
+          Technical work spans reinforced concrete, structural steelwork, timber, and composite floor
+          systems — from connection design to foundation engineering.
+        </p>
+        <p class="measure" data-reveal style="margin-bottom:var(--s-6);color:var(--text-dim)">
+          Before moving to the UK, I spent two years on water and wastewater infrastructure in India,
+          Bangladesh, and Malaysia, including structural design for treatment plants, procurement for a
+          US$11.45M Petronas ETP, and site supervision of a 178.3 MLD WTP with zero safety incidents
+          across 150,000+ man-hours.
+        </p>
+
+        <div class="cols-2" style="gap:var(--s-4)" data-stagger="1">
+          <article class="card" data-tilt data-reveal>
+            <p class="card-meta">2023 — 2024</p>
+            <h3 class="card-title" style="font-size:1.05rem">University of Leeds, UK</h3>
+            <p class="card-body">MSc Structural Engineering — Merit (2:1)</p>
+          </article>
+          <article class="card" data-tilt data-reveal>
+            <p class="card-meta">2017 — 2021</p>
+            <h3 class="card-title" style="font-size:1.05rem">Anna University, India</h3>
+            <p class="card-body">BE Civil Engineering — CGPA 7.96</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section class="section" id="experience">
+  <span class="section-ghost" aria-hidden="true">02</span>
+  <div class="shell">
+    <div class="sec-open" data-reveal>
+      <div>
+        <p class="sec-open-kicker">SEC·02 &nbsp;/&nbsp; Experience</p>
+        <h2 class="sec-open-title">Career<br><em>timeline</em></h2>
+      </div>
+    </div>
+
+    <div class="exp-layout">
+      <div class="timeline">
+        <span class="tl-spine" aria-hidden="true"></span>
+        <span class="sr-only">Roles in reverse chronological order</span>
+
+        <article class="tl-item" data-reveal>
+          <h3 class="tl-org">Francis Bradshaw Consulting · Wilmslow, UK</h3>
+          <p class="tl-role">Civil &amp; Structural Engineer <span class="tl-date">· Feb 2026 — Present</span></p>
+          <p class="tl-role" style="color:var(--text-muted)">Graduate Structural Engineer <span class="tl-date">· Nov 2024 — Jan 2026</span></p>
+          <ul class="tl-list">
+            <li>Designed structural solutions for 40+ projects across retail, commercial, industrial, and residential sectors</li>
+            <li>Engineered a sequenced mass concrete underpinning scheme for clay shrinkage damage, saving approximately £25,000 in rebuild costs</li>
+            <li>Caught a missing lateral load path during a mezzanine checker review where bracing had been removed — flagged before site work began</li>
+            <li>Designed a 20 m high × 150 m long fire-rated buffer wall integrated into a steel frame at 7 m centres</li>
+            <li>Detailed steel connections and designed bases for silos, crane beams, and crane legs with RC foundations for industrial clients</li>
+            <li>Designed canopies, mezzanine alterations, hanging bulkheads, shopfront modifications, and signage supports for a major UK retailer including SER-certified projects</li>
+            <li>Developed AI-assisted workflow tools and automated systems to improve practice efficiency</li>
+          </ul>
+          <ul class="chip-list" style="margin-top:var(--s-4)">
+            <li class="chip">Tekla Tedds</li><li class="chip">MasterSeries</li>
+            <li class="chip">AutoCAD</li><li class="chip">Eurocode</li>
+          </ul>
+        </article>
+
+        <article class="tl-item" data-reveal>
+          <h3 class="tl-org">VA Tech WABAG Ltd · India</h3>
+          <p class="tl-role">Engineer – Design (Civil) <span class="tl-date">· Feb 2023 — Aug 2023</span></p>
+          <p class="tl-role" style="color:var(--text-muted)">Civil Engineer Trainee <span class="tl-date">· Aug 2021 — Jan 2023</span></p>
+          <ul class="tl-list">
+            <li>Designed RC and steel structures for the 200 MLD Pagla STP (Dhaka) and 150 MLD Patna STP — digesters, clarifiers, dosing facilities, admin buildings</li>
+            <li>Managed procurement for a US$11.45M effluent treatment plant for Petronas (Malaysia)</li>
+            <li>Supervised construction of a 178.3 MLD WTP — zero safety incidents across 150,000+ man-hours</li>
+            <li>Prepared feasibility studies and technical design reports for pumping stations</li>
+            <li>Conducted material testing, approved pour cards for RC works, and prepared BOQs and bar bending schedules</li>
+          </ul>
+          <ul class="chip-list" style="margin-top:var(--s-4)">
+            <li class="chip">STAAD Pro</li><li class="chip">ETABS</li>
+            <li class="chip">RC Design</li><li class="chip">Infrastructure</li>
+          </ul>
+        </article>
+
+        <article class="tl-item" data-reveal>
+          <h3 class="tl-org">AK Consultant · Shree Constructions · VA Tech WABAG</h3>
+          <p class="tl-role">Engineering Internships <span class="tl-date">· 2018 — 2021</span></p>
+          <ul class="tl-list">
+            <li>Foundational experience in structural calculations, AutoCAD and Tekla drafting</li>
+            <li>Site supervision and quality inspection across residential (G+2/G+3) and water treatment projects</li>
+          </ul>
+        </article>
+      </div>
+
+      <aside class="skills-panel" data-reveal>
+        <h3 class="mono" style="margin-bottom:var(--s-4)">Technical skills</h3>
+        <div class="card">
+          <div class="skill-row"><span class="skill-name">MasterSeries</span><span class="skill-level">Expert · Daily</span><span class="meter"><span class="meter-fill" data-level="0.95"></span></span></div>
+          <div class="skill-row"><span class="skill-name">AutoCAD</span><span class="skill-level">Expert · Daily</span><span class="meter"><span class="meter-fill" data-level="0.95"></span></span></div>
+          <div class="skill-row"><span class="skill-name">British Standards</span><span class="skill-level">Expert · Daily</span><span class="meter"><span class="meter-fill" data-level="0.92"></span></span></div>
+          <div class="skill-row"><span class="skill-name">Eurocode Design</span><span class="skill-level">Expert · Daily</span><span class="meter"><span class="meter-fill" data-level="0.92"></span></span></div>
+          <div class="skill-row"><span class="skill-name">Hand Calculations</span><span class="skill-level">Expert · Daily</span><span class="meter"><span class="meter-fill" data-level="0.9"></span></span></div>
+          <div class="skill-row"><span class="skill-name">Tekla Tedds</span><span class="skill-level">Expert</span><span class="meter"><span class="meter-fill" data-level="0.85"></span></span></div>
+          <div class="skill-row"><span class="skill-name">Tekla TSD</span><span class="skill-level">Expert</span><span class="meter"><span class="meter-fill" data-level="0.82"></span></span></div>
+          <div class="skill-row"><span class="skill-name">STAAD Pro / ETABS</span><span class="skill-level">Prior use</span><span class="meter"><span class="meter-fill" data-level="0.6"></span></span></div>
+          <div class="skill-row"><span class="skill-name">Revit</span><span class="skill-level">Prior use</span><span class="meter"><span class="meter-fill" data-level="0.55"></span></span></div>
+        </div>
+
+        <!-- "Competencies" sat under Technical Skills on the original and had
+             been dropped entirely. Ten chips, his wording, his order. -->
+        <h3 class="mono" style="margin:var(--s-6) 0 var(--s-4)">Competencies</h3>
+        <ul class="chip-list">
+          <li class="chip">AI Workflows</li>
+          <li class="chip">Foundation Engineering</li>
+          <li class="chip">Lateral Stability</li>
+          <li class="chip">Load Paths</li>
+          <li class="chip">RC Design</li>
+          <li class="chip">SER Certification</li>
+          <li class="chip">Site Supervision</li>
+          <li class="chip">Steel Connections</li>
+          <li class="chip">Timber Design</li>
+          <li class="chip">Underpinning</li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section" id="projects">
+  <span class="section-ghost" aria-hidden="true">03</span>
+  <div class="shell">
+    <div class="sec-open" data-reveal>
+      <div>
+        <p class="sec-open-kicker">SEC·03 &nbsp;/&nbsp; Projects</p>
+        <h2 class="sec-open-title">Featured<br><em>work</em></h2>
+      </div>
+    </div>
+
+    <p class="measure mono" style="margin-bottom:var(--s-6);text-transform:none;letter-spacing:0">
+      Select a project to unroll the detail.
+    </p>
+
+    <div style="display:grid;gap:var(--s-4)" data-stagger="1">
+
+      <!-- 01 -->
+      <article class="scroll-unit" data-open="false" data-reveal>
+        <button class="scroll-head" type="button">
+          <span class="scroll-num">01</span>
+          <span>
+            <span class="scroll-name">Crane Gantry Foundations</span>
+            <span class="scroll-sub">Glass Manufacturer · BS EN 1992 · Constructed</span>
+          </span>
+          <span class="roller" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="scroll-sheet"><div class="scroll-clip">
+          <div class="scroll-paper">
+            <h4>Crane Gantry Foundations</h4>
+            <span class="label">The Challenge</span>
+            <p>Existing foundation and plinth ran close to proposed crane column positions, creating eccentric loading conditions that varied along the building length.</p>
+            <span class="label">My Contribution</span>
+            <ul>
+              <li>Developed three foundation types to suit varying proximity to existing foundation</li>
+              <li>Designed RC pad foundations — bearing, sliding, overturning checks</li>
+              <li>Designed RC strap beams for combined bending, shear and torsion</li>
+              <li>Detailed reinforcement with closed torsional links at 150 mm centres</li>
+              <li>Prepared AutoCAD drawings as part of coordinated design package</li>
+            </ul>
+            <div class="gallery" data-gallery id="gal-crane-gantry">
+              <div class="gal-track">
+                <figure class="gal-slide is-active">
+                  <picture>
+                    <source type="image/webp" srcset="assets/opt/crane-gantry-1-clean-800.webp 800w, assets/opt/crane-gantry-1-clean-1600.webp 1600w" sizes="(max-width:820px) 88vw, 60vw">
+                    <img src="assets/clean/crane-gantry-1.png" alt="Crane Gantry Foundation Section" width="1427" height="736" loading="lazy" decoding="async">
+                  </picture>
+                  <figcaption>Crane Gantry Foundation Section</figcaption>
+                </figure>
+                <figure class="gal-slide">
+                  <picture>
+                    <source type="image/webp" srcset="assets/opt/crane-gantry-2-clean-800.webp 800w, assets/opt/crane-gantry-2-clean-1600.webp 1600w" sizes="(max-width:820px) 88vw, 60vw">
+                    <img src="assets/clean/crane-gantry-2.png" alt="Crane Gantry Foundation Plan" width="1440" height="720" loading="lazy" decoding="async">
+                  </picture>
+                  <figcaption>Crane Gantry Foundation Plan</figcaption>
+                </figure>
+              </div>
+              <button class="gal-nav prev" type="button"><span class="sr-only">Previous drawing</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="gal-nav next" type="button"><span class="sr-only">Next drawing</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
+              <div class="gal-dots"><button class="gal-dot is-active" type="button"><span class="sr-only">Drawing 1 of 2</span></button><button class="gal-dot" type="button"><span class="sr-only">Drawing 2 of 2</span></button></div>
+            </div>
+            <div class="outcome"><strong>Lesson Learned:</strong> Balancing structural efficiency against buildability — a single “optimal” solution wouldn't suit all site constraints.</div>
+          </div>
+        </div></div>
+      </article>
+
+      <!-- 02 -->
+      <article class="scroll-unit" data-open="false" data-reveal>
+        <button class="scroll-head" type="button">
+          <span class="scroll-num">02</span>
+          <span>
+            <span class="scroll-name">Parapet Wall Stabilisation</span>
+            <span class="scroll-sub">Commercial · BS EN 1993 · Installed</span>
+          </span>
+          <span class="roller" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="scroll-sheet"><div class="scroll-clip">
+          <div class="scroll-paper">
+            <h4>Parapet Wall Stabilisation</h4>
+            <span class="label">The Challenge</span>
+            <p>No drilling or mechanical fixings permitted through the roof. Existing waterproofing meant any penetration would cause leakage.</p>
+            <span class="label">My Contribution</span>
+            <ul>
+              <li>Developed free-standing restraint using counterweighted steel buttress frames</li>
+              <li>Designed spreader beams to distribute loads across timber joists</li>
+              <li>Specified resin-fixed anchors into inner parapet face only</li>
+              <li>Prepared fabrication-ready steelwork drawings with bolted details</li>
+              <li>Coordinated safe installation sequence with contractor</li>
+            </ul>
+            <div class="gallery" data-gallery id="gal-parapet-wall">
+              <div class="gal-track">
+                <figure class="gal-slide is-active">
+                  <picture>
+                    <source type="image/webp" srcset="assets/opt/parapet-wall-1-clean-800.webp 800w, assets/opt/parapet-wall-1-clean-1600.webp 1600w" sizes="(max-width:820px) 88vw, 60vw">
+                    <img src="assets/clean/parapet-wall-1.png" alt="Parapet Wall Stabilisation" width="1376" height="783" loading="lazy" decoding="async">
+                  </picture>
+                  <figcaption>Parapet Wall Stabilisation</figcaption>
+                </figure>
+              </div>
+            </div>
+            <div class="outcome"><strong>Design Innovation:</strong> Counterweight system eliminated all roof penetrations — understanding the client’s real constraint, not just the structural problem.</div>
+          </div>
+        </div></div>
+      </article>
+
+      <!-- 03 -->
+      <article class="scroll-unit" data-open="false" data-reveal>
+        <button class="scroll-head" type="button">
+          <span class="scroll-num">03</span>
+          <span>
+            <span class="scroll-name">Shopfront Portal Frame Conversion</span>
+            <span class="scroll-sub">Retail · BS EN 1993 · Constructed</span>
+          </span>
+          <span class="roller" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="scroll-sheet"><div class="scroll-clip">
+          <div class="scroll-paper">
+            <h4>Shopfront Portal Frame Conversion</h4>
+            <span class="label">The Challenge</span>
+            <p>Existing blockwork infill panels being replaced with full-height glazing. Diagonal cross-bracing providing lateral stability conflicted with the new layout.</p>
+            <span class="label">My Contribution</span>
+            <ul>
+              <li>Designed moment frame using new UB beam between existing columns</li>
+              <li>Detailed bolted front plate and doubler plate to UC column</li>
+              <li>Designed Hollo-Bolt connection to SHS — no internal access needed</li>
+              <li>Integrated RSA brick support angle with glazing fixings</li>
+              <li>Prepared connection calculations and fabrication drawings</li>
+            </ul>
+            <div class="gallery" data-gallery id="gal-shopfront">
+              <div class="gal-track">
+                <figure class="gal-slide is-active">
+                  <picture>
+                    <source type="image/webp" srcset="assets/opt/shopfront-1-clean-800.webp 800w, assets/opt/shopfront-1-clean-1600.webp 1600w" sizes="(max-width:820px) 88vw, 60vw">
+                    <img src="assets/clean/shopfront-1.png" alt="Shopfront Portal Frame 1" width="928" height="1128" loading="lazy" decoding="async">
+                  </picture>
+                  <figcaption>Shopfront Portal Frame 1</figcaption>
+                </figure>
+                <figure class="gal-slide">
+                  <picture>
+                    <source type="image/webp" srcset="assets/opt/shopfront-2-clean-800.webp 800w, assets/opt/shopfront-2-clean-1600.webp 1600w" sizes="(max-width:820px) 88vw, 60vw">
+                    <img src="assets/clean/shopfront-2.png" alt="Shopfront Portal Frame 2" width="912" height="1177" loading="lazy" decoding="async">
+                  </picture>
+                  <figcaption>Shopfront Portal Frame 2</figcaption>
+                </figure>
+                <figure class="gal-slide">
+                  <picture>
+                    <source type="image/webp" srcset="assets/opt/shopfront-3-clean-800.webp 800w, assets/opt/shopfront-3-clean-1600.webp 1600w" sizes="(max-width:820px) 88vw, 60vw">
+                    <img src="assets/clean/shopfront-3.png" alt="Shopfront Portal Frame 3" width="1395" height="768" loading="lazy" decoding="async">
+                  </picture>
+                  <figcaption>Shopfront Portal Frame 3</figcaption>
+                </figure>
+              </div>
+              <button class="gal-nav prev" type="button"><span class="sr-only">Previous drawing</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="gal-nav next" type="button"><span class="sr-only">Next drawing</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
+              <div class="gal-dots"><button class="gal-dot is-active" type="button"><span class="sr-only">Drawing 1 of 3</span></button><button class="gal-dot" type="button"><span class="sr-only">Drawing 2 of 3</span></button><button class="gal-dot" type="button"><span class="sr-only">Drawing 3 of 3</span></button></div>
+            </div>
+            <div class="outcome"><strong>Lesson Learned:</strong> Connection design isn't just about strength — access, sequence, and tolerances matter just as much on a live retail site.</div>
+          </div>
+        </div></div>
+      </article>
+
+      <!-- 04 -->
+      <article class="scroll-unit" data-open="false" data-reveal>
+        <button class="scroll-head" type="button">
+          <span class="scroll-num">04</span>
+          <span>
+            <span class="scroll-name">Residential Underpinning</span>
+            <span class="scroll-sub">Social Housing · BS EN 1992/1997 · £25K saving</span>
+          </span>
+          <span class="roller" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="scroll-sheet"><div class="scroll-clip">
+          <div class="scroll-paper">
+            <h4>Residential Underpinning</h4>
+            <span class="label">The Challenge</span>
+            <p>Tree removal had altered the moisture regime in shrinkable clay, creating both immediate subsidence and future heave risk.</p>
+            <span class="label">My Contribution</span>
+            <ul>
+              <li>Reviewed site investigation data and level surveys</li>
+              <li>Designed mass concrete underpin blocks below seasonal moisture zone</li>
+              <li>Specified Cordek heave protection void formers</li>
+              <li>Prepared technical recommendations with construction sequencing</li>
+              <li>Detailed isolation joints for future ground movement accommodation</li>
+            </ul>
+            <div class="gallery" data-gallery id="gal-underpinning">
+              <div class="gal-track">
+                <figure class="gal-slide is-active">
+                  <picture>
+                    <source type="image/webp" srcset="assets/opt/underpinning-1-clean-800.webp 800w, assets/opt/underpinning-1-clean-1600.webp 1600w" sizes="(max-width:820px) 88vw, 60vw">
+                    <img src="assets/clean/underpinning-1.png" alt="Underpinning Section" width="992" height="1066" loading="lazy" decoding="async">
+                  </picture>
+                  <figcaption>Underpinning Section</figcaption>
+                </figure>
+              </div>
+            </div>
+            <div class="outcome"><strong>Client Saving:</strong> £25,000 saved — Targeted underpinning retained existing structure, avoiding full rebuild. Heave protection future-proofed the solution.</div>
+          </div>
+        </div></div>
+      </article>
+
+      <!-- 05 -->
+      <article class="scroll-unit" data-open="false" data-reveal>
+        <button class="scroll-head" type="button">
+          <span class="scroll-num">05</span>
+          <span>
+            <span class="scroll-name">Digital Innovation in Defect Management</span>
+            <span class="scroll-sub">Social Housing · Digital workflows · Regulatory compliance</span>
+          </span>
+          <span class="roller" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="scroll-sheet"><div class="scroll-clip">
+          <div class="scroll-paper">
+            <h4>Digital Innovation in Defect Management</h4>
+            <!-- Every other project carries a Challenge; this one had lost its
+                 own. Wording verbatim from the original. -->
+            <span class="label">The Challenge</span>
+            <p>Social housing providers face increasing regulatory pressure under
+              Awaab&rsquo;s Law to respond quickly and systematically to defect reports,
+              with full audit trails and evidence management.</p>
+            <span class="label">Skills Demonstrated</span>
+            <ul>
+              <li>Led digital solution design from concept through implementation</li>
+              <li>Applied AI/ML technologies to improve data consistency and capture</li>
+              <li>Built systems with regulatory compliance requirements in mind</li>
+              <li>Designed for full traceability and audit readiness</li>
+              <li>Maintained clear separation of AI assistance from professional decisions</li>
+              <li>Full-stack web development using modern frameworks</li>
+            </ul>
+            <span class="label">Technologies Used</span>
+            <ul class="chip-list" style="margin-bottom:var(--s-5)">
+              <li class="chip">AI Integration</li>
+              <li class="chip">Full-Stack Dev</li>
+              <li class="chip">Database Design</li>
+              <li class="chip">Awaab&rsquo;s Law</li>
+              <li class="chip">Audit Trails</li>
+              <li class="chip">Workflow Design</li>
+            </ul>
+            <div class="outcome"><strong>Engineering Principle:</strong> Technology should serve the engineering workflow, not replace professional judgement. AI assists with data capture; engineers retain decision-making authority.</div>
+            <p style="margin-top:var(--s-4)">
+              <a class="inline btn-inline" href="https://vijayvvs.github.io/ai-defect-reporting-case-study/">View Skills &amp; Competencies Case Study →</a>
+            </p>
+          </div>
+        </div></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ ALL WORK (horizontal rail) ============ -->
+<section class="rail" id="all-projects">
+  <span class="section-ghost" aria-hidden="true">04</span>
+  <div class="rail-stage">
+    <header class="section-head rail-head">
+      <span class="section-index">SEC·04</span>
+      <span class="mono">All work</span>
+      <span class="section-rule" data-draw></span>
+      <h2 class="section-title" data-reveal>Project <em>experience</em></h2>
+    </header>
+    <div class="rail-track">
+      <article class="rail-card" data-tilt>
+        <p class="rail-num" aria-hidden="true">01</p>
+
+        <p class="card-meta">5 projects</p>
+        <h3 class="card-title">UK Health &amp; Beauty Retailer</h3>
+        <ul class="tl-list" style="margin-top:var(--s-3)">
+          <li>Dundee Gallagher (SER) — mezzanine alterations, signage, floor infill, fire wall</li>
+          <li>Fort Kinnaird (SER) — canopy design, hanging bulkheads, M&amp;E supports</li>
+          <li>Glasgow — signage support, floor infill, hanging bulkhead</li>
+          <li>Multiple retail parks — canopy installations, shopfront modifications</li>
+          <li>Fragrance retail unit — chandelier support design</li>
+        </ul>
+      </article>
+      <article class="rail-card" data-tilt>
+        <p class="rail-num" aria-hidden="true">02</p>
+
+        <p class="card-meta">5 projects</p>
+        <h3 class="card-title">Industrial &amp; Manufacturing</h3>
+        <ul class="tl-list" style="margin-top:var(--s-3)">
+          <li>National food manufacturer — SuDS strategy, structural assessment, crane platform</li>
+          <li>Glass manufacturer — crane gantry foundations</li>
+          <li>Building products manufacturer — silo base design, structural assessment</li>
+          <li>Automotive products — sprinkler tanks, pipe supports, drainage</li>
+          <li>Automotive dealership — warehouse design and drainage concept</li>
+        </ul>
+      </article>
+      <article class="rail-card" data-tilt>
+        <p class="rail-num" aria-hidden="true">03</p>
+
+        <p class="card-meta">4 projects</p>
+        <h3 class="card-title">Social Housing &amp; Residential</h3>
+        <ul class="tl-list" style="margin-top:var(--s-3)">
+          <li>Underpinning schemes — multiple properties on shrinkable clay</li>
+          <li>Wall stabilisation — remedial ties, joist restraints, strengthening plates</li>
+          <li>Heave protection — Cordek void formers, isolation joints</li>
+          <li>Digital workflow innovation — AI-assisted defect management for regulatory compliance</li>
+        </ul>
+      </article>
+      <article class="rail-card" data-tilt>
+        <p class="rail-num" aria-hidden="true">04</p>
+
+        <p class="card-meta">4 projects</p>
+        <h3 class="card-title">WABAG — Water Infrastructure</h3>
+        <ul class="tl-list" style="margin-top:var(--s-3)">
+          <li>Pagla STP, Dhaka (200 MLD) — RC/steel design for treatment structures and ancillaries</li>
+          <li>Patna STP, India (150 MLD) — structural design for STP units and supporting facilities</li>
+          <li>WTP Construction (178.3 MLD) — Site supervision &amp; delivery — 150,000+ safe man-hours</li>
+          <li>ETP procurement (US$11.45M) — Package procurement support for Petronas ETP Malaysia</li>
+        </ul>
+      </article>
+    </div>
+    <p class="rail-hint">Scroll to move sideways</p>
+  </div>
+</section>
+
+<!-- ============ RESEARCH ============ -->
+<section class="section" id="research">
+  <span class="section-ghost" aria-hidden="true">05</span>
+  <div class="shell">
+    <div class="sec-open" data-reveal>
+      <div>
+        <p class="sec-open-kicker">SEC·05 &nbsp;/&nbsp; Academic</p>
+        <h2 class="sec-open-title">Research &amp;<br><em>academic projects</em></h2>
+      </div>
+    </div>
+
+    <div style="display:grid;gap:var(--s-4)" data-stagger="1">
+      <article class="scroll-unit" data-open="false" data-reveal>
+        <button class="scroll-head" type="button">
+          <span class="scroll-num">R1</span>
+          <span>
+            <span class="scroll-name">Structural Fragility Analysis</span>
+            <span class="scroll-sub">University of Leeds · Oct 2023 — Sep 2024</span>
+          </span>
+          <span class="roller" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="scroll-sheet"><div class="scroll-clip">
+          <div class="scroll-paper">
+            <h4>Structural Fragility Analysis</h4>
+            <p>Uncertainty quantification for complex civil infrastructure systems subject to seismic loads.</p>
+            <span class="label">Research detail</span>
+            <ul>
+              <li>Enhanced reliability of fragility assessments by integrating forward uncertainty quantification with traditional fragility analysis</li>
+              <li>Developed a point source stochastic seismological model using MATLAB with Monte Carlo simulations to study uncertainties from seismological models to structural response</li>
+              <li>Conducted inelastic modal decomposition for random vibration analysis on non-proportionally damped, nonlinear MDOF structures using ANSYS</li>
+              <li>Findings contribute to more reliable design and assessment practices for civil infrastructure under seismic loading</li>
+            </ul>
+            <div class="outcome"><strong>Significance:</strong> More reliable fragility curves directly improve seismic risk assessments for bridges, dams, and critical infrastructure.</div>
+            <ul class="chip-list" style="margin-top:var(--s-5)">
+              <li class="chip">MATLAB</li>
+              <li class="chip">ANSYS Workbench</li>
+              <li class="chip">Monte Carlo Simulation</li>
+              <li class="chip">Seismic Analysis</li>
+              <li class="chip">Risk Assessment</li>
+              <li class="chip">Structural Dynamics</li>
+            </ul>
+          </div>
+        </div></div>
+      </article>
+
+      <article class="scroll-unit" data-open="false" data-reveal>
+        <button class="scroll-head" type="button">
+          <span class="scroll-num">R2</span>
+          <span>
+            <span class="scroll-name">Design of New HS2 Railway Station for Leeds</span>
+            <span class="scroll-sub">University of Leeds · Oct 2023 — May 2024</span>
+          </span>
+          <span class="roller" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+          </span>
+        </button>
+        <div class="scroll-sheet"><div class="scroll-clip">
+          <div class="scroll-paper">
+            <h4>HS2 Railway Station — Leeds</h4>
+            <p>Feasibility study and detailed structural design for the proposed Leeds HS2 train station.</p>
+            <span class="label">Project detail</span>
+            <ul>
+              <li>Conducted feasibility study through RIBA Stage 4 for the proposed Leeds HS2 train station</li>
+              <li>Developed two conceptual designs in Stage 1, scoring highly for engineering integrity, constructability, and sustainability</li>
+              <li>Produced detailed structural design calculations and drawings for superstructure and foundations in Stage 3, selecting materials to meet technical and sustainability requirements</li>
+              <li>Reduced initial estimated construction costs by 10% through load distribution and stability optimisation</li>
+              <li>Maintained safety standards through comprehensive risk assessments and method statements for construction phases</li>
+            </ul>
+            <div class="outcome"><strong>Outcome:</strong> <strong>10%</strong> cost reduction through structural optimisation without compromising safety or sustainability targets.</div>
+            <ul class="chip-list" style="margin-top:var(--s-5)">
+              <li class="chip">Tekla Structural Designer</li>
+              <li class="chip">Tekla Structures</li>
+              <li class="chip">RIBA Stages</li>
+              <li class="chip">Foundation Design</li>
+            </ul>
+          </div>
+        </div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="section" id="process">
+  <span class="section-ghost" aria-hidden="true">06</span>
+  <div class="shell">
+    <div class="sec-open" data-reveal>
+      <div>
+        <p class="sec-open-kicker">SEC·06 &nbsp;/&nbsp; Innovation</p>
+        <h2 class="sec-open-title">Process<br><em>improvement</em></h2>
+      </div>
+    </div>
+
+    <p class="measure" data-reveal style="margin-bottom:var(--s-6);color:var(--text-dim)">
+      Digital workflows and automation systems developed to improve practice efficiency.
+    </p>
+
+    <div class="cols-2" data-stagger="1">
+      <article class="card" data-tilt data-reveal>
+        <h3 class="card-title">Proposal Generation Workflow</h3>
+        <p class="card-body">Designed and implemented an automated workflow for generating scope of works documents and fee proposals, using a structured knowledge base to ensure consistency and reduce preparation time significantly.</p>
+      </article>
+      <article class="card" data-tilt data-reveal>
+        <h3 class="card-title">Knowledge Management System</h3>
+        <p class="card-body">Designed and built a searchable knowledge base covering technical documentation, standard details, and project precedents — enabling rapid retrieval of relevant information when preparing calculations, reports, and design packages.</p>
+      </article>
+      <article class="card" data-tilt data-reveal>
+        <h3 class="card-title">Project Tracking System</h3>
+        <p class="card-body">Designed and implemented a reference numbering and tracking system for managing projects and clients, ensuring consistent records and easy retrieval of project information.</p>
+      </article>
+      <article class="card" data-tilt data-reveal>
+        <h3 class="card-title">Digital Defect Management</h3>
+        <p class="card-body">Digital workflows for social housing defect management, applying AI and modern development practices to compliance-driven processes under Awaab's Law.</p>
+              <p style="margin-top:var(--s-4)">
+          <a class="inline btn-inline" href="https://vijayvvs.github.io/ai-defect-reporting-case-study/">View Skills Case Study &rarr;</a>
+        </p>
+</article>
+    </div>
+
+    <p class="mono" data-reveal style="margin-top:var(--s-6);text-transform:none;letter-spacing:0;color:var(--text-muted)">
+      Skills applied: AI/ML integration, full-stack web development, database architecture,
+      API integration, and regulatory compliance mapping.
+    </p>
+
+    <!-- Original .process-callout, dropped in the rebuild. It sits in the
+         process section directly after "Skills applied", exactly as on the
+         live site, and it is his own framing of where AI stops. -->
+    <p class="outcome" data-reveal style="margin-top:var(--s-5);max-width:70ch">
+      <strong>Engineering Principle:</strong> AI supports data capture and prioritisation
+      &mdash; all technical decisions remain under professional engineer control.
+    </p>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section" id="contact">
+  <span class="section-ghost" aria-hidden="true">07</span>
+  <div class="shell">
+    <div class="sec-open" data-reveal>
+      <div>
+        <p class="sec-open-kicker">SEC·07 &nbsp;/&nbsp; Contact</p>
+        <h2 class="sec-open-title">Get in<br><em>touch</em></h2>
+      </div>
+    </div>
+
+    <p class="contact-desc lede" data-reveal>Feel free to reach out via email or LinkedIn.</p>
+
+    <div style="max-width:760px" data-stagger="1">
+      <a class="contact-link" data-reveal href="mailto:vijayvvs1998@gmail.com">
+        <span><span class="what">Email</span><br>vijayvvs1998@gmail.com</span>
+        <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="contact-link" data-reveal href="tel:+447425619651">
+        <span><span class="what">Phone</span><br>+44 7425 619 651</span>
+        <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="contact-link" data-reveal href="https://linkedin.com/in/vijayvvs1998" rel="noopener">
+        <span><span class="what">LinkedIn</span><br>in/vijayvvs1998</span>
+        <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="contact-link" data-reveal href="assets/Vijay-Venkatasamy-Civil-Structural-Engineer-CV.pdf" download>
+        <span><span class="what">Curriculum vitae</span><br>Download PDF <span class="sr-only">(67 KB)</span></span>
+        <span class="btn-arrow" aria-hidden="true">↓</span>
+      </a>
+
+      <!-- Location / Current Role / Chartership were on the original contact
+           panel and had been dropped in the rebuild. They are facts, not
+           links, so they use .contact-fact — the same row, without the arrow
+           and without the link affordance. Wording verbatim. -->
+      <div class="contact-fact" data-reveal>
+        <span class="what">Location</span><br>Stockport, Greater Manchester, UK
+      </div>
+      <div class="contact-fact" data-reveal>
+        <span class="what">Current Role</span><br>Civil &amp; Structural Engineer at Francis
+        Bradshaw Consulting, Wilmslow — working across retail, commercial, industrial,
+        and residential sectors.
+      </div>
+      <div class="contact-fact" data-reveal>
+        <span class="what">Chartership</span><br>Working towards CEng MICE (ICE) and
+        IStructE membership. GMICE registered.
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer shell">
+  <p>© <span id="year">2026</span> Vijay Venkatasamy · Civil &amp; Structural Engineer</p>
+  <p class="mono" style="text-transform:none;letter-spacing:0">Working towards CEng MICE (ICE) and IStructE membership. GMICE registered.</p>
+</footer>
+
+<!-- Import map: three's examples/jsm/* modules import 'three' as a BARE
+     specifier, which the browser cannot resolve on its own. Without this the
+     post-processing addons fail to load and the WebGL layer silently falls
+     back to the 2D hero. Must appear before any module script. -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
