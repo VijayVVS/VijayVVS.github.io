@@ -11,8 +11,9 @@ html {
   overflow-x: clip;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  /* offset for the fixed nav when jumping to #anchors */
-  scroll-padding-top: 6rem;
+  /* offset for the fixed nav when jumping to #anchors — the bar's own height
+     plus a gap, rather than a number that happened to be bigger than it */
+  scroll-padding-top: calc(var(--nav-h) + var(--s-5));
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

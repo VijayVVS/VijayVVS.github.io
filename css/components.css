@@ -155,6 +155,16 @@
    about #34373d — at which point --accent falls to 4.26:1, just under AA.
    --accent-lit holds 5.27:1 on that worst case and 8.71:1 on the page ground. */
 .tl-role { color: var(--accent-lit); font-size: var(--t-small); font-weight: 500; }
+
+/* THE TIMELINE NEEDS ITS OWN GROUND ON A PHONE.
+   Every card on the page sits on --bg-raised, so the 3D passing behind never
+   touches its text. The timeline did not: at 390px the canvas renders bright
+   under it in places and the accent role line measured 4.05:1 against
+   rgb(70,72,76) — under AA. Measured behind the glyphs, not guessed. A ground
+   the same colour as the page fixes it without changing the look. */
+@media (max-width: 820px) {
+  .timeline { background: var(--page-bg); }
+}
 /* --text-dim, not --text-muted. The timeline runs over the drawing station,
    and where a lit sheet passes behind the dates the measured ground rises to
    about #3b3e43 — at which point --text-muted lands on 4.43:1, a hair under
@@ -207,8 +217,13 @@
   border: var(--border-w) solid var(--accent);
   padding: 0.25rem 0.5rem;
 }
-.scroll-name { font-size: var(--t-h3); }
-.scroll-sub  { color: var(--text-muted); font-size: var(--t-small); margin-top: 2px; }
+/* Both are spans, so they used to flow as one run of text: on a phone the
+   card read "Crane Gantry Foundations Glass Manufacturer - BS EN 1992 -
+   Constructed" as a single sentence. On a wide screen the title happened to
+   fill the line, which hid it. The 2px margin below was always written for
+   stacked blocks. */
+.scroll-name { font-size: var(--t-h3); display: block; }
+.scroll-sub  { color: var(--text-muted); font-size: var(--t-small); margin-top: 2px; display: block; }
 
 /* The roller: a small dowel that rotates as the sheet unrolls */
 .roller {
@@ -607,7 +622,11 @@
    ============================================================ */
 .sec-open {
   position: relative;
-  min-height: 88svh;
+  /* A full-height opener centres a short title and leaves the rest of the
+     screen empty before the copy starts: on a 900px window that was 792px of
+     void under "precision & purpose". Capped, so the moment still reads as a
+     moment on any screen without the reader scrolling past nothing. */
+  min-height: min(78svh, 34rem);
   display: grid;
   grid-template-columns: 1fr;
   align-content: center;

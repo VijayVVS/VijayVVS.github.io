@@ -194,7 +194,14 @@ export async function initHero3D(canvas) {
   }
 
   /* ---- Sizing ------------------------------------------------- */
+  /* Is the stage pinned to the viewport, or is it just a tall block the page
+     scrolls past? CSS decides that by width, so ask CSS rather than duplicate
+     the breakpoint here. Read on resize, never in the frame loop. */
+  let pinned = true;
+
   function resize() {
+    const stage = canvas.closest('.hero-stage');
+    if (stage) pinned = getComputedStyle(stage).position === 'sticky';
     const r = canvas.getBoundingClientRect();
     if (!r.width || !r.height) return;
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
@@ -223,10 +230,15 @@ export async function initHero3D(canvas) {
     pointer.y += (pointer.ty - pointer.y) * 0.06;
     setProgress(0.06 + shown * 0.94);   // start at foundations, finish braced
     placeCamera(shown, t);
-    // Hand the stage over: copy recedes as the frame goes up.
+    // Hand the stage over: copy recedes as the frame goes up. That only
+    // makes sense while the stage is PINNED — the copy is then parked in the
+    // middle of the screen and fading it is how the frame takes over. Below
+    // 640px the stage is not pinned (the column is taller than a phone
+    // screen), so the same fade would dim the headline while the reader is
+    // still on it. `pinned` is read once per resize, never per frame.
     const inner = document.querySelector('.hero-inner');
     if (inner) {
-      const f = Math.max(0, Math.min((shown - 0.45) / 0.4, 1));
+      const f = pinned ? Math.max(0, Math.min((shown - 0.45) / 0.4, 1)) : 0;
       inner.style.opacity = String(1 - f);
       inner.style.transform = `translate3d(0, ${-f * 40}px, 0)`;
     }

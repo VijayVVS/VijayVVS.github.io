@@ -164,6 +164,10 @@
   .line-mask > span { transform: none !important; }
   .scroll-sheet { grid-template-rows: 1fr !important; visibility: visible !important; }
   .grid-field, #truss-canvas, .scroll-cue, .nav { display: none !important; }
+  /* The hero pads itself clear of the fixed bar and the scroll cue. On paper
+     neither exists, so that padding would print as 72px of blank at the top of
+     page one and 104px at the foot of the hero. */
+  .hero-stage { padding-top: 0 !important; padding-bottom: 0 !important; }
   .section { break-inside: avoid; }
 }
 

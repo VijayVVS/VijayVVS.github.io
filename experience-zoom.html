@@ -187,10 +187,11 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
         <div class="caption" data-cap="0">
           <p class="cap-era">2021 — 2023 &nbsp;·&nbsp; VA Tech WABAG · India</p>
           <h3 class="cap-title">200 MLD <em>Pagla STP</em></h3>
-          <p class="cap-body">Designed RC and steel structures for the 200 MLD Pagla
-            sewage treatment plant in Dhaka and the 150 MLD Patna STP — digesters,
-            clarifiers, dosing facilities, administration buildings.</p>
-          <p class="cap-meta">STAAD Pro · ETABS · RC design</p>
+          <p class="cap-body">Checked RC and steel calculations and working drawings before
+            issue for the 200 MLD Pagla sewage treatment plant in Dhaka and the 150 MLD
+            Patna STP — digesters, clarifiers, dosing facilities, administration
+            buildings.</p>
+          <p class="cap-meta">STAAD Pro · ETABS · RC checking</p>
         </div>
 
         <div class="caption" data-cap="1">
@@ -204,19 +205,19 @@ canvas#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
 
         <div class="caption" data-cap="2">
           <p class="cap-era">2024 — present &nbsp;·&nbsp; Francis Bradshaw · UK</p>
-          <h3 class="cap-title">20 m fire-rated <em>buffer wall</em></h3>
-          <p class="cap-body">Designed a 20 m high by 150 m long fire-rated buffer wall
-            integrated into a steel frame at 7 m centres. Detailed steel connections and
-            designed bases for silos, crane beams and crane legs.</p>
-          <p class="cap-meta">7 m centres · Eurocode · MasterSeries</p>
+          <h3 class="cap-title">17 m fire-rated <em>buffer wall</em></h3>
+          <p class="cap-body">Sized and detailed a fire-rated buffer wall about 17 m high,
+            built into an existing steel frame in 6 m bays with deflection heads. Detailed
+            steel connections and designed bases for silos, crane beams and crane legs.</p>
+          <p class="cap-meta">6 m bays · Eurocode · MasterSeries</p>
         </div>
 
         <div class="caption" data-cap="3">
           <p class="cap-era">2024 — present &nbsp;·&nbsp; Remedial design</p>
           <h3 class="cap-title">Sequenced <em>underpinning</em></h3>
           <p class="cap-body">Engineered a sequenced mass concrete underpinning scheme
-            for clay shrinkage damage, saving approximately £25,000 in rebuild costs.</p>
-          <p class="cap-meta">≈ £25,000 saved · clay shrinkage</p>
+            for clay shrinkage damage.</p>
+          <p class="cap-meta">clay shrinkage</p>
         </div>
 
         <div class="caption" data-cap="4">
@@ -499,22 +500,25 @@ function buildLayers(){
     drawn.add(wireOf(slab, m).translateY(-3.6).translateZ(2));
   }));
 
-  /* 10^1 m — THE WALL. 20 m high, 150 m long, steel frame at 7 m centres.
-     The frame is instanced because that is literally what "at 7 m centres"
-     means: the same portal, repeated. */
+  /* 10^1 m — THE WALL. About 17 m high, built into an existing steel frame in
+     6 m bays. The frame is instanced because that is literally what a bay is:
+     the same portal, repeated. Spacing is 4.24 units against a 12-unit panel,
+     so the drawn bay-to-height ratio is 6 : 17, the proportion he states. No
+     length is drawn as a claim, because his wording does not give one. */
   layers.push(makeLayer(1, (solid, drawn) => {
     const m = lm();
     const col = new THREE.BoxGeometry(0.55, 13, 0.55);
-    const inst = new THREE.InstancedMesh(col, mat(PALETTE.steel,{metalness:0.5,roughness:0.35}), 14);
+    const BAYS = 10, BAY = 4.24, X0 = -19.1;   /* 6 m bays against a 17 m wall */
+    const inst = new THREE.InstancedMesh(col, mat(PALETTE.steel,{metalness:0.5,roughness:0.35}), BAYS);
     const dummy = new THREE.Object3D();
-    for (let i = 0; i < 14; i++){
-      dummy.position.set(-19.5 + i*3, 0, (i%2) ? -4.2 : 4.2);
+    for (let i = 0; i < BAYS; i++){
+      dummy.position.set(X0 + i*BAY, 0, (i%2) ? -4.2 : 4.2);
       dummy.updateMatrix(); inst.setMatrixAt(i, dummy.matrix);
     }
     solid.add(inst);
-    for (let i = 0; i < 14; i++){
+    for (let i = 0; i < BAYS; i++){
       const w = wireOf(col, m);
-      w.position.set(-19.5 + i*3, 0, (i%2) ? -4.2 : 4.2);
+      w.position.set(X0 + i*BAY, 0, (i%2) ? -4.2 : 4.2);
       drawn.add(w);
     }
     const panel = new THREE.BoxGeometry(42, 12, 0.5);

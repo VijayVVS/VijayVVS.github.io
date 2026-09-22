@@ -105,7 +105,10 @@ export function initCounters(root = document) {
       // expo-out matches --e-out so numbers decelerate like the motion
       const eased = 1 - Math.pow(2, -10 * p);
       const v = num * (p === 1 ? 1 : eased);
-      const shown = num % 1 === 0 ? Math.round(v) : v.toFixed(1);
+      // decimals come from the source value, not a fixed 1: "US$11.45M" was
+      // being shown as US$11.4M, which is a different number to the one stated
+      const dp = ((raw.match(/\.(\d+)/) || [, ''])[1]).length;
+      const shown = dp === 0 ? Math.round(v) : v.toFixed(dp);
       el.textContent = `${prefix}${shown}${suffix}`;
       if (p < 1) requestAnimationFrame(tick);
     };

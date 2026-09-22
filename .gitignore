@@ -1,0 +1,21 @@
+# Working backups kept on disk while the rebuild was in progress.
+# They are NOT deleted — they stay in the folder — they just don't get
+# published to the live site.
+*.light-backup
+*.presparkle-backup
+*.before-provenance-fix
+*.before-restore2
+*.before-contour
+*.before-stations
+*.before-prr-corrections
+
+# Windows / editor noise
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp
+
+# Superseded CV. Kept on disk, never published — a stale CV reachable at a
+# public URL is worse than none. The live one is
+# assets/Vijay-Venkatasamy-Civil-Structural-Engineer-CV.pdf
+assets/Vijay_Venkatasamy_CV.pdf

@@ -57,6 +57,7 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
   align-items: center;
   justify-content: space-between;
   gap: var(--s-5);
+  min-height: var(--nav-h);
   padding: var(--s-4) var(--gutter);
   background: color-mix(in srgb, var(--page-bg) 72%, transparent);
   backdrop-filter: blur(14px) saturate(1.3);
@@ -179,7 +180,9 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
 .section {
   position: relative;
   padding-block: var(--section-y);
-  scroll-margin-top: 5rem;
+  /* 5rem was 80px against a 71px bar: 9px of daylight when you jumped to a
+     section, and none at all below 820px where the bar is 78px. */
+  scroll-margin-top: calc(var(--nav-h) + var(--s-4));
 }
 .section + .section { border-top: 1px solid var(--hairline); }
 
@@ -250,6 +253,22 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
 .hero {
   position: relative;
   min-height: 200svh;
+
+  /* The column's own rhythm, measured against the window rather than fixed at
+     a desktop size. It has to fit between the nav and the scroll cue, and on a
+     768px-tall laptop the fixed 24/32/64px gaps were spending 168px on air the
+     words needed. These shrink with the viewport and stop at the old values
+     once there is room for them. */
+  --hero-gap:     clamp(0.75rem, 2.2vh, 1.5rem);   /* 12 -> 24px */
+  --hero-gap-mid: clamp(1rem,    3vh,   2rem);     /* 16 -> 32px */
+  --hero-gap-lg:  clamp(1rem,    4vh,   4rem);     /* 16 -> 64px */
+
+  /* What the scroll cue occupies at the foot of the stage: its own 72px plus
+     the 24px it floats above the floor. Nothing used to reserve it, so the
+     stats strip was laid straight over it — 49px of overlap at 1024x768, 22px
+     at 1440x900, 73px at 390x844. The cue is aria-hidden, which is why every
+     text-level audit walked past it. */
+  --hero-cue-reserve: calc(4.5rem + var(--s-5) + var(--s-2));
 }
 @media (max-width: 760px) { .hero { min-height: 150svh; } }
 @media (prefers-reduced-motion: reduce) { .hero { min-height: 100svh; } }
@@ -262,6 +281,11 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
+  /* The nav owns the top strip and the cue owns the bottom one. The copy is
+     centred in WHAT IS LEFT, not in the whole viewport — which is what put the
+     eyebrow behind the bar at every width from 1024 to 1600. */
+  padding-top: calc(var(--nav-h) + var(--hero-gap));
+  padding-bottom: var(--hero-cue-reserve);
 }
 
 .hero-inner { position: relative; z-index: var(--z-base); }
@@ -309,7 +333,7 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: var(--s-5);
+  margin-bottom: var(--hero-gap);
 }
 
 .hero-name {
@@ -317,7 +341,7 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
   line-height: var(--lh-tight);
   letter-spacing: -0.04em;
   font-weight: 500;
-  margin-bottom: var(--s-5);
+  margin-bottom: var(--hero-gap);
 }
 .hero-name span { display: block; }
 .hero-name .surname { color: var(--text-dim); }
@@ -326,24 +350,30 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
   max-width: 46ch;
   font-size: var(--t-lead);
   color: var(--text-dim);
-  margin-bottom: var(--s-6);
+  margin-bottom: var(--hero-gap-mid);
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-3);
-  margin-bottom: var(--s-8);
+  margin-bottom: var(--hero-gap-lg);
 }
 
 /* Stats strip at the foot of the hero */
 .hero-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(120px, 45%), 1fr));
-  gap: var(--s-5);
-  padding-top: var(--s-6);
+  /* Sized to content, not equal columns. As four equal 1fr cells, "40+" sat in
+     a 193px box mostly empty while "US$11.45M" filled its own edge to edge and
+     forced its label onto two lines — the values read as clamped together and
+     the row looked lopsided. Each figure now takes the width it needs. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: var(--s-5) var(--s-8);
+  padding-top: var(--hero-gap-mid);
   border-top: 1px solid var(--hairline);
 }
+.hero-stats > div { flex: 0 1 auto; min-width: 0; }
 
 .scroll-cue {
   position: absolute;
@@ -365,16 +395,48 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
 
 /* At 390px the stat grid wraps to two rows and grows up into the bottom of
    the stage, where this cue is absolutely positioned — "SCROLL" landed on top
-   of "4 / SECTORS". Measured at 390 and 360. On narrow screens the cue moves
-   out of the centre column and shortens its rule so it clears the stats. */
+   of "4 / SECTORS". Measured at 390 and 360. Moving the cue to the gutter and
+   shortening its rule bought room for a while; see the 640px block below for
+   why it now stands down on phones entirely. */
 @media (max-width: 640px) {
-  .scroll-cue {
-    left: auto; right: var(--gutter);
-    transform: none;
-    justify-items: end;
-    bottom: var(--s-3);
+  /* THE CUE HAS NOWHERE LEFT TO STAND HERE, so it stands down.
+     It used to move to the right gutter and shorten its rule to clear the
+     wrapped stats; that is no longer enough.
+     Below 640px the stage no longer pins, and it now runs past the first
+     screen: anchored to the stage's foot the cue printed "SCROLL" over the
+     About portrait and the ghost 01, and anchored to the fold it printed it
+     alongside "PETRONAS ETP PROCUREMENT", both measured at 390x844. The copy
+     fills the first screen edge to edge, so there is no clear corner for it.
+     Its job was to say the pinned hero answers to scrolling; unpinned, the
+     page says that by simply scrolling. Decorative and aria-hidden, so
+     nothing is lost to a reader or to a screen reader. It is untouched at
+     641px and above, where the stage still pins and the corner is free. */
+  .scroll-cue { display: none; }
+
+  /* With the cue stood down there is nothing to reserve, so what is left is
+     simply air between the last stat and the next section. */
+  .hero { --hero-cue-reserve: var(--s-7); }
+
+  /* A PHONE CANNOT HOLD THIS COLUMN IN ONE SCREEN, and no amount of trimming
+     changes that: at 390x844 the copy measures 861px before the 77px nav is
+     taken off it. Centring it in one clipped screen cut the eyebrow off the
+     top (-18px) and pushed the stats 8px past the bottom. So below 640px the
+     stage stops pinning and grows to its content: every line is on the page,
+     and the page scrolls, which is what a phone is for. The stage keeps a
+     runway past the first screen so the erection sequence still has scroll to
+     play across, and the canvas — inset:0 on the stage — grows with it. */
+  .hero { min-height: 0; }
+  .hero-stage {
+    position: relative;
+    height: auto;
+    min-height: 140svh;
+    justify-content: flex-start;
   }
-  .scroll-cue-line { height: 24px; }
+  /* With motion off there is no sequence to play across the runway, so the
+     extra 40svh would just be empty frame. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-stage { min-height: 100svh; }
+  }
 }
 
 /* ---- Footer ---- */
@@ -415,6 +477,31 @@ body[data-hero='3d'] #frame-canvas { opacity: 1; }
     visibility: visible;
     opacity: 1;
     transition: opacity var(--d-base) var(--e-out), visibility 0s linear 0s;
+  }
+  /* THE DRAWER HAS TO ESCAPE THE HEADER.
+     .nav carries backdrop-filter, and a filtered element becomes the
+     containing block for its position:fixed descendants. So this drawer's
+     inset:0 resolved to the 76px header, not the viewport: the panel painted
+     only behind the header while the links spilled down the page, sitting
+     unreadable on top of a drawing, with two of the five hidden under the
+     bar. Dropping the filter while the drawer is open hands the containing
+     block back to the viewport. Measured at 390px: panel 390x76 before,
+     390x844 after. */
+  body[data-nav='open'] .nav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  /* Below 820px the 44px touch target, not the link row, sets the bar's
+     height: measured 77px against 71px. The hero offsets itself by this. */
+  :root { --nav-h: 4.875rem; }
+  /* The drawer is a child of .nav and carries z-index 99, so inside the
+     header's stacking context it also covered the mark and the close button
+     (both z-index auto). A menu you cannot see how to close is worse than a
+     broken panel, so both sit above it. */
+  .nav-mark,
+  .nav-toggle {
+    position: relative;
+    z-index: var(--z-nav);
   }
   .nav-links .nav-link {
     font-size: clamp(1.5rem, 5vw, 2.25rem);

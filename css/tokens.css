@@ -113,7 +113,13 @@
   --font-alt:     'Space Grotesk', var(--font-display);
 
   /* Brutalist scale — bigger jumps, heavier weights */
-  --t-hero:   clamp(3rem, 1rem + 9vw, 11rem);
+  /* Bounded by the WINDOW'S HEIGHT as well as its width. At 9vw alone a
+     1440x900 laptop rendered this at 145.6px; two lines of that, plus the
+     chips, lead, buttons and stats, came to 755px of copy in the 829px left
+     once the nav was taken off — 1px of daylight under the bar. 11vh caps it
+     at 99px there and 84px on a 1024x768 machine, and that is where the room
+     for the rest of the column comes from. */
+  --t-hero:   clamp(3rem, min(1rem + 9vw, 11vh), 11rem);
   --t-h2:     clamp(2.25rem, 1.3rem + 4.2vw, 5.5rem);
   --t-h3:     clamp(1.25rem, 1.05rem + 1vw, 1.9rem);
   --t-lead:   clamp(1.0625rem, 1rem + 0.4vw, 1.3125rem);
@@ -147,6 +153,13 @@
   --gutter:    clamp(1.25rem, 0.5rem + 3.5vw, 5rem);
   --measure:   66ch;
   --maxw:      1600px;
+
+  /* The fixed header's height, so anything that has to clear it is arithmetic
+     instead of an estimate. .nav carries this as a min-height, which makes the
+     number true rather than approximately true. Measured: 71px with the link
+     row, 77px with the 44px menu button — hence the taller value at <=820px,
+     where the button is what sets the height. */
+  --nav-h:     4.5rem;
 
   /* ---- Form: brutalism means sharp ---- */
   --r-sm: 0;  --r-md: 0;  --r-lg: 0;  --r-xl: 0;  --r-full: 0;
