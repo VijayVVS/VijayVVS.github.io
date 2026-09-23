@@ -10,7 +10,7 @@ import { initTruss } from './hero-truss.js';
 import { initScene3D } from './scene-3d.js';
 import { initReveal, initCounters, initMeters } from './reveal.js';
 import { initNav, initDrawer, initUnroll, initMagnetic, initAnchors } from './nav.js';
-import { initRail, initTilt, initLoadPath, initCursor, initGhostNumbers, initPreloader, initGalleries } from './sections.js';
+import { initRail, initTilt, initLoadPath, initCursor, initGhostNumbers, initPreloader, initGalleries, initZoom } from './sections.js';
 
 const teardown = [];
 
@@ -51,6 +51,7 @@ function boot() {
   teardown.push(initGhostNumbers());
   teardown.push(initCursor());
   teardown.push(initGalleries());
+  teardown.push(initZoom());          // after the galleries: it reads their slides
 
   // Trigger the hero line-mask entrance on the next frame so the
   // transition has a start state to animate from.

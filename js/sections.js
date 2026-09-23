@@ -275,6 +275,9 @@ export function initGalleries(root = document) {
       });
     };
 
+    // the drawing viewer hands the page back the one it finished on
+    gal.galleryShow = show;
+
     prev?.addEventListener('click', (e) => { e.stopPropagation(); show(i - 1); });
     next?.addEventListener('click', (e) => { e.stopPropagation(); show(i + 1); });
     dots.forEach((d, k) => d.addEventListener('click', (e) => { e.stopPropagation(); show(k); }));
@@ -286,4 +289,125 @@ export function initGalleries(root = document) {
     show(0);
   });
   return () => {};
+}
+
+/* ------------------------------------------------------------------
+   7. DRAWING VIEWER
+   On the page a drawing is letterboxed into 260-480px of stage: the right
+   size for reading the case study around it, the wrong size for reading the
+   drawing itself. Clicking one opens it at the size of the window, with the
+   same arrows, and it closes on Escape or on a click anywhere outside it.
+
+   Built on <dialog>.showModal(), which brings the top layer (so it clears
+   the fixed nav), the backdrop, the focus trap and Escape with it. Browsers
+   without it get no button injected and the page they had before.
+   ------------------------------------------------------------------ */
+export function initZoom(root = document) {
+  const galleries = [...root.querySelectorAll('[data-gallery]')];
+  const supported = typeof HTMLDialogElement === 'function'
+    && typeof HTMLDialogElement.prototype.showModal === 'function';
+  if (!galleries.length || !supported) return () => {};
+
+  const arrow = (points) =>
+    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="${points}"/></svg>`;
+
+  const dlg = document.createElement('dialog');
+  dlg.className = 'zoom';
+  dlg.setAttribute('aria-label', 'Drawing viewer');
+  dlg.innerHTML = `
+    <figure class="zoom-panel">
+      <div class="zoom-stage"></div>
+      <figcaption class="zoom-cap"><span class="zoom-text"></span><span class="zoom-count"></span></figcaption>
+    </figure>
+    <button class="zoom-nav prev" type="button"><span class="sr-only">Previous drawing</span>${arrow('15 18 9 12 15 6')}</button>
+    <button class="zoom-nav next" type="button"><span class="sr-only">Next drawing</span>${arrow('9 18 15 12 9 6')}</button>
+    <button class="zoom-close" type="button"><span class="sr-only">Close viewer</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>`;
+  document.body.appendChild(dlg);
+
+  const panel = dlg.querySelector('.zoom-panel');
+  const stage = dlg.querySelector('.zoom-stage');
+  const text  = dlg.querySelector('.zoom-text');
+  const count = dlg.querySelector('.zoom-count');
+  const prev  = dlg.querySelector('.zoom-nav.prev');
+  const next  = dlg.querySelector('.zoom-nav.next');
+  const shut  = dlg.querySelector('.zoom-close');
+
+  let gal = null, slides = [], i = 0, opener = null;
+  const capOf = (slide) => slide.querySelector('figcaption')?.textContent.trim() || 'Drawing';
+
+  const render = () => {
+    const shot = slides[i].querySelector('picture').cloneNode(true);
+    // On the page the drawing is asked for at 60vw. Here it fills the window,
+    // so the browser has to be told to pick the bigger source.
+    shot.querySelectorAll('source, img').forEach((el) => el.setAttribute('sizes', '94vw'));
+    const img = shot.querySelector('img');
+    img?.removeAttribute('loading');                         // it IS the screen
+    // the panel is cut to the drawing's shape; the attributes are already on
+    // the markup for layout stability, so nothing has to load to know it
+    const iw = Number(img?.getAttribute('width')), ih = Number(img?.getAttribute('height'));
+    if (iw > 0 && ih > 0) panel.style.setProperty('--ar', `${iw} / ${ih}`);
+    stage.replaceChildren(shot);
+    text.textContent = capOf(slides[i]);
+    count.textContent = slides.length > 1 ? `${i + 1} / ${slides.length}` : '';
+    prev.hidden = next.hidden = slides.length < 2;
+  };
+
+  const go = (n) => { i = (n + slides.length) % slides.length; render(); };
+
+  const open = (g, n, from) => {
+    gal = g; slides = [...g.querySelectorAll('.gal-slide')]; i = n; opener = from;
+    render();
+    // body alone does not hold the page still -- base.css says as much. The
+    // gutter is reserved so nothing shifts sideways behind the backdrop.
+    document.documentElement.dataset.locked = 'true';
+    document.body.dataset.locked = 'true';
+    dlg.showModal();
+    shut.focus();
+  };
+
+  dlg.addEventListener('close', () => {
+    delete document.documentElement.dataset.locked;
+    delete document.body.dataset.locked;
+    // leave the page showing whichever drawing he stopped on
+    if (gal && typeof gal.galleryShow === 'function') gal.galleryShow(i);
+    stage.replaceChildren();
+    // Focus lands on the drawing now on screen, not on the one that opened the
+    // viewer: after paging from 1 to 2, the slide that was clicked is the
+    // hidden one, focusing it silently fails and the keyboard is dumped back
+    // at the top of the document. Measured: focus went to <body>.
+    const landed = slides[i]?.querySelector('.gal-zoom');
+    (landed || opener)?.focus?.();
+  });
+
+  // Anything that is not the drawing or a control is "outside".
+  dlg.addEventListener('click', (e) => {
+    if (!e.target.closest('.zoom-panel, .zoom-nav, .zoom-close')) dlg.close();
+  });
+  shut.addEventListener('click', () => dlg.close());
+  prev.addEventListener('click', () => go(i - 1));
+  next.addEventListener('click', () => go(i + 1));
+  dlg.addEventListener('keydown', (e) => {
+    if (slides.length < 2) return;
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(i - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(i + 1); }
+  });
+
+  // One transparent button per drawing, so the whole stage is the target and
+  // a keyboard can reach it. Injected rather than written into the markup:
+  // without JS there is then nothing to click and nothing to explain.
+  galleries.forEach((g) => {
+    [...g.querySelectorAll('.gal-slide')].forEach((slide, n) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'gal-zoom';
+      btn.setAttribute('aria-label', `Enlarge drawing: ${capOf(slide)}`);
+      btn.innerHTML = '<span class="gal-zoom-badge" aria-hidden="true">'
+        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>'
+        + 'Enlarge</span>';
+      btn.addEventListener('click', (e) => { e.stopPropagation(); open(g, n, btn); });
+      slide.appendChild(btn);
+    });
+  });
+
+  return () => { if (dlg.open) dlg.close(); dlg.remove(); };
 }

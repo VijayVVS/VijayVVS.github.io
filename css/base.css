@@ -38,6 +38,13 @@ body {
 }
 
 /* Stop the page scrolling behind an open modal / mobile menu */
+/* Hiding overflow on the body alone does not stop the page (see the note at
+   the top of this file), so the viewer locks the element that actually
+   scrolls. The gutter is reserved at all times -- the page is always long
+   enough to have a scrollbar, so this costs nothing until the moment the
+   scrollbar goes away, when it stops the page jumping sideways. */
+html { scrollbar-gutter: stable; }
+html[data-locked='true'],
 body[data-locked='true'] { overflow: hidden; }
 
 h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd { margin: 0; }
